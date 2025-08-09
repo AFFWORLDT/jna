@@ -68,9 +68,7 @@ export default function Footer() {
             <Linkedin className="h-4 w-4" />
           </a>
         </div>
-        <div className="mt-4 md:mt-0">
-          <span className="text-white text-xl font-light tracking-wider">qobrix</span>
-        </div>
+
       </div>
     </footer>
   )
