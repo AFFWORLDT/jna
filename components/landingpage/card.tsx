@@ -105,13 +105,13 @@ export function BlogCard({ imageSrc, date, title, description, href }: BlogCardP
         />
       </div>
       <div className="px-4 py-6 text-left">
-        <p className="text-sm text-gray-500 mb-2 text-left font-light">{date}</p>
-        <h3 className="text-lg font-light text-gray-800 mb-2 line-clamp-2 tracking-wide">{title}</h3>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3 font-light leading-relaxed">{description}</p>
+        <p className="text-sm text-gray-500 mb-2 text-left font-extralight">{date}</p>
+        <h3 className="text-lg font-extralight text-gray-800 mb-2 line-clamp-2 tracking-wide">{title}</h3>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3 font-extralight leading-relaxed">{description}</p>
         <motion.a 
           href={href}
           whileHover={{ x: 5 }}
-          className="inline-flex items-center font-light tracking-wider hover:underline text-[#dbbb90] uppercase"
+          className="inline-flex items-center font-extralight tracking-wider hover:underline text-[#dbbb90] uppercase"
         >
           READ MORE
           <svg 
