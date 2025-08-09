@@ -21,18 +21,18 @@ export default function PropertyCard({ id, name, location, price, imageUrl }: Pr
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
-        <div className="absolute bottom-4 left-4 bg-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+        <div className="absolute bottom-4 left-4 bg-white text-xs font-light tracking-wider px-3 py-1 rounded-full shadow-md uppercase">
           UNITS
         </div>
-        <div className="absolute bottom-4 right-4 bg-white text-sm font-bold px-3 py-1 rounded-full shadow-md text-[#1A202C]">
+        <div className="absolute bottom-4 right-4 bg-white text-sm font-light px-3 py-1 rounded-full shadow-md text-[#1A202C]">
           FROM {price}
-          <span className="font-normal text-gray-500 ml-1">د.إ</span>
+          <span className="font-light text-gray-500 ml-1">د.إ</span>
         </div>
       </div>
       <CardContent className="p-6">
-        <CardDescription className="text-sm text-gray-500 mb-1">{id}</CardDescription>
-        <CardTitle className="text-2xl font-serif font-medium text-[#1A202C] mb-2">{name}</CardTitle>
-        <p className="text-sm  uppercase tracking-wide text-[#B89B6F]">{location}</p>
+        <CardDescription className="text-sm text-gray-500 mb-1 font-light">{id}</CardDescription>
+        <CardTitle className="text-2xl font-light text-[#1A202C] mb-2 tracking-wide">{name}</CardTitle>
+        <p className="text-sm uppercase tracking-wider text-[#B89B6F] font-light">{location}</p>
       </CardContent>
     </Card>
   )

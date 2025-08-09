@@ -8,14 +8,14 @@ export default function Footer() {
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {/* Newsletter Section */}
         <div className="md:col-span-1">
-          <h3 className="text-2xl font-serif font-bold mb-4">Receive our exceptional real estate listings delivered straight to your inbox.</h3>
+          <h3 className="text-2xl font-light mb-4 tracking-wide leading-relaxed">Receive our exceptional real estate listings delivered straight to your inbox.</h3>
           <div className="flex space-x-2">
             <Input
               type="email"
               placeholder="Email"
               className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-md transition-colors">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-md transition-colors uppercase">
               Subscribe
             </Button>
           </div>
@@ -23,22 +23,22 @@ export default function Footer() {
 
         {/* Sitemap */}
         <div>
-          <h4 className="text-lg font-semibold mb-4">Sitemap</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Buy</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Off-Plan</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Communities</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Why Dubai</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Services</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">About Us</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Contact Us</a></li>
+          <h4 className="text-lg font-light mb-4 tracking-wide">Sitemap</h4>
+          <ul className="space-y-2 text-sm font-light">
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Buy</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Off-Plan</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Communities</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Why Dubai</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Services</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">About Us</a></li>
+            <li><a href="#" className="hover:text-gray-300 transition-colors uppercase tracking-wider">Contact Us</a></li>
           </ul>
         </div>
 
         {/* Contact */}
         <div>
-          <h4 className="text-lg font-semibold mb-4">Contact</h4>
-          <address className="not-italic space-y-2 text-sm">
+          <h4 className="text-lg font-light mb-4 tracking-wide">Contact</h4>
+          <address className="not-italic space-y-2 text-sm font-light leading-relaxed">
             <p>Aspin Commercial Tower Level 48,</p>
             <p>Sheikh Zayed Road,</p>
             <p>Dubai, UAE</p>
@@ -48,15 +48,15 @@ export default function Footer() {
 
         {/* About Us */}
         <div>
-          <h4 className="text-lg font-semibold mb-4">About Us</h4>
-          <p className="text-sm leading-relaxed">
+          <h4 className="text-lg font-light mb-4 tracking-wide">About Us</h4>
+          <p className="text-sm leading-relaxed font-light">
             J&A Properties specializes in luxury Dubai real estate, offering personalized service, market insights, and tailored investment solutions for discerning clients.
           </p>
         </div>
       </div>
 
       <div className="container mx-auto border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-white/70">
-        <p>&copy; {'2025 J&A Properties | Privacy Policy | Cookie Policy'}</p>
+        <p className="font-light">&copy; {'2025 J&A Properties | Privacy Policy | Cookie Policy'}</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a href="#" aria-label="Facebook" className="w-8 h-8 flex items-center justify-center border border-white/50 rounded-full hover:bg-white/10 transition-colors">
             <Facebook className="h-4 w-4" />
@@ -69,7 +69,7 @@ export default function Footer() {
           </a>
         </div>
         <div className="mt-4 md:mt-0">
-          <span className="text-white text-xl font-bold">qobrix</span>
+          <span className="text-white text-xl font-light tracking-wider">qobrix</span>
         </div>
       </div>
     </footer>

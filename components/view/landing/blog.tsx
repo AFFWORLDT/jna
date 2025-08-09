@@ -37,11 +37,11 @@ export function InsightsInspiration() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-lg text-[#dbbb90] uppercase  font-normal mb-2">INSIGHTS & INSPIRATION</p>
-          <h2 className="text-3xl  font-bold text-gray-800 mb-4">
+          <p className="text-lg text-[#dbbb90] uppercase font-light tracking-wider mb-2">INSIGHTS & INSPIRATION</p>
+          <h2 className="text-3xl font-light text-gray-800 mb-4 tracking-wide">
             Unveiling Dubai&apos;s Luxurious Real Estate Landscape
           </h2>
-          <p className="text-sm  text-gray-600 max-w-3xl mx-auto mb-12">
+          <p className="text-sm font-light text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
             Dive into our curated collection of articles, designed to enlighten, inspire, and guide you through Dubai&apos;s dynamic real estate market.
           </p>
         </motion.div>
@@ -68,7 +68,7 @@ export function InsightsInspiration() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors uppercase">
+       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
        VIEW ALL BLOGS
           </Button>
         </motion.div>

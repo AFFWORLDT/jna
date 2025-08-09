@@ -16,18 +16,18 @@ export function CallToAction() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-sm uppercase text-white/70 font-semibold mb-2">JOIN THE ELITE</p>
-          <h2 className="text-3xl  font-medium mb-4">
+          <p className="text-sm uppercase text-white/70 font-light tracking-wider mb-2">JOIN THE ELITE</p>
+          <h2 className="text-3xl font-light mb-4 tracking-wide">
             Elevate Your Real Estate Journey
           </h2>
-          <p className="text-base md:text-lg  max-w-4xl mx-auto mb-12">
+          <p className="text-base md:text-lg font-light max-w-4xl mx-auto mb-12 leading-relaxed">
             Ready to embark on a luxurious real estate experience tailored just for you? Take the first step towards unparalleled living.
           </p>
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors uppercase">
+       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
        CONTACT US
             </Button>
           </motion.div>

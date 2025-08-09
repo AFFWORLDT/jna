@@ -6,13 +6,13 @@ export default function Property() {
     <div className="min-h-screen bg-[#F8F5EF] text-[#1A202C]">
       <main className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
         <section className="text-center mb-12">
-          <h2 className="text-[#B89B6F] text-sm font-semibold tracking-widest mb-2">
+          <h2 className="text-[#B89B6F] text-sm font-light tracking-widest mb-2 uppercase">
             FEATURED PROPERTIES
           </h2>
-          <h1 className="text-3xl font-serif font-bold mb-4 text-[#1A202C]">
+          <h1 className="text-3xl font-light mb-4 text-[#1A202C] tracking-wide">
             Handpicked Luxury Listings in Dubai
           </h1>
-          <p className="max-w-4xl mx-auto text-sm text-gray-700">
+          <p className="max-w-4xl mx-auto text-sm font-light text-gray-700 leading-relaxed">
             Step into a realm of unparalleled sophistication with our featured properties. Explore these exclusive gems and envision your next luxurious retreat with J&A Properties.
           </p>
         </section>
@@ -51,7 +51,7 @@ export default function Property() {
         </section>
 
         <div className="text-center">
-          <Button className="bg-[#D4B88C] hover:bg-[#C2A77B] text-white px-8 py-6 text-lg font-semibold rounded-none shadow-md">
+          <Button className="bg-[#D4B88C] hover:bg-[#C2A77B] text-white px-8 py-6 text-lg font-light tracking-wider rounded-none shadow-md uppercase">
             VIEW ALL PROPERTIES
           </Button>
         </div>

@@ -36,10 +36,10 @@ export function PropertyCard({
           className="rounded-none object-cover"
         />
         <div className="absolute top-4 left-4 flex gap-2">
-          <span className="bg-[#D4B88C] text-white px-3 py-1 rounded-none text-xs font-semibold">
+          <span className="bg-[#D4B88C] text-white px-3 py-1 rounded-none text-xs font-light tracking-wider uppercase">
             FOR SALE
           </span>
-          <span className="bg-white text-gray-800 px-3 py-1 rounded-none text-xs font-semibold">
+          <span className="bg-white text-gray-800 px-3 py-1 rounded-none text-xs font-light tracking-wider uppercase">
             AVAILABLE
           </span>
         </div>
@@ -54,13 +54,13 @@ export function PropertyCard({
       </div>
       <CardContent className="grid gap-2 px-4 py-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-[#1A202C]">{title}</h3>
-          <p className="text-sm text-gray-500">#{propertyId}</p>
+          <h3 className="text-lg font-light text-[#1A202C] tracking-wide">{title}</h3>
+          <p className="text-sm text-gray-500 font-light">#{propertyId}</p>
         </div>
 
-        <p className="text-sm text-[#B89B6F] uppercase">{location}</p>
-        <p className="text-xl font-bold text-[#1A202C]">{price}</p>
-        <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 ">
+        <p className="text-sm text-[#B89B6F] uppercase font-light tracking-wider">{location}</p>
+        <p className="text-xl font-light text-[#1A202C] tracking-wide">{price}</p>
+        <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 font-light">
           <div className="flex items-center gap-1">
             <Bed className="w-4 h-4" />
             <span>{bedrooms}</span>
@@ -105,13 +105,13 @@ export function BlogCard({ imageSrc, date, title, description, href }: BlogCardP
         />
       </div>
       <div className="px-4 py-6 text-left">
-        <p className="text-sm text-gray-500 mb-2 text-left">{date}</p>
-        <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{title}</h3>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3">{description}</p>
+        <p className="text-sm text-gray-500 mb-2 text-left font-light">{date}</p>
+        <h3 className="text-lg font-light text-gray-800 mb-2 line-clamp-2 tracking-wide">{title}</h3>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3 font-light leading-relaxed">{description}</p>
         <motion.a 
           href={href}
           whileHover={{ x: 5 }}
-          className="inline-flex items-center  font-medium hover:underline text-[#dbbb90]"
+          className="inline-flex items-center font-light tracking-wider hover:underline text-[#dbbb90] uppercase"
         >
           READ MORE
           <svg 

@@ -17,8 +17,8 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-black/40 z-10" /> 
       <div className="relative z-20 text-white px-4">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold mb-4 leading-tight">Luxury Living Reimagined</h1>
-        <p className="text-lg  mb-12 ">
+        <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">Luxury Living Reimagined</h1>
+        <p className="text-lg font-light mb-12 tracking-wider uppercase">
           EMBRACE TO A JOURNEY OF PURE SOPHISTICATION CULMINATING IN THE REFLECTION OF YOUR LIFESTYLE
         </p>
 

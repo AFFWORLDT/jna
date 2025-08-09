@@ -85,9 +85,9 @@ export default function Component() {
 
       {/* Hero Section */}
       <section className="py-16 md:py-24 text-center px-4">
-        <p className="text-[#D4B88C] text-sm uppercase tracking-widest mb-2">COMMUNITIES</p>
-        <h1 className="text-3xl font-medium text-gray-800 mb-6">Discover Dubai&apos;s Finest</h1>
-        <p className="max-w-4xl mx-auto text-gray-600 text-sm leading-relaxed">
+        <p className="text-[#D4B88C] text-sm uppercase tracking-widest mb-2 font-light">COMMUNITIES</p>
+        <h1 className="text-3xl font-light text-gray-800 mb-6 tracking-wide">Discover Dubai&apos;s Finest</h1>
+        <p className="max-w-4xl mx-auto text-gray-600 text-sm leading-relaxed font-light">
           Explore the diverse tapestry of Dubai&apos;s most sought-after areas and communities. From serene waterfront retreats to
           bustling urban hubs, our curated selection showcases the essence of luxury living in each locale.
         </p>
@@ -117,10 +117,10 @@ export default function Component() {
                       className="transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end text-white">
-                      <h3 className="text-2xl font-bold mb-2">{community.name}</h3>
-                      <p className="text-sm mb-4">{community.description}</p>
+                      <h3 className="text-2xl font-light mb-2 tracking-wide">{community.name}</h3>
+                      <p className="text-sm mb-4 font-light leading-relaxed">{community.description}</p>
                       <div className="w-16 h-0.5 border mb-4" />
-                      <Button variant="link" asChild className="p-0 h-auto text-[#D4B88C] uppercase text-sm font-semibold hover:underline">
+                      <Button variant="link" asChild className="p-0 h-auto text-[#D4B88C] uppercase text-sm font-light tracking-wider hover:underline">
                         <Link href="#">
                           EXPLORE
                         </Link>
@@ -151,7 +151,7 @@ export default function Component() {
           ))}
         </div>
         <div className="w-full flex justify-center items-center mt-11 mb-4">
-       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors uppercase">
+       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
               View All Communities
             </Button>
        </div>
