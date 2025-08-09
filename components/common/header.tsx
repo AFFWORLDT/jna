@@ -54,21 +54,21 @@ export default function Header() {
           />
         </div>
         {/* Desktop Navigation Links - still hidden on small screens */}
-        <div className="hidden md:flex items-center space-x-8 text-white text-sm font-medium uppercase">
-          <a href="#" className="hover:text-gray-300 transition-colors">
-            Buy
+        <div className="hidden md:flex items-center space-x-10 text-white text-sm font-light uppercase tracking-wider">
+          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+            BUY
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors">
-            Off-Plan
+          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+            OFF-PLAN
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors">
-            Communities
+          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+            COMMUNITIES
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors">
-            Why Dubai
+          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+            WHY DUBAI
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors">
-            Contact Us
+          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+            CONTACT US
           </a>
         </div>
         <div className="flex items-center space-x-4">
@@ -109,27 +109,21 @@ export default function Header() {
           <span className="sr-only">Close menu</span>
         </Button>
 
-        <nav className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-medium flex-grow">
+        <nav className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-wider flex-grow">
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Buy
+            BUY
           </a>
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Off-Plan
+            OFF-PLAN
           </a>
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Communities
+            COMMUNITIES
           </a>
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Why Dubai
+            WHY DUBAI
           </a>
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Services
-          </a>
-          <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            About Us
-          </a>
-          <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
-            Contact Us
+            CONTACT US
           </a>
         </nav>
         <div className="p-8 border-t border-gray-200 flex justify-start space-x-4">
