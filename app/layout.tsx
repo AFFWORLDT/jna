@@ -6,9 +6,12 @@ import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.dev",
+  title: "JNA Properties - Luxury Real Estate in Dubai",
+  description: "Discover Dubai's finest luxury properties with JNA Properties. Premium apartments, villas, and penthouses in prime locations like Dubai Marina, Downtown Dubai, and Palm Jumeirah.",
+  keywords: "Dubai real estate, luxury properties, Dubai Marina, Downtown Dubai, Palm Jumeirah, property investment, luxury apartments, villas Dubai",
+  authors: [{ name: "JNA Properties" }],
+  viewport: "width=device-width, initial-scale=1",
+  robots: "index, follow",
 };
 
 export default function RootLayout({
