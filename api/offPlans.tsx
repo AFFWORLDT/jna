@@ -8,3 +8,11 @@ export const getAllProperties = async (querry?:string) => {
     throw handleApiError(error)
    }
 }
+export const getPropertyById = async (id:string) => {
+   try {
+     const res = await api.get(`/properties/projects?project_id=${id}` )
+     return res.data
+   } catch (error) {
+    throw handleApiError(error)
+   }
+}
