@@ -1,27 +1,51 @@
 "use client";
 import { getAllCommunities } from "@/api/communities";
 import CommunitiesCard from "@/src/view/communities/communitiesCard";
-import { set } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+
+const PAGE_SIZE = 10;
 
 function Communities() {
-  const [communities, setCommunities] = useState([]);
+  const [communities, setCommunities] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const fetchCommunities = async () => {
-    setLoading(true);
-    const query = "sort_by=total_count&sort_order=desc&page=1&size=24";
-    try {
-      const res = await getAllCommunities(query);
-      setCommunities(res?.communities);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastCommunityRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore]
+  );
+
   useEffect(() => {
+    const fetchCommunities = async () => {
+      setLoading(true);
+      const query = `sort_by=total_count&sort_order=desc&page=${page}&size=${PAGE_SIZE}`;
+      try {
+        const res = await getAllCommunities(query);
+        if (res?.communities?.length) {
+          setCommunities((prev) => [...prev, ...res.communities]);
+          setHasMore(res.communities.length === PAGE_SIZE);
+        } else {
+          setHasMore(false);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCommunities();
-  }, []);
+  }, [page]);
+
   return (
     <div>
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
@@ -46,10 +70,23 @@ function Communities() {
       </div>
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6 px-4 container mx-auto py-6">
-          {communities.map((community, i) => (
-            <CommunitiesCard key={i} data={community} />
-          ))}
+          {communities.map((community, i) => {
+            if (i === communities.length - 1) {
+              return (
+                <div ref={lastCommunityRef} key={i}>
+                  <CommunitiesCard data={community} />
+                </div>
+              );
+            }
+            return <CommunitiesCard key={i} data={community} />;
+          })}
         </div>
+        {loading && (
+          <div className="text-center py-4 text-gray-500">Loading...</div>
+        )}
+        {!hasMore && (
+          <div className="text-center py-4 text-gray-400">No more communities.</div>
+        )}
       </div>
     </div>
   );

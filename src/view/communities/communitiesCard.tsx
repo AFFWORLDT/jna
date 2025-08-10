@@ -21,8 +21,8 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
     <Card className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border">
       <CardContent className="p-0 h-full">
         <Image
-          src={data.photos?.[0]}
-          alt={`Image of ${data.name}`}
+          src={data?.photos?.[0]}
+          alt={`Image of ${data?.name}`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -32,12 +32,10 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end text-white">
           <h3 className="text-2xl font-light mb-2 tracking-wide">
-            {data.name}
+            {data?.name}
           </h3>
           <p className="text-sm mb-4 font-light leading-relaxed">
-            {`${data.city} — ${data.latitude.toFixed(
-              4
-            )}, ${data.longitude.toFixed(4)}`}
+            {`${data?.city}`}
           </p>
           <div className="w-16 h-0.5 border mb-4" />
 
