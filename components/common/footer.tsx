@@ -29,7 +29,7 @@ export default function Footer() {
             <li><a href="#" className="hover:text-gray-300 transition-colors">Off-Plan</a></li>
             <li><a href="#" className="hover:text-gray-300 transition-colors">Communities</a></li>
             <li><a href="#" className="hover:text-gray-300 transition-colors">Why Dubai</a></li>
-            <li><a href="#" className="hover:text-gray-300 transition-colors">Services</a></li>
+            <li><a href="/service" className="hover:text-gray-300 transition-colors">Services</a></li>
             <li><a href="#" className="hover:text-gray-300 transition-colors">About Us</a></li>
             <li><a href="#" className="hover:text-gray-300 transition-colors">Contact Us</a></li>
           </ul>
