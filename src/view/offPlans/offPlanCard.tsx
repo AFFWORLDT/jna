@@ -5,6 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface PropertyData {
   id?: string | number;
@@ -24,8 +25,9 @@ interface PropertyData {
 }
 
 export default function OffPlanCard({ data }: { data?: PropertyData }) {
+    const router = useRouter();
   return (
-    <Card className="overflow-hidden border-none p-0 shadow-sm border-2 rounded-none">
+    <Card className="overflow-hidden border-none p-0 shadow-sm border-2 rounded-none" onClick={() => router.push(`/offPlans/details/${data?.id}`)}>
       <div className="relative w-full h-64 overflow-hidden group">
         <Image
           src={data?.photos?.[0] ?? ""}
