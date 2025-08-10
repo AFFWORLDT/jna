@@ -1,3 +1,5 @@
+"use client";
+import { getAllProperties } from "@/api/offPlans";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,10 +10,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/src/lib/utils";
+import OffPlanCard from "@/src/view/offPlans/offPlanCard";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function page() {
+  const [property, setProperty] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchproperty = async () => {
+    setLoading(true);
+    const query = "sort_by=total_count&sort_order=desc&page=1&size=24";
+    try {
+      const res = await getAllProperties(query);
+      setProperty(res?.projects);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchproperty();
+  }, []);
   return (
     <div>
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
@@ -57,17 +77,24 @@ function page() {
         <p className="text-center text-gray-600 mt-4">
           Curated off-plan investments for discerning investors.
         </p>
-        <p
-         className="text-center my-6"
-        >
-          <span  className={cn(
-            "relative pb-1 transition-all duration-300 text-primary uppercase",
-            "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
-            "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-          )}>
+        <p className="text-center my-6">
+          <span
+            className={cn(
+              "relative pb-1 transition-all duration-300 text-primary uppercase",
+              "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
+              "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            )}
+          >
             Learn More
           </span>
         </p>
+      </div>
+      <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-  gap-6 px-4 container mx-auto py-6">
+          {property.map((property, i) => (
+            <OffPlanCard data={property} key={i} />
+          ))}
+        </div>
       </div>
     </div>
   );
