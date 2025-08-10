@@ -64,10 +64,10 @@ export default function Header() {
           <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
             COMMUNITIES
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+          <a href="/whyDubai" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
             WHY DUBAI
           </a>
-          <a href="#" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
+          <a href="/contactUs" className="hover:text-gray-300 transition-colors duration-300 hover:opacity-80">
             CONTACT US
           </a>
         </div>
@@ -122,7 +122,7 @@ export default function Header() {
           <a href="/whyDubai" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
             WHY DUBAI
           </a>
-          <a href="/contact" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
+          <a href="/contactUs" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
             CONTACT US
           </a>
         </nav>

@@ -26,7 +26,7 @@ const servicesData = [
       "Complete property management services for your luxury real estate portfolio. From tenant screening to maintenance coordination, we handle every aspect of property management.",
     additionalInfo:
       "Premium services including concierge support, regular property inspections, and direct communication channels for all your property needs.",
-    imageUrl: "/images/third.jpeg",
+    imageUrl: "/images/third.webp",
   },
 ];
 
