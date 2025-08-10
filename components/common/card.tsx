@@ -58,7 +58,7 @@ export function PropertyCard({
           <p className="text-sm text-gray-500 font-light">#{propertyId}</p>
         </div>
 
-        <p className="text-sm text-[#B89B6F] uppercase font-light tracking-wider">{location}</p>
+        <p className="text-sm text-primary uppercase font-light tracking-wider">{location}</p>
         <p className="text-xl font-light text-[#1A202C] tracking-wide">{price}</p>
         <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 font-light">
           <div className="flex items-center gap-1">

@@ -1,4 +1,4 @@
-import { PropertyCard } from "@/components/landingpage/card"
+import { PropertyCard } from "@/components/common/card"
 import { Button } from "@/components/ui/button"
 
 export default function Property() {
@@ -6,7 +6,7 @@ export default function Property() {
     <div className="min-h-screen bg-[#F8F5EF] text-[#1A202C]">
       <main className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
         <section className="text-center mb-12">
-          <h2 className="text-[#B89B6F] text-sm font-light tracking-widest mb-2 uppercase">
+          <h2 className="text-primary text-sm font-light tracking-widest mb-2 uppercase">
             FEATURED PROPERTIES
           </h2>
           <h1 className="text-3xl font-light mb-4 text-[#1A202C] tracking-wide">

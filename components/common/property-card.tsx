@@ -32,7 +32,7 @@ export default function PropertyCard({ id, name, location, price, imageUrl }: Pr
       <CardContent className="p-6">
         <CardDescription className="text-sm text-gray-500 mb-1 font-light">{id}</CardDescription>
         <CardTitle className="text-2xl font-light text-[#1A202C] mb-2 tracking-wide">{name}</CardTitle>
-        <p className="text-sm uppercase tracking-wider text-[#B89B6F] font-light">{location}</p>
+        <p className="text-sm uppercase tracking-wider text-primary font-light">{location}</p>
       </CardContent>
     </Card>
   )

@@ -1,4 +1,4 @@
-import PropertyCard from "@/components/landingpage/property-card"
+import PropertyCard from "@/components/common/property-card"
 import { Button } from "@/components/ui/button"
 
 export default function Feature() {
@@ -36,7 +36,7 @@ const properties = [
 return (
   <div className="flex flex-col items-center py-16 px-4 md:px-6 lg:px-8  container mx-auto">
     <div className="text-center mb-12">
-      <p className="text-sm font-semibold uppercase tracking-wider text-[#B89B6F] mb-2">
+      <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-2">
         FEATURED PROJECTS
       </p>
       <h1 className="text-3xl  font-serif font-bold text-[#1A202C] leading-tight mb-4">
