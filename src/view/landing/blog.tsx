@@ -1,5 +1,5 @@
 "use client"
-import { BlogCard } from "@/components/landingpage/card"
+import { BlogCard } from "@/components/common/card"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 
