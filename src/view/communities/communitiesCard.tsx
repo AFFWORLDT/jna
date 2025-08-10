@@ -18,7 +18,7 @@ interface CommunityData {
 
 export default function CommunitiesCard({ data }: { data: CommunityData }) {
   return (
-    <Card className="relative w-full h-[450px] rounded-lg overflow-hidden shadow-lg group border-none">
+    <Card className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border">
       <CardContent className="p-0 h-full">
         <Image
           src={data.photos?.[0]}

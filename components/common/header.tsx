@@ -38,7 +38,7 @@ export default function Header() {
 
   const navLinks = [
     { href: "#", label: "BUY" },
-    { href: "#", label: "OFF-PLAN" },
+    { href: "/offPlans", label: "OFF-PLAN" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
     { href: "/contactUs", label: "CONTACT US" },
