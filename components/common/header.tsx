@@ -119,10 +119,10 @@ export default function Header() {
           <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
             COMMUNITIES
           </a>
-          <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
+          <a href="/whyDubai" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
             WHY DUBAI
           </a>
-          <a href="#" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
+          <a href="/contact" className="block py-2 hover:text-gray-600 transition-colors duration-200" onClick={() => setIsOverlayOpen(false)}>
             CONTACT US
           </a>
         </nav>
