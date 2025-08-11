@@ -47,7 +47,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isScrolled ? "bg-[#141442]" : "bg-transparent"
+        isScrolled ? "bg-[#141442] text-white" : "bg-transparent text-black"
       }`}
     >
       <nav
@@ -67,7 +67,7 @@ export default function Header() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-10 text-white text-sm font-light uppercase tracking-wider">
+        <div className="hidden md:flex items-center space-x-10  text-sm font-light uppercase tracking-wider">
           {navLinks.map((link, i) => (
             <Link
               key={i}
