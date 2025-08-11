@@ -19,7 +19,7 @@ interface PropertyData {
         totalUnits?: number;
 
   };
-  photos: string[];
+  photos?: string[];
   area_id?: string;
 
 }
@@ -30,7 +30,7 @@ export default function OffPlanCard({ data }: { data?: PropertyData }) {
     <Card className="overflow-hidden border-none p-0 shadow-sm border-2 rounded-none" onClick={() => router.push(`/offPlans/details/${data?.id}`)}>
       <div className="relative w-full h-64 overflow-hidden group">
         <Image
-          src={data?.photos?.[0] ?? ""}
+          src={data?.photos?.[0] ?? "/placeholder.jpg"}
           alt={`Image of ${data?.name}`}
           fill
           className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110 cursor-pointer"

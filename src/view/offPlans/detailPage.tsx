@@ -8,6 +8,7 @@ import moment from "moment";
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   useEffect(() => {
     async function fetchProperty() {
@@ -17,23 +18,60 @@ export default function DetailPage({ id }: any) {
     fetchProperty();
   }, [id]);
 
+  useEffect(() => {
+    if (!property?.photos || property.photos.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setHeroImageIndex(
+        (prevIndex) => (prevIndex + 1) % property.photos.length
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [property?.photos]);
+
+  if (!property?.photos || property.photos.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <section className="relative h-screen w-full flex items-center justify-center text-center">
+      <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
-          <Image
-            src={property?.photos?.[0] ?? ""}
-            alt="Luxury Living in Dubai"
-            layout="fill"
-            objectFit="cover"
-            quality={85}
-            priority
-            className="z-0"
-          />
-          <div className="absolute inset-0 bg-black/20 z-10" />
+          <div className="relative w-full h-full">
+            {property.photos.map((photo: string, index: number) => (
+              <Image
+                key={index}
+                src={photo}
+                alt="Luxury Living in Dubai"
+                layout="fill"
+                objectFit="cover"
+                quality={85}
+                priority={index === 0}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  index === heroImageIndex
+                    ? "opacity-100 z-10"
+                    : "opacity-0 z-0"
+                }`}
+              />
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-black/20 z-20" />
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+            {property.photos.map((_: any, index: number) => (
+              <button
+                key={index}
+                onClick={() => setHeroImageIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === heroImageIndex
+                    ? "bg-white scale-125"
+                    : "bg-white/50 hover:bg-white/75"
+                }`}
+              />
+            ))}
+          </div>
         </div>
-        <div className="relative z-20 text-white px-4 mt-[60vh]">
+        <div className="relative z-30 text-white px-4 mt-[60vh]">
           <span>#{property?.agent_Id}</span>
           <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">
             {property?.name}
