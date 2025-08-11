@@ -1,3 +1,5 @@
+"use client";
+
 import { getPropertyById } from "@/api/offPlans";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -5,6 +7,7 @@ import moment from "moment";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     async function fetchProperty() {
@@ -13,7 +16,8 @@ export default function DetailPage({ id }: any) {
     }
     fetchProperty();
   }, [id]);
-  console.log(property);
+
+
   return (
     <div>
       <section className="relative h-screen w-full flex items-center justify-center text-center">
@@ -35,7 +39,7 @@ export default function DetailPage({ id }: any) {
             {property?.name}
           </h1>
           <p className="text-lg font-light mb-12 tracking-wider uppercase text-[#DBBB90]">
-            {property?.location?.community}, {property?.location?.sub_community}{" "}
+            {property?.location?.community}, {property?.location?.sub_community}
             , {property?.location?.city}
           </p>
         </div>
@@ -52,7 +56,9 @@ export default function DetailPage({ id }: any) {
               Properties List
             </a>
           </div>
+
           <hr className="border-t border-gray-200 mb-12" />
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
             <div>
               <h3 className="text-sm font-light uppercase text-[#DBBB90] mb-2 border-b border-[#DBBB90] inline-block pb-1">
@@ -69,19 +75,22 @@ export default function DetailPage({ id }: any) {
                 Completion Date
               </h3>
               <p className="text-sm font-light text-gray-700">
-                {property?.newParam?.handoverTime && moment(property?.newParam?.handoverTime).format("DD / MM / YYYY")}
+                {property?.newParam?.handoverTime &&
+                  moment(property?.newParam?.handoverTime).format(
+                    "DD / MM / YYYY"
+                  )}
               </p>
             </div>
             <div>
               <h3 className="text-sm font-light uppercase text-[#DBBB90] mb-2 border-b border-[#DBBB90] inline-block pb-1">
                 Construction Stage
               </h3>
-              <p className="text-sm font-light text-gray-700">
-                {"Off-plan"}
-              </p>
+              <p className="text-sm font-light text-gray-700">{"Off-plan"}</p>
             </div>
           </div>
+
           <hr className="border-t border-gray-200 mb-12" />
+
           <div className="text-center">
             <h2 className="text-4xl font-serif text-gray-800 mb-8">
               Description
@@ -90,6 +99,48 @@ export default function DetailPage({ id }: any) {
               {property?.description}
             </p>
           </div>
+        </div>
+      </section>
+      <section className="bg-white py-16 px-4 md:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          {property?.photos && property.photos.length > 0 && (
+            <div className="mb-16">
+              <div className="relative h-[400px] md:h-[500px] lg:h-[600px] mb-4 overflow-hidden rounded-lg">
+                <Image
+                  src={property.photos[selectedImageIndex]}
+                  alt={`${property.name} - Image ${selectedImageIndex + 1}`}
+                  layout="fill"
+                  objectFit="cover"
+                  quality={90}
+                  className="transition-opacity duration-300"
+                />
+              </div>
+
+              <div className="grid grid-cols-5 gap-2 md:gap-4">
+                {property.photos
+                  .slice(0, 5)
+                  .map((photo: string, index: number) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`relative h-20 md:h-24 lg:h-28 overflow-hidden rounded transition-all duration-200 ${
+                        selectedImageIndex === index
+                          ? "ring-2 ring-[#DBBB90] opacity-100"
+                          : "opacity-70 hover:opacity-90"
+                      }`}
+                    >
+                      <Image
+                        src={photo || "/placeholder.svg"}
+                        alt={`${property.name} thumbnail ${index + 1}`}
+                        layout="fill"
+                        objectFit="cover"
+                        quality={75}
+                      />
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>
