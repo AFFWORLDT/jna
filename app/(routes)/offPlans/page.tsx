@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/src/lib/utils";
 import OffPlanCard from "@/src/view/offPlans/offPlanCard";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 function page() {
@@ -91,7 +90,7 @@ function page() {
       </div>
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-  gap-6 px-4 container mx-auto py-6">
-          {property.map((property, i) => (
+          {property?.map((property, i) => (
             <OffPlanCard data={property} key={i} />
           ))}
         </div>

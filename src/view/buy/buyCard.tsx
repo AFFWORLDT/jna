@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Bath, Bed, Heart, SquareGanttChart } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 interface PropertyData {
   id?: string | number
@@ -28,6 +29,7 @@ interface BuyCardProps {
 }
 
 export function BuyCard({ data, onFavorite }: BuyCardProps) {
+  const router = useRouter()
   const handleFavorite = () => {
     if (data && onFavorite) {
       onFavorite(data)
@@ -55,7 +57,7 @@ export function BuyCard({ data, onFavorite }: BuyCardProps) {
     : "Price on request"
 
   return (
-    <Card className="relative overflow-hidden rounded-none shadow-sm bg-white p-0 border">
+    <Card className="relative overflow-hidden rounded-none shadow-sm bg-white p-0 border cursor-pointer" onClick={() => router.push(`/buy/details/${data.id}`)}>
       <div className="relative w-full h-80">
         <Image
           src={imageUrl}
