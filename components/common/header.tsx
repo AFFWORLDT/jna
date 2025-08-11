@@ -37,7 +37,7 @@ export default function Header() {
   }, [isOverlayOpen]);
 
   const navLinks = [
-    { href: "#", label: "BUY" },
+    { href: "/buy", label: "BUY" },
     { href: "/offPlans", label: "OFF-PLAN" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
@@ -56,14 +56,14 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center">
-         <Link href={"/"}>
-           <Image
-            src={"/images/logo-gold.svg"}
-            alt="logo"
-            width={80}
-            height={80}
-          />
-         </Link>
+          <Link href={"/"}>
+            <Image
+              src={"/images/logo-gold.svg"}
+              alt="logo"
+              width={80}
+              height={80}
+            />
+          </Link>
         </div>
 
         {/* Desktop Nav */}
