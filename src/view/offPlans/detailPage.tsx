@@ -39,7 +39,7 @@ export default function DetailPage({ id }: any) {
       <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
           <div className="relative w-full h-full">
-            {property.photos.map((photo: string, index: number) => (
+            {property?.photos?.map((photo: string, index: number) => (
               <Image
                 key={index}
                 src={photo}
@@ -58,7 +58,7 @@ export default function DetailPage({ id }: any) {
           </div>
           <div className="absolute inset-0 bg-black/20 z-20" />
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
-            {property.photos.map((_: any, index: number) => (
+            {property?.photos?.map((_: any, index: number) => (
               <button
                 key={index}
                 onClick={() => setHeroImageIndex(index)}

@@ -10,6 +10,8 @@ export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
   const fetchPropertyDetails = async () => {
     setLoading(true);
     try {
@@ -24,18 +26,55 @@ export default function DetailPage({ id }: any) {
   useEffect(() => {
     fetchPropertyDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (!property?.photos || property.photos.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setHeroImageIndex(
+        (prevIndex) => (prevIndex + 1) % property.photos.length
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [property?.photos]);
   return (
     <div className="">
       <div className="bg-white h-24" />
       <div className="grid grid-cols-1 lg:grid-cols-2 items-start px-4">
-        <section className="w-full my-2">
-          <Image
-            src={property?.photos[0]}
-            alt={property?.title || "Property Image"}
-            width={800}
-            height={600}
-            className="w-full h-96 object-cover"
-          />
+        <section className="w-full my-2 relative">
+            <div className="relative w-full h-96">
+              {property?.photos?.map((photo: string, index: number) => (
+                <Image
+                  key={index}
+                  src={photo}
+                  alt="Luxury Living in Dubai"
+                  layout="fill"
+                  objectFit="cover"
+                  quality={85}
+                  priority={index === 0}
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                    index === heroImageIndex
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
+                  }`}
+                />
+              ))}
+            </div>
+            <div className="absolute inset-0 bg-black/20 z-20" />
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+              {property?.photos?.map((_: any, index: number) => (
+                <button
+                  key={index}
+                  onClick={() => setHeroImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    index === heroImageIndex
+                      ? "bg-white scale-125"
+                      : "bg-white/50 hover:bg-white/75"
+                  }`}
+                />
+              ))}
+            </div>
         </section>
         <section className="w-full my-2 bg-[#F2EEE8] h-96 py-16">
           <p className="text-neutral-400 text-base font-mono text-center">
