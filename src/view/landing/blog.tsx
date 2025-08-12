@@ -10,21 +10,21 @@ const blogPosts = [
     date: "Jul 16, 2025",
     title: "Why Your Home Should Feel as Good as It Looks: The Psychology of Luxury Living",
     description: "Have you ever stepped into a space that looked stunning... yet somehow felt wrong?...",
-    href: "#",
+    href: "/blog/details/why-your-home-should-feel-as-good-as-it-looks",
   },
   {
     imageSrc: "/images/blog2.webp",
     date: "Dec 24, 2024",
     title: "Why Buying Property in Dubai is Better than Renting",
     description: "Dubai's real estate market continues to be one of the most dynamic and sought-after...",
-    href: "#",
+    href: "/blog/details/why-your-home-should-feel-as-good-as-it-looks",
   },
   {
     imageSrc: "/images/building.jpg",
     date: "Jan 8, 2024",
     title: "Why Invest in Dubai's Real Estate? A Look into the Future",
     description: "Introduction in the heart of the Middle East, Dubai shines as a beacon of progress...",
-    href: "#",
+    href: "/blog/details/why-your-home-should-feel-as-good-as-it-looks",
   },
 ]
 

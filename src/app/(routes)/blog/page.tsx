@@ -1,3 +1,4 @@
+import { InsightsInspiration } from "@/src/view/landing/blog";
 import React from "react";
 
 function Blog() {
@@ -19,6 +20,7 @@ function Blog() {
          Dive into our curated collection of articles, designed to enlighten, inspire, and guide you through Dubai&rsquo;s dynamic real estate market.
         </p>
       </div>
+      <InsightsInspiration/>
     </div>
   );
 }
