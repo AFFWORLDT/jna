@@ -10,6 +10,15 @@ function Blog() {
           </h1>
         </div>
       </section>
+      <div className=" mx-auto px-4 py-12 max-w-4xl">
+        <h1 className="text-center  text-4xl font-mono">
+          {" "}
+          Living the Dubai Dream: Where Inspiration Meets Information
+        </h1>
+        <p className="text-center text-gray-600 mt-4">
+         Dive into our curated collection of articles, designed to enlighten, inspire, and guide you through Dubai&rsquo;s dynamic real estate market.
+        </p>
+      </div>
     </div>
   );
 }

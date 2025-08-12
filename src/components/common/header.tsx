@@ -47,7 +47,7 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        isScrolled ? "bg-[#141442] text-white" : "bg-transparent text-black"
+        isScrolled ? "bg-[#141442] " : "bg-transparent"
       }`}
     >
       <nav
@@ -73,7 +73,7 @@ export default function Header() {
               key={i}
               href={link.href}
               className={cn(
-                "relative pb-1 transition-all duration-300",
+                "relative pb-1 transition-all duration-300 text-primary",
                 "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
                 "after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                 pathname === link.href && "after:w-full"
