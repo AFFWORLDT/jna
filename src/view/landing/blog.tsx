@@ -1,7 +1,8 @@
 "use client"
-import { BlogCard } from "@/components/common/card"
-import { Button } from "@/components/ui/button"
+import { BlogCard } from "@/src/components/common/card"
+import { Button } from "@/src/components/ui/button"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 const blogPosts = [
   {
@@ -68,9 +69,11 @@ export function InsightsInspiration() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-       <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
+       <Link href={"/blog"} passHref>
+        <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
        VIEW ALL BLOGS
           </Button>
+       </Link>
         </motion.div>
       </div>
     </section>

@@ -4,14 +4,14 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Heart, Phone, Menu, MessageCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/src/components/ui/button'
+import { Card, CardContent } from '@/src/components/ui/card'
 import {
     Carousel,
     CarouselApi,
     CarouselContent,
     CarouselItem,
-} from "@/components/ui/carousel"
+} from "@/src/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
 
 const communities = [

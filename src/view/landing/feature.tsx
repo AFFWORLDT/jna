@@ -1,5 +1,5 @@
-import PropertyCard from "@/components/common/property-card"
-import { Button } from "@/components/ui/button"
+import PropertyCard from "@/src/components/common/property-card"
+import { Button } from "@/src/components/ui/button"
 
 export default function Feature() {
 const properties = [
