@@ -1,6 +1,6 @@
-import { getAllBuyPropertiesById } from "@/api/buy";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { getAllBuyPropertiesById } from "@/src/api/buy";
+import { Badge } from "@/src/components/ui/badge";
+import { Card } from "@/src/components/ui/card";
 import { Bed, Bath, Square, SquareGanttChart, Heart } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";

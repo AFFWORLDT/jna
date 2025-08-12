@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent } from "@/src/components/ui/card"
 import { Bath, Bed, Heart, SquareGanttChart } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"

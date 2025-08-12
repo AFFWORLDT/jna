@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
+import { Input } from "@/src/components/ui/input"
+import { Button } from "@/src/components/ui/button"
 
 export default function HeroSection() {
   return (

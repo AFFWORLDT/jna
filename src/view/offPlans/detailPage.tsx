@@ -1,6 +1,6 @@
 "use client";
 
-import { getPropertyById } from "@/api/offPlans";
+import { getPropertyById } from "@/src/api/offPlans";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import moment from "moment";
