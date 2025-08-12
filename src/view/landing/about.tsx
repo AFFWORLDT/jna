@@ -23,7 +23,7 @@ export default function AboutUsSection() {
               why discerning clients choose us as their trusted real estate
               partner.
             </p>
-            <Button className="bg-[#D4B88C] px-8 py-3 text-base font-light tracking-wider text-white shadow-sm hover:bg-[#C2A77B] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-fit uppercase">
+            <Button className="bg-[#D4B88C] px-8 py-3 text-base rounded-none font-light tracking-wider text-white shadow-sm hover:bg-[#C2A77B] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-fit uppercase">
               ABOUT US
             </Button>
           </div>

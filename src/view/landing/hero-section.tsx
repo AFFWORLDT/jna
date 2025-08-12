@@ -16,8 +16,8 @@ export default function HeroSection() {
         className="z-0"
       />
       <div className="absolute inset-0 bg-black/40 z-10" /> 
-      <div className="relative z-20 text-white px-4">
-        <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">Luxury Living Reimagined</h1>
+      <div className="relative z-20 text-white px-4 mt-[500px]">
+        <h1 className="text-3xl md:text-4xl font-mono mb-4 leading-tight tracking-wide">Luxury Living Reimagined</h1>
         <p className="text-lg font-light mb-12 tracking-wider uppercase">
           EMBRACE TO A JOURNEY OF PURE SOPHISTICATION CULMINATING IN THE REFLECTION OF YOUR LIFESTYLE
         </p>
@@ -25,7 +25,7 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 p-6 ">
           <div className="md:col-span-1">
             <Select>
-              <SelectTrigger className="w-full text-white backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white bg-white/10 border border-white/30 rounded-sm backdrop-blur-s">
+              <SelectTrigger className="w-full text-white backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-s">
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent className="bg-white text-gray-900">
@@ -38,7 +38,7 @@ export default function HeroSection() {
           </div>
           <div className="md:col-span-1">
             <Select>
-              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-sm backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
+              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent className="bg-white text-gray-900">
@@ -51,7 +51,7 @@ export default function HeroSection() {
           </div>
           <div className="md:col-span-1">
             <Select>
-              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-sm backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
+              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
                 <SelectValue placeholder="Price" />
               </SelectTrigger>
               <SelectContent className="bg-white text-gray-900">
@@ -64,7 +64,7 @@ export default function HeroSection() {
           </div>
           <div className="md:col-span-1">
             <Select>
-              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-sm backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
+              <SelectTrigger className="w-full text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-white">
                 <SelectValue placeholder="Bedrooms" />
               </SelectTrigger>
               <SelectContent className="bg-white text-gray-900">
@@ -80,11 +80,11 @@ export default function HeroSection() {
             <Input
               type="text"
               placeholder="Ref Number"
-              className="w-full text-white bg-white/10 border border-white/30 rounded-sm backdrop-blur-s placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
+              className="w-full text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-s placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
             />
           </div>
           <div className="md:col-span-1">
-            <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-md transition-colors">
+            <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors h-14">
               Search
             </Button>
           </div>

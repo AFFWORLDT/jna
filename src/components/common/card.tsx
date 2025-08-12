@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import { Heart, Bed, Bath, SquareGanttChart } from "lucide-react";
+import { Heart, Bed, Bath, SquareGanttChart, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion"
 
 interface PropertyCardProps {
@@ -114,15 +114,8 @@ export function BlogCard({ imageSrc, date, title, description, href }: BlogCardP
           className="inline-flex items-center font-extralight tracking-wider hover:underline text-[#dbbb90] uppercase"
         >
           READ MORE
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-4 w-4 ml-1" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
+         
+           <ChevronRight size={15} />
         </motion.a>
       </div>
     </motion.div>
