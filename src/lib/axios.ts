@@ -1,4 +1,4 @@
-import { API_URL } from "../utils/config";
+import { API_URL, TOKEN } from "../utils/config";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { clearCookies, getCookie } from "./cookies";
 
@@ -10,7 +10,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = getCookie();
+    const token = TOKEN || getCookie();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
