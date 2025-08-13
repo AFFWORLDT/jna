@@ -1,3 +1,4 @@
+import { Separator } from "@/src/components/ui/separator";
 import Image from "next/image";
 
 function AboutUs() {
@@ -66,8 +67,8 @@ function AboutUs() {
           </div>
 
           {/* Company Description */}
-          <div className="max-w-5xl mx-auto">
-            <p className="text-muted-foreground text-lg leading-relaxed text-center">
+          <div className="container mx-auto my-4">
+            <p className="text-muted-foreground text-sm leading-relaxed text-center">
               J&amp;A Properties is your ultimate source to genuine and trending
               market insights leading to a rewarding and highly satisfying
               luxury real estate experience in the UAE. Founded by seasoned
@@ -86,6 +87,35 @@ function AboutUs() {
               Properties is here to exceed your expectations.
             </p>
           </div>
+        </div>
+        <Separator className="my-4" />
+        <div className="flex  items-center container mx-auto my-4 gap-5">
+          <section>
+            <div className="text-left mb-12 max-w-5xl mx-auto">
+              <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-2">
+                The <span className="text-primary">Mission</span>
+              </h1>
+              <p className="text-muted-foreground text-sm leading-relaxed">
+                We meticulously align your investment aspirations with the
+                perfect property, leveraging personalized service and astute
+                analysis to ensure a seamless and fulfilling journey.
+              </p>
+            </div>
+          </section>
+          <section>
+            <div className="text-left mb-12 max-w-5xl mx-auto">
+              <h1 className="text-4xl md:text-5xl font-serif text-foreground mb-2">
+                The <span className="text-primary">Vision</span>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  To be the preferred luxury real estate company in the UAE,
+                  built on trust, and integrity and renowned for exceptional
+                  customer service, unwavering responsiveness, and unparalleled
+                  expertise in identifying and securing the perfect property
+                  match for our clients&apos; objectives.
+                </p>
+              </h1>
+            </div>
+          </section>
         </div>
       </div>
     </div>
