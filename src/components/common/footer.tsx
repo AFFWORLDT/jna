@@ -21,7 +21,7 @@ export default function Footer() {
               placeholder="Email"
               className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-md transition-colors uppercase">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-md transition-colors uppercase h-14">
               Subscribe
             </Button>
           </div>
