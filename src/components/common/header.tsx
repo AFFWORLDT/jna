@@ -41,8 +41,11 @@ export default function Header() {
     { href: "/offPlans", label: "OFF-PLAN" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
+    { href: "/service", label: "SERVICE" },     
+    { href: "/about", label: "ABOUT" },          
     { href: "/contactUs", label: "CONTACT US" },
   ];
+
 
   return (
     <header
