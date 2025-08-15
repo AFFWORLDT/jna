@@ -1,6 +1,7 @@
 "use client";
 import { getAllCommunities } from "@/src/api/communities";
 import CommunitiesCard from "@/src/view/communities/communitiesCard";
+import { Loader } from "lucide-react";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 
 const PAGE_SIZE = 10;
@@ -82,7 +83,7 @@ function Communities() {
           })}
         </div>
         {loading && (
-          <div className="text-center py-4 text-gray-500">Loading...</div>
+          <div className="flex justify-center items-center py-4 text-primary"><Loader className="animate-spin w-8 h-8"/></div>
         )}
         {!hasMore && (
           <div className="text-center py-4 text-gray-400">No more communities.</div>

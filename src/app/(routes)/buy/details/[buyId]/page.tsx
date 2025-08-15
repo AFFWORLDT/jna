@@ -1,6 +1,6 @@
 "use client";
 import DetailPage from "@/src/view/buy/detailPage";
-import SocialMediaFloat from "@/src/view/offPlans/socialMediaFlotionButtons";
+import SocialMediaFloat from "@/src/components/common/socialMediaFlotionButtons";
 import { useParams } from "next/navigation";
 import React from "react";
 
@@ -10,7 +10,7 @@ function BuyDetails() {
   return (
     <div>
         <DetailPage id={buyId} />
-      <SocialMediaFloat />
+      <SocialMediaFloat css="bottom-6 right-6"/>
     </div>
   );
 }
