@@ -11,6 +11,7 @@ import {
 } from "@/src/components/ui/select";
 import { cn } from "@/src/lib/utils";
 import OffPlanCard from "@/src/view/offPlans/offPlanCard";
+import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 function page() {
@@ -31,6 +32,7 @@ function page() {
   useEffect(() => {
     fetchproperty();
   }, []);
+  
   return (
     <div>
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
@@ -89,6 +91,11 @@ function page() {
         </p>
       </div>
       <div>
+        {loading && (
+          <div className="flex justify-center items-center h-64">
+            <Loader className="animate-spin h-10 w-10 text-primary" />
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-  gap-6 px-4 container mx-auto py-6">
           {property?.map((property, i) => (
             <OffPlanCard data={property} key={i} />

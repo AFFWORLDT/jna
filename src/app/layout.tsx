@@ -7,8 +7,10 @@ import Footer from "@/src/components/common/footer";
 
 export const metadata: Metadata = {
   title: "JNA Properties - Luxury Real Estate in Dubai",
-  description: "Discover Dubai's finest luxury properties with JNA Properties. Premium apartments, villas, and penthouses in prime locations like Dubai Marina, Downtown Dubai, and Palm Jumeirah.",
-  keywords: "Dubai real estate, luxury properties, Dubai Marina, Downtown Dubai, Palm Jumeirah, property investment, luxury apartments, villas Dubai",
+  description:
+    "Discover Dubai's finest luxury properties with JNA Properties. Premium apartments, villas, and penthouses in prime locations like Dubai Marina, Downtown Dubai, and Palm Jumeirah.",
+  keywords:
+    "Dubai real estate, luxury properties, Dubai Marina, Downtown Dubai, Palm Jumeirah, property investment, luxury apartments, villas Dubai",
   authors: [{ name: "JNA Properties" }],
   viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
@@ -32,9 +34,11 @@ html {
       </head>
       <body>
         <Header />
-        {children}
+       <main className="min-h-screen bg-gray-100">
+         {children}
+        </main>
+        <Footer />
       </body>
-      <Footer />
     </html>
   );
 }

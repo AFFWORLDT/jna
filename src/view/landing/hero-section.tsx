@@ -85,7 +85,7 @@ export default function HeroSection() {
                 className="w-full h-12 sm:h-14 text-white bg-white/10 border border-white/30 rounded-none backdrop-blur-sm placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
               />
             </div>
-            <div className="lg:col-span-1 sm:col-span-2 lg:col-span-1">
+            <div className="lg:col-span-1 sm:col-span-2">
               <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors h-12 sm:h-14">
                 Search
               </Button>

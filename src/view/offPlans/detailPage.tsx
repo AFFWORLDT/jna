@@ -4,6 +4,7 @@ import { getPropertyById } from "@/src/api/offPlans";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import EnquireForm from "@/src/components/common/enquireForm";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -76,7 +77,7 @@ export default function DetailPage({ id }: any) {
           <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">
             {property?.name}
           </h1>
-          <p className="text-lg font-light mb-12 tracking-wider uppercase text-[#DBBB90]">
+          <p className="text-lg font-light mb-12 tracking-wider uppercase text-primary">
             {property?.location?.community}, {property?.location?.sub_community}
             , {property?.location?.city}
           </p>
@@ -85,7 +86,7 @@ export default function DetailPage({ id }: any) {
 
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center gap-8 text-lg font-light uppercase text-[#DBBB90] mb-12">
+          <div className="flex justify-center gap-8 text-lg font-light uppercase text-primary mb-12">
             <a href="#" className="hover:underline">
               Enquire Now
             </a>
@@ -99,7 +100,7 @@ export default function DetailPage({ id }: any) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
             <div>
-              <h3 className="text-sm font-light uppercase text-[#DBBB90] mb-2 border-b border-[#DBBB90] inline-block pb-1">
+              <h3 className="text-sm font-light uppercase text-primary mb-2 border-b border-primary inline-block pb-1">
                 From
               </h3>
               <p className="text-sm font-light text-gray-700">
@@ -109,7 +110,7 @@ export default function DetailPage({ id }: any) {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-light uppercase text-[#DBBB90] mb-2 border-b border-[#DBBB90] inline-block pb-1">
+              <h3 className="text-sm font-light uppercase text-primary mb-2 border-b border-primary inline-block pb-1">
                 Completion Date
               </h3>
               <p className="text-sm font-light text-gray-700">
@@ -120,7 +121,7 @@ export default function DetailPage({ id }: any) {
               </p>
             </div>
             <div>
-              <h3 className="text-sm font-light uppercase text-[#DBBB90] mb-2 border-b border-[#DBBB90] inline-block pb-1">
+              <h3 className="text-sm font-light uppercase text-primary mb-2 border-b border-primary inline-block pb-1">
                 Construction Stage
               </h3>
               <p className="text-sm font-light text-gray-700">{"Off-plan"}</p>
@@ -163,7 +164,7 @@ export default function DetailPage({ id }: any) {
                       onClick={() => setSelectedImageIndex(index)}
                       className={`relative h-20 md:h-24 lg:h-28 overflow-hidden rounded transition-all duration-200 ${
                         selectedImageIndex === index
-                          ? "ring-2 ring-[#DBBB90] opacity-100"
+                          ? "ring-2 ring-primary opacity-100"
                           : "opacity-70 hover:opacity-90"
                       }`}
                     >
@@ -179,6 +180,10 @@ export default function DetailPage({ id }: any) {
               </div>
             </div>
           )}
+        </div>
+        <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
+          <h2 className="text-3xl font-serif text-primary mb-8">Enquire</h2>
+          <EnquireForm type="contact" />
         </div>
       </section>
     </div>
