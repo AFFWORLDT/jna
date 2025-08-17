@@ -10,29 +10,29 @@ function EnquireForm({ type }: { type: string }) {
         <Input
           type="text"
           placeholder="Name"
-          className="h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
+          className="bg-white h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
         />
         <Input
           type="text"
           placeholder="Surname"
-          className="h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
+          className="bg-white h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
           type="email"
           placeholder="Email"
-          className="h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
+          className="bg-white h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
         />
         <Input
           type="tel"
           placeholder="Telephone"
-          className="h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
+          className="bg-white h-12 px-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold font-mono"
         />
       </div>
       <Textarea
         placeholder="Write your message here..."
-        className="min-h-[150px] p-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold resize-y font-mono"
+        className="bg-white min-h-[150px] p-4 border border-gray-300 focus:border-brand-gold focus:ring-brand-gold resize-y font-mono"
       />
       <p className="text-xs text-gray-500 mt-4 font-mono">
         By submitting this form you confirm that this website can store your

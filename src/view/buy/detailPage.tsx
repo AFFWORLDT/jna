@@ -41,7 +41,7 @@ export default function DetailPage({ id }: any) {
   }, [property?.photos]);
   return (
     <div className="">
-      <div className="bg-white h-24" />
+      <div className="bg-[#141442] h-24" />
       <div className="grid grid-cols-1 lg:grid-cols-2 items-start px-4">
         <section className="w-full my-2 relative">
             <div className="relative w-full h-96">
@@ -54,7 +54,7 @@ export default function DetailPage({ id }: any) {
                   objectFit="cover"
                   quality={85}
                   priority={index === 0}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out text-white${
                     index === heroImageIndex
                       ? "opacity-100 z-10"
                       : "opacity-0 z-0"
