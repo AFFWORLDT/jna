@@ -14,7 +14,6 @@ export default function HeroSection() {
         quality={85}
         priority
       />
-      <div className="absolute inset-0 bg-black/40 z-10" />
       <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-mono mb-4 leading-tight tracking-wide">
           Luxury Living Reimagined
