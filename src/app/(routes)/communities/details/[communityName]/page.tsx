@@ -92,7 +92,7 @@ export default function CommunityDetails({ params }: { params: { communityName: 
       {/* Featured Image */}
       <section className="mt-11">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <img
               src={article.featured_image}
               alt={article.title}
@@ -105,7 +105,7 @@ export default function CommunityDetails({ params }: { params: { communityName: 
       {/* Content Section */}
       <section className="py-1 md:py-4">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="prose prose-lg max-w-none">
               <div 
                 className="text-gray-800 leading-relaxed"

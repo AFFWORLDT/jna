@@ -3,21 +3,21 @@ export default function WhyDubai() {
     <div className="min-h-screen bg-white text-gray-800">
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl font-medium mb-6 text-white font-mono">
+          <h1 className="text-5xl font-medium mb-6 text-white font-mono">
             Why Dubai
           </h1>
         </div>
       </section>
       <main className="container mx-auto px-4 py-8 md:py-12 lg:py-16 max-w-5xl">
         {/* Advantages to buy a Luxury property in Dubai */}
-        <section className="mb-12 md:mb-16">
-          <h2 className="text-2xl font-serif font-normal mb-6">
+        <section className="mb-12 md:my-16">
+          <h2 className="text-4xl font-serif font-normal mb-6">
             Advantages to buy a Luxury property in Dubai
           </h2>
           <div className="space-y-6 text-gray-600">
             <div>
               <h3 className="font-bold text-base mb-2">Lifestyle:</h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Unparalleled Luxury: Own a luxury property offering a
                   combination of stunning architecture, world-class amenities,
@@ -37,7 +37,7 @@ export default function WhyDubai() {
             </div>
             <div>
               <h3 className="font-bold text-base mb-2">Investment:</h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Tax-Free Haven: Investing in Dubai means
                   benefiting from high-profit margins with no income or property
@@ -67,7 +67,7 @@ export default function WhyDubai() {
             </div>
             <div>
               <h3 className="font-bold text-base mb-2">Exclusivity & Status:</h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Own a Piece of History: Invest in Dubai real
                   estate by acquiring iconic stunning landmarks and lifestyle
@@ -99,7 +99,7 @@ export default function WhyDubai() {
           <h2 className="text-2xl font-serif font-normal mb-6">
             off-Plan Property Investment
           </h2>
-          <p className="mb-6 text-gray-600 leading-relaxed text-sm">
+          <p className="mb-6 text-gray-600 leading-relaxed text-[15px]">
             For seasoned and first-time property investors seeking unique
             opportunities with a maximized return on investment potential,
             Dubai&apos;s off-plan market holds several compelling advantages.
@@ -112,7 +112,7 @@ export default function WhyDubai() {
               <h3 className="font-bold text-base mb-2">
                 Attractive Entry Point & Potential Capital Growth:
               </h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Lower Prices: Generally priced 10-20% lower
                   than completed units, thus offering immediate savings.
@@ -136,7 +136,7 @@ export default function WhyDubai() {
               <h3 className="font-bold text-base mb-2">
                 Flexible Payment Plans & Lower Upfront Costs:
               </h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Staged Payments: Spread investment costs over
                   several years without interest payments, thus reducing the
@@ -159,7 +159,7 @@ export default function WhyDubai() {
               <h3 className="font-bold text-base mb-2">
                 Diversification & Tax Benefits:
               </h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Diversity Portfolio: Expand your portfolio by
                   a unique asset class with high potential returns and above-
@@ -176,7 +176,7 @@ export default function WhyDubai() {
               <h3 className="font-bold text-base mb-2">
                 Strong Market Fundamentals & Growth Potential:
               </h3>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Stable Economy: Dubai&apos;s highly dynamic
                   and growing economy attracts international businesses and
@@ -199,7 +199,7 @@ export default function WhyDubai() {
               </ul>
             </div>
           </div>
-          <p className="mt-6 text-gray-600 leading-relaxed text-sm">
+          <p className="mt-6 text-gray-600 leading-relaxed text-[15px]">
             As J&A Properties applies a thorough due diligence process,
             understands the legal framework, and chooses to work exclusively
             with the most reputable developers with a proven track record within
@@ -215,14 +215,14 @@ export default function WhyDubai() {
           <h2 className="text-2xl font-serif font-normal mb-6">
             Ready Property Investment
           </h2>
-          <p className="mb-6 text-gray-600 leading-relaxed text-sm">
+          <p className="mb-6 text-gray-600 leading-relaxed text-[15px]">
             Ready properties are completed buildings available for immediate
             move-in. Here are the key advantages of investing in ready
             properties in Dubai:
           </p>
           <div className="space-y-6 text-gray-600">
             <div>
-              <ul className="list-disc pl-6 space-y-2 text-sm">
+              <ul className="list-disc pl-6 space-y-2 text-[15px]">
                 <li>
                   Move in Now: The biggest advantage is
                   immediate occupancy. With a ready property, you can skip the
@@ -265,7 +265,7 @@ export default function WhyDubai() {
               </ul>
             </div>
           </div>
-          <p className="mt-6 text-gray-600 leading-relaxed text-sm">
+          <p className="mt-6 text-gray-600 leading-relaxed text-[15px]">
             In summary, ready properties are a good choice for those who
             prioritize immediate occupancy, a guaranteed product, lower risk,
             and access to established amenities. They may also be a good option

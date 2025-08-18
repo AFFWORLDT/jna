@@ -2,6 +2,16 @@ import { Input } from "@/src/components/ui/input"
 import { Button } from "@/src/components/ui/button"
 import { Facebook, Instagram, Linkedin } from "lucide-react"
 
+const sitemapLinks = [
+  { href: "/buy", label: "Buy" },
+  { href: "/offPlans", label: "Off-Plan" },
+  { href: "/communities", label: "Communities" },
+  { href: "/whyDubai", label: "Why Dubai" },
+  { href: "/service", label: "Services" },
+  { href: "/about", label: "About Us" },
+  { href: "/contactUs", label: "Contact Us" },
+]
+
 export default function Footer() {
   return (
     <footer className="bg-[#141442] text-white py-12 px-4 md:px-6">
@@ -26,47 +36,27 @@ export default function Footer() {
             </Button>
           </div>
         </div>
+
         {/* Sitemap */}
         <div>
           <h4 className="text-lg font-extralight mb-4 tracking-wide">Sitemap</h4>
           <ul className="space-y-2 text-sm font-extralight">
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                Buy
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                Off-Plan
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                Communities
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                Why Dubai
-              </a>
-            </li>
-            <li>
-              <a href="/service" className="hover:text-gray-300 transition-colors">
-                Services
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                About Us
-              </a>
-            </li>
-            <li>
-              <a href="#" className="hover:text-gray-300 transition-colors">
-                Contact Us
-              </a>
-            </li>
+            {sitemapLinks.map((link, i) => (
+              <li key={i}>
+                <a
+                  href={link.href}
+                  className="relative inline-block hover:text-gray-300 transition-colors
+                             after:content-[''] after:absolute after:left-0 after:bottom-0
+                             after:h-[2px] after:w-0 after:bg-primary
+                             after:transition-all after:duration-300 hover:after:w-full"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
+
         {/* Contact */}
         <div>
           <h4 className="text-lg font-extralight mb-4 tracking-wide">Contact</h4>
@@ -78,22 +68,28 @@ export default function Footer() {
               <span className="font-extralight">E</span>{" "}
               <a
                 href="mailto:welcome@jna-properties.com"
-                className="hover:text-gray-300 transition-colors font-extralight"
+                className="relative inline-block hover:text-gray-300 transition-colors
+                           after:content-[''] after:absolute after:left-0 after:bottom-0
+                           after:h-[2px] after:w-0 after:bg-primary
+                           after:transition-all after:duration-300 hover:after:w-full"
               >
                 welcome@jna-properties.com
               </a>
             </p>
           </address>
         </div>
+
         {/* About Us */}
         <div>
           <h4 className="text-lg font-extralight mb-4 tracking-wide">About Us</h4>
           <p className="text-sm leading-relaxed font-extralight">
-            J&A Properties specializes in luxury Dubai real estate, offering personalized service, market insights, and
-            tailored investment solutions for discerning clients.
+            J&A Properties specializes in luxury Dubai real estate, offering personalized service,
+            market insights, and tailored investment solutions for discerning clients.
           </p>
         </div>
       </div>
+
+      {/* Bottom bar */}
       <div className="container mx-auto border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-white/70">
         <p className="font-extralight">&copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
