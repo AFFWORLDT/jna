@@ -101,17 +101,31 @@ export default function Header() {
             variant="ghost"
             size="icon"
             className="text-white hover:bg-white/10"
+            asChild
           >
-            <MessageCircle className="h-5 w-5" />
-            <span className="sr-only">WhatsApp</span>
+            <a
+              href="https://wa.me/971471803105"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle className="h-5 w-5" />
+              <span className="sr-only">WhatsApp</span>
+            </a>
           </Button>
           <Button
             variant="ghost"
             size="icon"
             className="text-white hover:bg-white/10"
+            asChild
           >
-            <Phone className="h-5 w-5" />
-            <span className="sr-only">Call Us</span>
+            <a
+              href="tel:+971471803105"
+              aria-label="Call Us"
+            >
+              <Phone className="h-5 w-5" />
+              <span className="sr-only">Call Us</span>
+            </a>
           </Button>
           <Button
             variant="ghost"
