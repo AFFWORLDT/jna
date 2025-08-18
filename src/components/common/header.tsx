@@ -70,17 +70,18 @@ export default function Header() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-10  text-sm font-light uppercase tracking-wider">
+        <div className="hidden md:flex items-center space-x-10 text-sm font-light uppercase tracking-[1.5px]" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
           {navLinks.map((link, i) => (
             <Link
               key={i}
               href={link.href}
               className={cn(
-                "relative pb-1 transition-all duration-300 text-white",
+                "relative pb-1 transition-all duration-300 text-white uppercase",
                 "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
                 "after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                 pathname === link.href && "after:w-full"
               )}
+              style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '1.5px' }}
             >
               {link.label}
             </Link>
@@ -155,16 +156,17 @@ export default function Header() {
           <span className="sr-only">Close menu</span>
         </Button>
 
-        <nav className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-wider flex-grow">
+        <nav className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-[1.5px] flex-grow" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
           {navLinks.map((link, i) => (
             <Link
               key={i}
               href={link.href}
-              className={`block py-2 transition-colors duration-200
+              className={`block py-2 transition-colors duration-200 uppercase
                 ${
                   pathname === link.href ? "text-primary" : "hover:text-primary"
                 }`}
               onClick={() => setIsOverlayOpen(false)}
+              style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '1.5px' }}
             >
               {link.label}
             </Link>
