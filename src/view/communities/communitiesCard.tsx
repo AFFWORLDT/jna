@@ -20,7 +20,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
     <Card className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border">
       <CardContent className="p-0 h-full">
         <Image
-          src={data?.photos?.[0] || data?.order_photo || '/images/placeholder.jpg'}
+          src={data?.order_photo || data?.photos?.[0] || '/images/placeholder.jpg'}
           alt={`Image of ${data?.name}`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -33,9 +33,6 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
           <h3 className="text-2xl font-light mb-2 tracking-wide">
             {data?.name}
           </h3>
-          <p className="text-sm mb-4 font-light leading-relaxed">
-            {`${data?.city}`}
-          </p>
           {data?.order_description && (
             <p className="text-xs mb-4 font-light leading-relaxed opacity-90">
               {data.order_description}
@@ -44,7 +41,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
           <div className="w-16 h-0.5 border mb-4" />
 
           <Link
-            href="#"
+            href={`/communities/details/${encodeURIComponent(data?.name)}`}
             className="mt-4 text-[#D4B88C] uppercase text-sm font-light tracking-wider hover:underline"
           >
             Explore
