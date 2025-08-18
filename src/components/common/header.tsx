@@ -53,7 +53,19 @@ export default function Header() {
     { href: "/whyDubai", label: "WHY DUBAI" },
     { href: "/contactUs", label: "CONTACT US" },
   ];
+  useEffect(() => {
+    if (!isOverlayOpen) return;
 
+    const handleClickOutside = () => {
+      setIsOverlayOpen(false);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isOverlayOpen]);
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
@@ -90,7 +102,7 @@ export default function Header() {
               key={i}
               href={link.href}
               className={cn(
-                "relative pb-1 transition-all duration-300 text-white uppercase",
+                "relative pb-1 transition-all duration-300 text-white uppercase text-sm font-normal",
                 "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
                 "after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                 pathname === link.href && "after:w-full"
@@ -153,22 +165,20 @@ export default function Header() {
 
       {/* Overlay */}
       <div
-        className={`fixed top-0 bottom-0 right-0 w-full md:w-1/4 bg-[#F5F2ED] text-gray-900 z-[100] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 bottom-0 right-0 w-full md:w-1/4 bg-[#F5F2ED] text-gray-900 z-[100] transform transition-transform duration-800 ease-in-out ${
           isOverlayOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <Button
-          variant="ghost"
-          size="icon"
+        <div
           className="absolute top-4 right-4 text-[#1A2B40] hover:bg-gray-200"
           onClick={() => setIsOverlayOpen(false)}
         >
-          <X className="h-6 w-6" />
+          <Icon icon={"ic:outline-cancel"} fontSize={25} />
           <span className="sr-only">Close menu</span>
-        </Button>
+        </div>
 
         <nav
-          className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-[1.5px] flex-grow"
+          className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-[1.5px] flex-grow mt-16 ms-8"
           style={{
             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           }}
@@ -177,11 +187,11 @@ export default function Header() {
             <Link
               key={i}
               href={link.href}
-              className={`block py-2 transition-colors duration-200 uppercase
-                ${
-                  pathname === link.href ? "text-primary" : "hover:text-primary"
-                }`}
-              onClick={() => setIsOverlayOpen(false)}
+              className={cn(
+                "relative pb-1 transition-all duration-300 text-black uppercase text-base",
+                "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
+                "after:bg-primary after:transition-all after:duration-300 hover:after:w-20"
+              )}
               style={{
                 fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 letterSpacing: "1.5px",
