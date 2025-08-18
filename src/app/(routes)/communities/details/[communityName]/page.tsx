@@ -82,7 +82,7 @@ export default function CommunityDetails({ params }: { params: { communityName: 
       <section className="bg-[#141442] py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-6xl md:text-5xl font-normal font-mono text-white mb-6 leading-tight">
               {article.title}
             </h1>
           </div>
@@ -90,20 +90,20 @@ export default function CommunityDetails({ params }: { params: { communityName: 
       </section>
 
       {/* Featured Image */}
-      <section className="py-12">
+      <section className="mt-11">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <img
               src={article.featured_image}
               alt={article.title}
-              className="w-full h-[400px] object-cover"
+              className="w-full max-h-[400px] object-cover"
             />
           </div>
         </div>
       </section>
 
       {/* Content Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-1 md:py-4">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none">
@@ -112,13 +112,13 @@ export default function CommunityDetails({ params }: { params: { communityName: 
                 dangerouslySetInnerHTML={{ 
                   __html: article.content.replace(
                     /<h2>/g, 
-                    '<h2 class="text-3xl font-bold text-gray-900 mt-12 mb-6 first:mt-0">'
+                    '<h2 class="text-4xl font-normal my-6 font-mono text-gray-900 first:mt-0">'
                   ).replace(
                     /<p>/g, 
-                    '<p class="text-lg text-gray-700 mb-6 leading-relaxed">'
+                    '<p class="text-sm  text-gray-700 mb-6 leading-relaxed">'
                   ).replace(
                     /<ul>/g, 
-                    '<ul class="list-disc list-inside space-y-2 mb-6 text-lg text-gray-700">'
+                    '<ul class="list-disc list-inside space-y-2 mb-6 text-sm text-gray-700">'
                   ).replace(
                     /<li>/g, 
                     '<li class="leading-relaxed">'

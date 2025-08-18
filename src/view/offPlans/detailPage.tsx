@@ -7,6 +7,7 @@ import moment from "moment";
 import EnquireForm from "@/src/components/common/enquireForm";
 import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -189,7 +190,7 @@ export default function DetailPage({ id }: any) {
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <AnimatePresence>
-            <DialogContent className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#F2EEE8]">
+            <DialogContent className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#F2EEE8] rounded-none px-8 py-4">
               <motion.div
                 key="dialog"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -197,17 +198,25 @@ export default function DetailPage({ id }: any) {
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <DialogTitle className="mb-6">
-                  <h2 className="text-2xl  font-mono font-thin text-black text-center">
-                    Take the First Step
-                  </h2>
-                  <p className="font-mono font-thin text-center text-[15px] text-neutral-400">
-                    Get a free consultation, personalized investment strategy,
-                    and exclusive access to Dubai best properties.
-                  </p>
+                <DialogTitle className="mb-6 flex justify-between">
+                  <div>
+                    <h2 className="text-2xl  font-mono font-thin text-black text-center">
+                      Take the First Step
+                    </h2>
+                    <p className="font-mono font-thin text-center text-[15px] text-neutral-400">
+                      Get a free consultation, personalized investment strategy,
+                      and exclusive access to Dubai best properties.
+                    </p>
+                  </div>
+                  <Icon
+                    icon={"material-symbols-light:cancel-outline"}
+                    fontSize={25}
+                    className="text-neutral-400 cursor-pointer"
+                    onClick={() => setIsOpen(false)}
+                  />
                 </DialogTitle>
 
-                <EnquireForm type="contact" />
+                <EnquireForm type="offPlan" />
               </motion.div>
             </DialogContent>
           </AnimatePresence>

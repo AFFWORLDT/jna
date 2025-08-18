@@ -16,6 +16,7 @@ import {
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/src/lib/utils";
+import { Icon } from "@iconify/react";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,11 +42,17 @@ export default function Header() {
     { href: "/offPlans", label: "OFF-PLAN" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
-    { href: "/service", label: "SERVICE" },     
-    { href: "/about", label: "ABOUT" },          
+    { href: "/service", label: "SERVICE" },
+    { href: "/about", label: "ABOUT" },
     { href: "/contactUs", label: "CONTACT US" },
   ];
-
+  const headerLink = [
+    { href: "/buy", label: "BUY" },
+    { href: "/offPlans", label: "OFF-PLAN" },
+    { href: "/communities", label: "COMMUNITIES" },
+    { href: "/whyDubai", label: "WHY DUBAI" },
+    { href: "/contactUs", label: "CONTACT US" },
+  ];
 
   return (
     <header
@@ -61,7 +68,9 @@ export default function Header() {
         <div className="flex items-center">
           <Link href={"/"}>
             <Image
-              src={isScrolled?"/images/logo-gold.svg":"/images/logo-white.svg"}
+              src={
+                isScrolled ? "/images/logo-gold.svg" : "/images/logo-white.svg"
+              }
               alt="logo"
               width={80}
               height={80}
@@ -70,8 +79,13 @@ export default function Header() {
         </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center space-x-10 text-sm font-light uppercase tracking-[1.5px]" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
-          {navLinks.map((link, i) => (
+        <div
+          className="hidden md:flex items-center space-x-10 text-sm font-light uppercase tracking-[1.5px]"
+          style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          }}
+        >
+          {headerLink.map((link, i) => (
             <Link
               key={i}
               href={link.href}
@@ -81,7 +95,10 @@ export default function Header() {
                 "after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                 pathname === link.href && "after:w-full"
               )}
-              style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '1.5px' }}
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                letterSpacing: "1.5px",
+              }}
             >
               {link.label}
             </Link>
@@ -89,54 +106,48 @@ export default function Header() {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/10"
-          >
-            <Heart className="h-5 w-5" />
+        <div className="flex items-center gap-x-7">
+          <div className="text-white">
+            <Heart className="h-5 w-5" fill="white" />
             <span className="sr-only">Favorites</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/10"
-            asChild
-          >
+          </div>
+          <div className="text-white">
             <a
               href="https://wa.me/971471803105"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
             >
-              <MessageCircle className="h-5 w-5" />
+              <Icon icon={"iconoir:whatsapp-solid"} className="h-6 w-6" />
               <span className="sr-only">WhatsApp</span>
             </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/10"
-            asChild
-          >
-            <a
-              href="tel:+971471803105"
-              aria-label="Call Us"
-            >
-              <Phone className="h-5 w-5" />
+          </div>
+          <div className="text-white">
+            <a href="tel:+971471803105" aria-label="Call Us">
+              <Icon icon={"line-md:phone-call-filled"} className="h-6 w-6" />
               <span className="sr-only">Call Us</span>
             </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white hover:bg-white/10"
+          </div>
+          <div
+            className="text-white group relative cursor-pointer w-6 h-6"
             onClick={() => setIsOverlayOpen(true)}
           >
-            <Menu className="h-5 w-5" />
+            {/* Default Icon */}
+            <Icon
+              icon="codicon:menu"
+              fontSize={25}
+              className="absolute inset-0 opacity-100 scale-100 transition-all duration-300 ease-in-out group-hover:opacity-0 group-hover:scale-90"
+            />
+
+            {/* Hover Icon */}
+            <Icon
+              icon="heroicons-solid:menu-alt-2"
+              fontSize={25}
+              className="absolute inset-0 opacity-0 scale-90 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:scale-100"
+            />
+
             <span className="sr-only">Toggle Menu</span>
-          </Button>
+          </div>
         </div>
       </nav>
 
@@ -156,7 +167,12 @@ export default function Header() {
           <span className="sr-only">Close menu</span>
         </Button>
 
-        <nav className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-[1.5px] flex-grow" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+        <nav
+          className="flex flex-col pt-16 p-8 space-y-4 text-lg uppercase font-light tracking-[1.5px] flex-grow"
+          style={{
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+          }}
+        >
           {navLinks.map((link, i) => (
             <Link
               key={i}
@@ -166,7 +182,10 @@ export default function Header() {
                   pathname === link.href ? "text-primary" : "hover:text-primary"
                 }`}
               onClick={() => setIsOverlayOpen(false)}
-              style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '1.5px' }}
+              style={{
+                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                letterSpacing: "1.5px",
+              }}
             >
               {link.label}
             </Link>
