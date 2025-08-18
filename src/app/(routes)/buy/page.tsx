@@ -40,7 +40,6 @@ function Buy() {
     // Add your favorite logic here
   };
 
-  console.log(property, "property");
 
   return (
     <div>

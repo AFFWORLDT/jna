@@ -1,122 +1,111 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
-import { Badge } from "@/src/components/ui/badge"
-import { Button } from "@/src/components/ui/button"
-import { Card, CardContent } from "@/src/components/ui/card"
-import { Separator } from "@/src/components/ui/separator"
-import { Calendar, Clock, Share2, BookOpen, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import SocialMediaFloat from "@/src/components/common/socialMediaFlotionButtons";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/src/components/ui/avatar";
+import { Badge } from "@/src/components/ui/badge";
+import { Button } from "@/src/components/ui/button";
+import { Card, CardContent } from "@/src/components/ui/card";
+import { Separator } from "@/src/components/ui/separator";
+import { Calendar, Clock, Share2, BookOpen, ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 // Mock data - in a real app, this would come from your CMS or database
 const blogPost = {
-  title: "Designing for Deep Reading: How to Keep Users Hooked",
-  subtitle: "Creating immersive digital experiences that encourage sustained engagement",
+  title: "Why Buying Property in Dubai is Better than Renting",
+  subtitle:
+    "Discover the financial, lifestyle, and investment advantages of owning property in Dubai.",
   content: `
-    <p>In our fast-paced digital world, capturing and maintaining a reader's attention has become both an art and a science. The challenge isn't just getting someone to click on your content—it's keeping them engaged long enough to absorb your message and take meaningful action.</p>
-    
-    <h2>The Psychology of Digital Reading</h2>
-    <p>Research shows that people read differently on screens than on paper. Our eyes tend to scan in an F-pattern, looking for quick takeaways rather than diving deep into lengthy paragraphs. Understanding this behavior is crucial for designers who want to create content that truly resonates.</p>
-    
-    <blockquote>"A truly great design disappears into the background, letting the story take center stage."</blockquote>
-    
-    <p>When we design with reading psychology in mind, we can create layouts that guide the eye naturally through the content, using white space, typography, and visual hierarchy to create a seamless reading experience.</p>
-    
-    <h2>Visual Hierarchy and Flow</h2>
-    <p>The key to deep reading lies in creating a clear visual hierarchy that doesn't overwhelm the reader. This means using consistent spacing, appropriate font sizes, and strategic use of color to highlight important information without creating visual noise.</p>
-    
-    <p>Consider how your content flows from one section to the next. Are you providing clear transitions? Are your headings descriptive enough to help readers navigate? These details make the difference between content that gets skimmed and content that gets absorbed.</p>
-    
-    <h2>The Role of White Space</h2>
-    <p>White space isn't empty space—it's breathing room for your content. Generous margins, line spacing, and paragraph breaks give readers' eyes a chance to rest and process information. This is especially important for longer-form content where reader fatigue can quickly set in.</p>
+    <h2>Long-Term Financial Benefits</h2>
+    <p>Renting might provide short-term flexibility, but it’s essentially paying for someone else’s property investment. When you buy a property, each payment builds equity—an asset that grows in value over time. With Dubai’s real estate market offering high capital appreciation, buying a home can significantly enhance your net worth.</p>
+    <p>Moreover, rental prices in Dubai can be volatile, often rising sharply in popular areas. Owning property allows you to avoid these fluctuations and provides you with stable and predictable housing costs.</p>
+
+    <h2>Tax-Free Property Ownership</h2>
+    <p>Dubai is known for its investor-friendly environment, including no property taxes. Once you purchase a property, you won’t need to worry about annual taxes cutting into your investment’s value. This tax-free advantage makes property ownership in Dubai even more appealing compared to other global cities.</p>
+
+    <h2>Flexible Payment Plans</h2>
+    <p>Developers in Dubai often offer attractive and flexible payment plans for off-plan properties. These plans allow buyers to spread payments over several years, making homeownership accessible to a broader range of individuals. In many cases, the monthly installments for a property purchase can be comparable to, or even less than, rental payments.</p>
+
+    <h2>Residency Benefits</h2>
+    <p>Owning property in Dubai can come with residency visa benefits, depending on the value of your investment. This provides not just a place to live but also the security of being a resident in one of the world’s most vibrant cities. These visas often allow property owners and their families to enjoy the perks of living in Dubai, such as access to excellent healthcare, education, and business opportunities.</p>
+
+    <h2>Freedom to Personalize</h2>
+    <p>When you own your home, you have complete control over its design and functionality. You can renovate, redecorate, and modify your property as you wish without the limitations imposed by a landlord. This freedom allows you to create a space that truly feels like home.</p>
+
+    <h2>High Rental Yields</h2>
+    <p>If you’re not planning to live in the property, Dubai’s high rental yields make property ownership a lucrative investment. Popular areas such as Downtown Dubai, Dubai Marina, and Palm Jumeirah offer some of the highest rental returns globally, ensuring your property works for you even when you’re not living in it.</p>
+
+    <h2>A Hedge Against Inflation</h2>
+    <p>Owning property protects you from rising rental prices, which can significantly impact your cost of living over time. Fixed mortgage rates or paid-off properties ensure stability in your housing expenses, acting as a hedge against inflation.</p>
+
+    <h2>A Thriving Real Estate Market</h2>
+    <p>Dubai’s real estate market is continuously evolving, with world-class infrastructure projects, upcoming mega-developments, and a strong commitment to sustainability and innovation. Buying property in this market positions you to benefit from the city’s ongoing growth and global appeal.</p>
+
+    <h2>Conclusion</h2>
+    <p>While renting offers short-term convenience, buying property in Dubai is a decision that offers lasting value, financial security, and numerous lifestyle advantages. From tax-free ownership to residency benefits and high rental yields, the incentives to invest in Dubai real estate are compelling.</p>
+
+    <p><strong>Make the smart move today.</strong> Contact our team at J&A Properties to explore exclusive property listings and discover your path to homeownership in Dubai. Let us help you turn your investment dreams into reality!</p>
   `,
   author: {
-    name: "Alex Rivera",
-    bio: "Senior UX Designer with 8+ years crafting digital experiences that prioritize user engagement and accessibility.",
-    avatar: "/placeholder.svg?height=64&width=64",
+    name: "J&A Properties",
+    bio: "Leading property experts helping investors and homeowners navigate Dubai’s thriving real estate market.",
+    avatar: "/images/logo-gold.svg",
     social: {
-      twitter: "@alexrivera",
-      linkedin: "alexrivera",
+      twitter: "@japroperties",
+      linkedin: "japroperties",
     },
   },
-  publishedAt: "March 15, 2024",
-  readTime: "7 min read",
-  category: "Design",
-  tags: ["UX Design", "Typography", "User Engagement"],
-  featuredImage: "/placeholder.svg?height=400&width=800",
-}
+  publishedAt: "December 24, 2024",
+  readTime: "6 min read",
+  category: "Real Estate",
+  tags: ["Dubai", "Investment", "Real Estate", "Property"],
+  featuredImage: "/images/blog1.webp",
+};
 
 export default function DetailsBlog() {
   return (
-    <div className="min-h-screen bg-background mt-20">
-     
-
-      {/* Header */}
-      <header className="relative bg-gradient-to-br from-slate-50 to-white border-b">
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Blog
-          </Link>
-
-          <div className="space-y-6">
-            <Badge variant="secondary" className="bg-blue-600 text-white hover:bg-blue-700">
-              {blogPost.category}
-            </Badge>
-
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-700 leading-tight">{blogPost.title}</h1>
-
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">{blogPost.subtitle}</p>
-
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                {blogPost.publishedAt}
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                {blogPost.readTime}
-              </div>
-              <Button variant="outline" size="sm" className="ml-auto bg-transparent">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
-              </Button>
-            </div>
-          </div>
+    <div className="min-h-screen bg-background">
+      <section className="pt-32 pb-12 px-4 bg-[#141442]">
+        <div className=" mx-auto text-center">
+          <h1 className="text-5xl font-medium mb-6 text-white font-mono">
+            Blog
+          </h1>
         </div>
-      </header>
-
+      </section>
+      <div className="max-w-5xl mx-auto px-6 mt-16">
+        <h1 className="text-center text-4xl font-mono">
+          Why Buying Property in Dubai is Better than Renting
+        </h1>
+        <p className="text-center text-xl font-mono mt-11">December 24, 2024</p>
+      </div>
       {/* Featured Image */}
-      <div className="max-w-4xl mx-auto px-6 -mt-8 mb-12">
-        <div className="relative rounded-xl overflow-hidden shadow-2xl">
-          <img
-            src={blogPost.featuredImage || "/placeholder.svg"}
+      <div className="max-w-5xl mx-auto px-6 mt-8 mb-12">
+        <div className="relative rounded-none overflow-hidden ">
+          <Image
+            src={"/images/blog1.webp"}
             alt="Featured image"
+            width={0}
+            height={0}
             className="w-full h-64 md:h-96 object-cover"
           />
         </div>
       </div>
-
       {/* Main Content */}
-      <main className="max-w-3xl mx-auto px-6">
+      <main className="max-w-5xl mx-auto px-6 py-4">
         <article className="prose prose-lg prose-slate max-w-none">
           <div
             className="text-slate-700 leading-relaxed space-y-6"
             dangerouslySetInnerHTML={{ __html: blogPost.content }}
             style={{
-              fontSize: "18px",
+              fontSize: "15px",
               lineHeight: "1.7",
             }}
           />
         </article>
-
-      
-
-      
-
-       
       </main>
+      <SocialMediaFloat css="bottom-6 left-6" />{" "}
     </div>
-  )
+  );
 }

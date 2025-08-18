@@ -6,7 +6,7 @@ import { Heart, Bed, Bath, SquareGanttChart, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion"
 
 interface PropertyCardProps {
-  imageSrc: string;
+  photos: string;
   title: string;
   location: string;
   price: string;
@@ -17,7 +17,7 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({
-  imageSrc,
+  photos,
   title,
   location,
   price,
@@ -30,7 +30,7 @@ export function PropertyCard({
     <Card className="relative overflow-hidden rounded-none shadow-sm bg-white p-0 border">
       <div className="relative w-full h-80">
         <Image
-          src={imageSrc}
+          src={photos}
           alt={title}
           fill
           className="rounded-none object-cover"
@@ -54,7 +54,7 @@ export function PropertyCard({
       </div>
       <CardContent className="grid gap-2 px-4 py-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-light text-[#1A202C] tracking-wide">{title}</h3>
+          <h3 className="text-lg font-light text-[#1A202C] tracking-wide line-clamp-1" title={title}>{title}</h3>
           <p className="text-sm text-gray-500 font-light">#{propertyId}</p>
         </div>
 

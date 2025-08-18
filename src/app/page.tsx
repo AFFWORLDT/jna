@@ -1,3 +1,4 @@
+"use client"
 import Header from "@/src/components/common/header"
 import HeroSection from "@/src/view/landing/hero-section"
 import Footer from "@/src/components/common/footer"

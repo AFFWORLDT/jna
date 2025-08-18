@@ -1,6 +1,8 @@
 import { Card, CardContent } from "@/src/components/ui/card";
+import { cn } from "@/src/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface CommunityData {
   city: string;
@@ -16,11 +18,19 @@ interface CommunityData {
 }
 
 export default function CommunitiesCard({ data }: { data: CommunityData }) {
+  const router = useRouter();
   return (
-    <Card className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border">
+    <Card
+      className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border cursor-pointer"
+      onClick={() =>
+        router.push(`/communities/details/${encodeURIComponent(data?.name)}`)
+      }
+    >
       <CardContent className="p-0 h-full">
         <Image
-          src={data?.order_photo || data?.photos?.[0] || '/images/placeholder.jpg'}
+          src={
+            data?.order_photo || data?.photos?.[0] || "/images/placeholder.jpg"
+          }
           alt={`Image of ${data?.name}`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -38,11 +48,15 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
               {data.order_description}
             </p>
           )}
-          <div className="w-16 h-0.5 border mb-4" />
+          <div className="w-full  border-[0.5px] border-white/30 mb-4" />
 
           <Link
             href={`/communities/details/${encodeURIComponent(data?.name)}`}
-            className="mt-4 text-[#D4B88C] uppercase text-sm font-light tracking-wider hover:underline"
+            className={cn(
+              "relative pb-1 transition-all duration-300 text-white uppercase text-base",
+              "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
+              "after:bg-primary after:transition-all after:duration-300 hover:after:w-20"
+            )}
           >
             Explore
           </Link>
