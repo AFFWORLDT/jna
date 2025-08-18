@@ -4,13 +4,14 @@ import CommunitiesCard from "@/src/view/communities/communitiesCard";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState, useRef, useCallback } from "react";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 100;
 
 function Communities() {
   const [communities, setCommunities] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [total, setTotal] = useState(0);
   const observer = useRef<IntersectionObserver | null>(null);
   const lastCommunityRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -29,12 +30,15 @@ function Communities() {
   useEffect(() => {
     const fetchCommunities = async () => {
       setLoading(true);
-      const query = `sort_by=total_count&sort_order=desc&page=${page}&size=${PAGE_SIZE}`;
       try {
-        const res = await getAllCommunities(query);
+        const res = await getAllCommunities(page, PAGE_SIZE);
         if (res?.communities?.length) {
-          setCommunities((prev) => [...prev, ...res.communities]);
-          setHasMore(res.communities.length === PAGE_SIZE);
+          setCommunities((prev) => {
+            const newCommunities = [...prev, ...res.communities];
+            setHasMore(newCommunities.length < res.total);
+            return newCommunities;
+          });
+          setTotal(res.total);
         } else {
           setHasMore(false);
         }
@@ -85,7 +89,7 @@ function Communities() {
         {loading && (
           <div className="flex justify-center items-center py-4 text-primary"><Loader className="animate-spin w-8 h-8"/></div>
         )}
-        {!hasMore && (
+        {!hasMore && communities.length > 0 && (
           <div className="text-center py-4 text-gray-400">No more communities.</div>
         )}
       </div>

@@ -3,17 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface CommunityData {
-  assigned_agents: any[];
   city: string;
+  photos: string[];
   latitude: number;
   longitude: number;
   name: string;
-  photos: string[];
-  pool_projects_count: number;
-  projects_count: number;
-  rent_properties_count: number;
-  sell_properties_count: number;
-  total_count: number;
+  assigned_order: number | null;
+  order_photo: string | null;
+  order_description: string | null;
+  order_created_at: string | null;
+  order_updated_at: string | null;
 }
 
 export default function CommunitiesCard({ data }: { data: CommunityData }) {
@@ -21,7 +20,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
     <Card className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border">
       <CardContent className="p-0 h-full">
         <Image
-          src={data?.photos?.[0]}
+          src={data?.photos?.[0] || data?.order_photo || '/images/placeholder.jpg'}
           alt={`Image of ${data?.name}`}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -37,6 +36,11 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
           <p className="text-sm mb-4 font-light leading-relaxed">
             {`${data?.city}`}
           </p>
+          {data?.order_description && (
+            <p className="text-xs mb-4 font-light leading-relaxed opacity-90">
+              {data.order_description}
+            </p>
+          )}
           <div className="w-16 h-0.5 border mb-4" />
 
           <Link
