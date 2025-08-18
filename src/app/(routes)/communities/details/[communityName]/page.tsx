@@ -79,10 +79,10 @@ export default function CommunityDetails({ params }: { params: { communityName: 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-[#141442] py-32">
+      <section className="bg-[#141442] py-12">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-5xl font-normal font-mono text-white mb-6 leading-tight">
+          <div className="max-w-4xl mx-auto text-center md:mt-20 mt-10">
+            <h1 className="text-6xl md:text-5xl font-normal font-mono text-white mb-6 leading-tight ">
               {article.title}
             </h1>
           </div>
@@ -90,7 +90,7 @@ export default function CommunityDetails({ params }: { params: { communityName: 
       </section>
 
       {/* Featured Image */}
-      <section className="mt-11">
+      <section className="mt-10 md:mt-28">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <img
