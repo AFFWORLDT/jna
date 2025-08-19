@@ -62,7 +62,7 @@ export default function Services() {
                       <img
                         src={service.imageUrl}
                         alt={service.title}
-                        className="w-full h-96 object-cover"
+                        className="w-full  sm:h-[600px] object-cover"
                       />
                     </div>
                   </div>

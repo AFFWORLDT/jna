@@ -26,13 +26,13 @@ export default function Feature() {
   return (
     <div className="flex flex-col items-center py-16 px-4 md:px-6 lg:px-8  container mx-auto">
       <div className="text-center mb-12">
-        <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-2">
+        <p className="text-sm font-thin uppercase tracking-wider text-primary mb-2">
           FEATURED PROJECTS
         </p>
-        <h1 className="text-3xl  font-serif font-bold text-[#1A202C] leading-tight mb-4">
+        <h1 className="text-4xl  font-mono font-thin text-[#1A202C] leading-tight mb-4">
           Luxury Unveiled, Comfort and Sophistication
         </h1>
-        <p className="text-lg text-gray-600  mx-auto">
+        <p className="text-[15px] text-gray-600  mx-auto">
           Discover a curated selection of Dubai's most exquisite properties,
           epitomizing luxury, elegance, and unparalleled design.
         </p>

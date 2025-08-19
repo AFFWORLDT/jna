@@ -21,7 +21,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
   const router = useRouter();
   return (
     <Card
-      className="relative w-full h-[450px] rounded-none overflow-hidden shadow-lg group border cursor-pointer"
+      className="relative w-[95%] h-[380px] rounded-none overflow-hidden shadow-lg group border cursor-pointer"
       onClick={() =>
         router.push(`/communities/details/${encodeURIComponent(data?.name)}`)
       }
@@ -53,7 +53,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
           <Link
             href={`/communities/details/${encodeURIComponent(data?.name)}`}
             className={cn(
-              "relative pb-1 transition-all duration-300 text-white uppercase text-base",
+              "relative pb-1 transition-all duration-300 text-primary uppercase text-base",
               "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
               "after:bg-primary after:transition-all after:duration-300 hover:after:w-20"
             )}

@@ -65,7 +65,7 @@ function Communities() {
           {" "}
           Unveiling Dubai&rsquo;s Vibrant Communities
         </h1>
-        <p className="text-center text-gray-600 mt-4">
+        <p className="text-center text-gray-600 mt-4 text-[15px]">
           Dubai is a city of diverse neighborhoods, each offering a unique
           character &amp; lifestyle. Beyond the stunning architecture, your
           bespoke community awaits. Explore the soul of Dubai&rsquo;s
