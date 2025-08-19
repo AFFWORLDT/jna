@@ -14,7 +14,7 @@ const sitemapLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#141442] text-white py-12 px-4 md:px-6">
+    <footer className="bg-[#141442] text-white py-12 px-5 md:px-6">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {/* Newsletter Section */}
         <div className="md:col-span-3 lg:col-span-4 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full">
@@ -29,9 +29,9 @@ export default function Footer() {
               id="email-subscribe"
               type="email"
               placeholder="Email"
-              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent"
+              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-md transition-colors uppercase h-14">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-md transition-colors uppercase h-14 rounded-none">
               Subscribe
             </Button>
           </div>
@@ -94,21 +94,24 @@ export default function Footer() {
         <p className="font-extralight">&copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a
-            href="#"
+            href="https://www.facebook.com/profile.php?id=61555781408625"
+            target="_blank"
             aria-label="Facebook"
             className="w-8 h-8 flex items-center justify-center border border-white/50 rounded-full hover:bg-white/10 transition-colors"
           >
             <Facebook className="h-4 w-4" />
           </a>
           <a
-            href="#"
+            href="https://www.instagram.com/jnapropertiesofficial/"
+            target="_blank"
             aria-label="Instagram"
             className="w-8 h-8 flex items-center justify-center border border-white/50 rounded-full hover:bg-white/10 transition-colors"
           >
             <Instagram className="h-4 w-4" />
           </a>
           <a
-            href="#"
+            href="https://www.linkedin.com/company/j-a-properties/"
+            target="_blank"
             aria-label="LinkedIn"
             className="w-8 h-8 flex items-center justify-center border border-white/50 rounded-full hover:bg-white/10 transition-colors"
           >

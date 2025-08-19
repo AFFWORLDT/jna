@@ -12,7 +12,7 @@ export default function AboutUsSection() {
             ABOUT US
           </p>
           <div className="flex flex-col justify-center items-center space-y-6 h-full">
-            <h2 className="text-3xl font-light leading-tight tracking-wide text-[#333333]">
+            <h2 className="text-3xl font-light font-mono leading-tight tracking-wide text-[#333333]">
               Crafting Dubai&apos;s Real Estate Legacy
             </h2>
             <p className="max-w-[600px] text-sm font-light text-[#6B7280] leading-relaxed">

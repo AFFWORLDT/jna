@@ -42,7 +42,7 @@ export default function Header() {
     { href: "/offPlans", label: "OFF-PLAN" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
-    { href: "/service", label: "SERVICE" },
+    { href: "/service", label: "SERVICES" },
     { href: "/about", label: "ABOUT" },
     { href: "/contactUs", label: "CONTACT US" },
   ];
@@ -204,21 +204,24 @@ export default function Header() {
 
         <div className="p-8 border-t border-gray-200 flex justify-start space-x-4">
           <Link
-            href="#"
+            href="https://www.facebook.com/profile.php?id=61555781408625"
+            target="_blank"
             aria-label="Facebook"
             className="w-8 h-8 flex items-center justify-center border border-gray-400 rounded-full text-gray-700 hover:bg-gray-200"
           >
             <Facebook className="h-4 w-4" />
           </Link>
           <Link
-            href="#"
+            href="https://www.instagram.com/jnapropertiesofficial/"
+            target="_blank"
             aria-label="Instagram"
             className="w-8 h-8 flex items-center justify-center border border-gray-400 rounded-full text-gray-700 hover:bg-gray-200"
           >
             <Instagram className="h-4 w-4" />
           </Link>
           <Link
-            href="#"
+            href="https://www.linkedin.com/company/j-a-properties/"
+            target="_blank"
             aria-label="LinkedIn"
             className="w-8 h-8 flex items-center justify-center border border-gray-400 rounded-full text-gray-700 hover:bg-gray-200"
           >
