@@ -26,7 +26,7 @@ export default function HeroSection() {
     } else if (priceRange.max) {
       return `Up to ${priceRange.max} AED`;
     }
-    return "Any";
+    return "Price";
   };
   return (
     <section className="relative h-screen w-full flex items-center justify-center text-center bg-white md:bg-transparent">
@@ -102,9 +102,7 @@ export default function HeroSection() {
                 className="relative w-full h-12 sm:h-14 text-white bg-white/10 border border-white/30 max-sm:border-gray-300 rounded-none backdrop-blur-sm focus:ring-offset-0 focus:ring-transparent cursor-pointer flex items-center px-3  "
                 onClick={() => setIsPriceOpen(!isPriceOpen)}
               >
-                <div className="absolute text-black block md:hidden left-3 top-0 text-[10px]">
-                  Price
-                </div>
+              
                 <span className="text-white max-sm:text-black">
                   {getPriceDisplayValue()}
                 </span>

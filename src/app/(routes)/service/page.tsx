@@ -52,12 +52,12 @@ export default function Services() {
               <div
                 key={service.id}
                 className={`flex flex-col lg:flex-row items-center mb-20 ${
-                  isEven ? "lg:flex-row" : "lg:flex-row-reverse"
+                  isEven ? "lg:flex-row-reverse" : "lg:flex-row"
                 }`}
               >
                 {/* Image Section */}
                 <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
-                  <div className={`${isEven ? "lg:pr-8" : "lg:pl-8"}`}>
+                  <div className={`${isEven ? "lg:pl-8" : "lg:pr-8"}`}>
                     <div className="relative overflow-hidden rounded-lg shadow-2xl">
                       <img
                         src={service.imageUrl}
@@ -71,15 +71,15 @@ export default function Services() {
                 {/* Text Section */}
                 <div className="w-full lg:w-1/2">
                   <div className={`${isEven ? "lg:pl-8" : "lg:pr-8"}`}>
-                    <h2 className="text-3xl  font-mono text-gray-900 mb-6">
+                    <h2 className="text-3xl sm:text-4xl  font-mono text-gray-900 mb-6">
                       {service.title}
                     </h2>
 
-                    <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                    <p className="text-sm text-neutral-500 mb-6 ">
                       {service.description}
                     </p>
 
-                    <p className="text-base text-gray-600 mb-8 leading-relaxed">
+                    <p className="text-sm text-neutral-500 mb-8 ">
                       {service.additionalInfo}
                     </p>
                   </div>

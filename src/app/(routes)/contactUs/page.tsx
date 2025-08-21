@@ -11,7 +11,7 @@ function ContactUs() {
           <h1 className="text-5xl font-medium mb-6 text-white font-mono">Contact Us</h1>
         </div>
       </section>
-      <div className="flex flex-col lg:flex-row py-16 items-center justify-center bg-white container mx-auto">
+      <div className="flex flex-col lg:flex-row py-16 items-center justify-center container mx-auto">
         <div className="w-full lg:w-1/2 p-4 md:p-8 lg:pr-16 space-y-6 text-center lg:text-left">
           <p className="text-primary text-sm font-semibold uppercase tracking-widest font-mono">
             CONNECT WITH LUXURY

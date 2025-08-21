@@ -34,10 +34,10 @@ export default function Property() {
     <div className="min-h-screen bg-[#F8F5EF] text-[#1A202C]">
       <main className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
         <section className="text-center mb-12">
-          <h2 className="text-primary text-sm font-light tracking-widest mb-2 uppercase">
+          <h2 className="text-black text-sm font-light tracking-widest mb-2 uppercase">
             FEATURED PROPERTIES
           </h2>
-          <h1 className="text-3xl font-light mb-4 text-[#1A202C] tracking-wide">
+          <h1 className="text-3xl sm:text-4xl font-mono mb-4 text-[#1A202C] tracking-wide">
             Handpicked Luxury Listings in Dubai
           </h1>
           <p className="max-w-4xl mx-auto text-sm font-light text-gray-700 leading-relaxed">
@@ -48,7 +48,7 @@ export default function Property() {
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {property?.map((obj:any) => (
+          {property?.map((obj:any,i) => (
             <PropertyCard
               photos={obj?.photos[0]}
               title={obj?.title}
@@ -58,6 +58,7 @@ export default function Property() {
               bathrooms={2}
               area="1,277ft²"
               propertyId="1059"
+              key={i}
             />
           ))}
         </section>
