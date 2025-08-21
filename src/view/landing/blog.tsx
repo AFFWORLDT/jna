@@ -39,10 +39,10 @@ export function InsightsInspiration() {
           transition={{ duration: 0.8 }}
         >
           <p className="text-lg text-[#dbbb90] uppercase font-extralight tracking-wider mb-2">INSIGHTS & INSPIRATION</p>
-          <h2 className="text-3xl font-extralight text-gray-800 mb-4 tracking-wide">
+          <h2 className="text-3xl sm:text-4xl font-mono text-gray-800 mb-4 ">
             Unveiling Dubai&apos;s Luxurious Real Estate Landscape
           </h2>
-          <p className="text-sm font-extralight text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed">
+          <p className="text-sm font-extralight text-gray-600 max-w-3xl mx-auto mb-12 leading-relaxed tracking-wide">
             Dive into our curated collection of articles, designed to enlighten, inspire, and guide you through Dubai&apos;s dynamic real estate market.
           </p>
         </motion.div>

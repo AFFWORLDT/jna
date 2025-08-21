@@ -104,10 +104,10 @@ export default function Component() {
         <p className="text-[#D4B88C] text-sm uppercase tracking-widest mb-2 font-light">
           COMMUNITIES
         </p>
-        <h1 className="text-3xl font-light text-gray-800 mb-6 tracking-wide">
+        <h1 className="text-3xl sm:text-4xl font-mono text-gray-800 mb-6 tracking-wide">
           Discover Dubai&apos;s Finest
         </h1>
-        <p className="max-w-4xl mx-auto text-gray-600 text-sm leading-relaxed font-light">
+        <p className="max-w-4xl mx-auto text-gray-600 text-sm tracking-tight font-light">
           Explore the diverse tapestry of Dubai&apos;s most sought-after areas
           and communities. From serene waterfront retreats to bustling urban
           hubs, our curated selection showcases the essence of luxury living in
@@ -132,7 +132,7 @@ export default function Component() {
                 key={community.id}
                 className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
-                <Card className="relative w-full h-[450px] rounded-lg overflow-hidden shadow-lg group border-none">
+                <Card className="relative w-full h-[650px] rounded-none overflow-hidden shadow-lg group border-none">
                   <CardContent className="p-0 h-full">
                     <Image
                       src={community.photos[0]}
@@ -146,13 +146,13 @@ export default function Component() {
                         {community.name}
                       </h3>
                       <p className="text-sm mb-4 font-light leading-relaxed">
-                        {community.description}
+                        {community.order_description}
                       </p>
                       <div className="w-full border-[0.5px] border-white/30 mb-4" />
                       <Link
                         href={"/communities"}
                         className={cn(
-                          "relative pb-1 transition-all duration-300 text-white uppercase text-base",
+                          "relative pb-1 transition-all duration-300 text-primary uppercase text-base",
                           "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
                           "after:bg-primary after:transition-all after:duration-300 hover:after:w-20"
                         )}

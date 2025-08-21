@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
 import { Heart, Bed, Bath, SquareGanttChart, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
 interface PropertyCardProps {
   photos: string;
@@ -54,12 +54,21 @@ export function PropertyCard({
       </div>
       <CardContent className="grid gap-2 px-4 py-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-light text-[#1A202C] tracking-wide line-clamp-1" title={title}>{title}</h3>
+          <h3
+            className="text-lg font-light text-[#1A202C] tracking-wide line-clamp-1"
+            title={title}
+          >
+            {title}
+          </h3>
           <p className="text-sm text-gray-500 font-light">#{propertyId}</p>
         </div>
 
-        <p className="text-sm text-primary uppercase font-light tracking-wider">{location}</p>
-        <p className="text-xl font-light text-[#1A202C] tracking-wide">{price}</p>
+        <p className="text-sm text-primary uppercase font-light tracking-wider">
+          {location}
+        </p>
+        <p className="text-xl font-light text-[#1A202C] tracking-wide">
+          {price}
+        </p>
         <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 font-light">
           <div className="flex items-center gap-1">
             <Bed className="w-4 h-4" />
@@ -79,45 +88,53 @@ export function PropertyCard({
   );
 }
 
-
-
 interface BlogCardProps {
-  imageSrc: string
-  date: string
-  title: string
-  description: string
-  href: string
+  imageSrc: string;
+  date: string;
+  title: string;
+  description: string;
+  href: string;
 }
 
-export function BlogCard({ imageSrc, date, title, description, href }: BlogCardProps) {
+export function BlogCard({
+  imageSrc,
+  date,
+  title,
+  description,
+  href,
+}: BlogCardProps) {
   return (
-    <motion.div 
-      whileHover={{ y: -5 }}
+    <motion.div
       transition={{ duration: 0.3 }}
-      className="bg-white rounded-none shadow-sm overflow-hidden group"
+      className="bg-white rounded-none shadow-sm overflow-hidden group min-h-[550px] max-h-[550px]"
     >
-      <div className="relative h-96 w-full overflow-hidden">
-        <div 
+      <div className="relative h-80 w-full overflow-hidden">
+        <div
           className="h-full w-full bg-center bg-cover transition-transform duration-300 group-hover:scale-105"
-          style={{ 
-            backgroundImage: `url('${imageSrc}')` 
+          style={{
+            backgroundImage: `url('${imageSrc}')`,
           }}
         />
       </div>
       <div className="px-4 py-6 text-left">
-        <p className="text-sm text-gray-500 mb-2 text-left font-extralight">{date}</p>
-        <h3 className="text-lg font-extralight text-gray-800 mb-2 line-clamp-2 tracking-wide">{title}</h3>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-3 font-extralight leading-relaxed">{description}</p>
-        <motion.a 
+        <p className="text-sm text-gray-500 mb-2 text-left font-extralight">
+          {date}
+        </p>
+        <h3 className="text-lg font-extralight text-gray-800 mb-2 line-clamp-2 tracking-wide">
+          {title}
+        </h3>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3 font-extralight leading-relaxed">
+          {description}
+        </p>
+        <motion.a
           href={href}
           whileHover={{ x: 5 }}
           className="inline-flex items-center font-extralight tracking-wider hover:underline text-[#dbbb90] uppercase"
         >
           READ MORE
-         
-           <ChevronRight size={15} />
+          <ChevronRight size={15} />
         </motion.a>
       </div>
     </motion.div>
-  )
+  );
 }

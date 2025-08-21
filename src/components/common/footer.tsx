@@ -14,11 +14,11 @@ const sitemapLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#141442] text-white py-12 px-5 md:px-6">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    <footer className="bg-[#141442] text-white py-12 px-10 md:px-6">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3  gap-8">
         {/* Newsletter Section */}
         <div className="md:col-span-3 lg:col-span-4 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full">
-          <h3 className="text-xl font-extralight tracking-wide leading-relaxed w-full md:flex-none md:w-[45%]">
+          <h3 className="text-xl font-extralight tracking-wide leading-relaxed w-full md:flex-none md:w-[40%]">
             Receive our exceptional real estate listings delivered straight to your inbox.
           </h3>
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full md:flex-1">
@@ -29,9 +29,9 @@ export default function Footer() {
               id="email-subscribe"
               type="email"
               placeholder="Email"
-              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none"
+              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none w-1/2"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 rounded-md transition-colors uppercase h-14 rounded-none">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 transition-colors uppercase h-14 rounded-none w-1/3">
               Subscribe
             </Button>
           </div>
@@ -58,7 +58,7 @@ export default function Footer() {
         </div>
 
         {/* Contact */}
-        <div>
+        <div className="">
           <h4 className="text-lg font-extralight mb-4 tracking-wide">Contact</h4>
           <address className="not-italic space-y-2 text-sm font-extralight leading-relaxed">
             <p>Aspin Commercial Tower Level 48,</p>
