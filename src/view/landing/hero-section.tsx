@@ -40,7 +40,7 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-black/20 z-10  md:hidden block" />
 
-      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11 max-sm:-mt-2">
+      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11 max-sm:mt-20">
         <h1 className="text-4xl  lg:text-5xl font-mono mb-4 leading-tight tracking-wide">
           Luxury Living Reimagined
         </h1>
@@ -102,7 +102,6 @@ export default function HeroSection() {
                 className="relative w-full h-12 sm:h-14 text-white bg-white/10 border border-white/30 max-sm:border-gray-300 rounded-none backdrop-blur-sm focus:ring-offset-0 focus:ring-transparent cursor-pointer flex items-center px-3  "
                 onClick={() => setIsPriceOpen(!isPriceOpen)}
               >
-              
                 <span className="text-white max-sm:text-black">
                   {getPriceDisplayValue()}
                 </span>
