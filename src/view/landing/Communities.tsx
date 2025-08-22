@@ -187,9 +187,12 @@ export default function Component() {
           ))}
         </div>
         <div className="w-full flex justify-center items-center mt-11 mb-4">
-          <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
+          
+        <Link href={"/communities"}>
+           <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-light tracking-wider py-2 px-4 rounded-none transition-colors uppercase">
             View All Communities
           </Button>
+        </Link>
         </div>
       </section>
     </div>

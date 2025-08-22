@@ -8,7 +8,7 @@ const servicesData = [
       "We understand Dubai's luxury real estate market and explain areas like freehold locations, property types (townhouses, villas, penthouses), and current market trends (capital appreciation, rental yields).",
     additionalInfo:
       "We provide insights on areas with high investment potential. We assist in making informed decisions by considering upcoming developments, infrastructure projects, and areas poised for growth.",
-    imageUrl: "/images/marketprofiling.webp",
+    imageUrl: "/images/third.webp",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const servicesData = [
       "Expert guidance on investment opportunities in Dubai's dynamic real estate market. We analyze market trends, ROI potential, and help you make strategic investment decisions.",
     additionalInfo:
       "Our team provides comprehensive analysis of emerging neighborhoods, off-plan projects, and established luxury communities to maximize your investment returns.",
-    imageUrl: "/images/analysis.webp",
+    imageUrl: "/images/marketprofiling.webp",
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ const servicesData = [
       "Complete property management services for your luxury real estate portfolio. From tenant screening to maintenance coordination, we handle every aspect of property management.",
     additionalInfo:
       "Premium services including concierge support, regular property inspections, and direct communication channels for all your property needs.",
-    imageUrl: "/images/third.webp",
+    imageUrl: "/images/analysis.webp",
   },
 ];
 
@@ -58,7 +58,7 @@ export default function Services() {
                 {/* Image Section */}
                 <div className="w-full lg:w-1/2 mb-8 lg:mb-0">
                   <div className={`${isEven ? "lg:pl-8" : "lg:pr-8"}`}>
-                    <div className="relative overflow-hidden rounded-lg shadow-2xl">
+                    <div className="relative overflow-hidden rounded-none shadow-none">
                       <img
                         src={service.imageUrl}
                         alt={service.title}
@@ -71,7 +71,7 @@ export default function Services() {
                 {/* Text Section */}
                 <div className="w-full lg:w-1/2">
                   <div className={`${isEven ? "lg:pl-8" : "lg:pr-8"}`}>
-                    <h2 className="text-3xl sm:text-4xl  font-mono text-gray-900 mb-6">
+                    <h2 className="text-3xl sm:text-4xl  font-mono text-gray-700 mb-6">
                       {service.title}
                     </h2>
 
