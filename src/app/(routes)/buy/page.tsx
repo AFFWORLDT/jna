@@ -11,12 +11,14 @@ import {
 } from "@/src/components/ui/select";
 import { cn } from "@/src/lib/utils";
 import { BuyCard } from "@/src/view/buy/buyCard";
-import { Loader } from "lucide-react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Loader, Filter } from "lucide-react";
 import React from "react";
 
 function Buy() {
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [showFilters, setShowFilters] = React.useState(false);
 
   const fetchproperty = async () => {
     setLoading(true);
@@ -40,13 +42,31 @@ function Buy() {
     // Add your favorite logic here
   };
 
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  };
 
   return (
     <div>
-      <section className="bg-[#141442] px-4 h-72 flex justify-center items-end py-16">
-        <div className="container mx-auto">
-          {/* Search Form */}
-          <div className="space-y-4">
+      <section className="bg-[#141442] px-4 lg:h-72 h-auto flex justify-center items-end lg:py-16 py-6">
+        <div className="container mx-auto " >
+          {/* Filter Button for Small Screens */}
+          <div className="lg:hidden mb-4 mt-20 flex justify-center">
+            <Button
+              onClick={toggleFilters}
+              className="w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#141442] font-medium h-12 rounded-none uppercase tracking-wider flex items-center justify-center gap-2"
+            >
+              <Icon icon={"lets-icons:filter"} color="white"/>
+              Filter s
+            </Button>
+          </div>
+
+          {/* Search Form - Hidden on small screens unless showFilters is true */}
+          <div className={cn(
+            "space-y-4 transition-all duration-300",
+            "lg:block", // Always show on large screens
+            showFilters ? "block" : "hidden" // Show/hide on small screens based on state
+          )}>
             {/* First Row */}
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
               <div className="md:col-span-1">

@@ -1,6 +1,6 @@
 export default function WhyDubai() {
   return (
-    <div className="min-h-screen bg-white text-gray-800">
+    <div className="min-h-screen bg-white text-gray-800 ">
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
         <div className="container mx-auto text-center">
           <h1 className="text-5xl font-medium mb-6 text-white font-mono">
@@ -8,10 +8,10 @@ export default function WhyDubai() {
           </h1>
         </div>
       </section>
-      <main className="container mx-auto px-4 py-8 md:py-12 lg:py-16 max-w-5xl">
+      <main className="container mx-auto px-8 py-4 md:py-12 lg:py-16 max-w-5xl ">
         {/* Advantages to buy a Luxury property in Dubai */}
         <section className="mb-12 md:my-16">
-          <h2 className="text-4xl font-serif font-normal mb-6">
+          <h2 className="text-2xl md:text-4xl font-serif font-normal mb-6">
             Advantages to buy a Luxury property in Dubai
           </h2>
           <div className="space-y-6 text-gray-600">

@@ -29,9 +29,9 @@ export default function Footer() {
               id="email-subscribe"
               type="email"
               placeholder="Email"
-              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none w-1/2"
+              className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none md:w-1/2 w-full"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 transition-colors uppercase h-14 rounded-none w-1/3">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 transition-colors uppercase h-14 rounded-none md:w-1/3 w-full">
               Subscribe
             </Button>
           </div>
