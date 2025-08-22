@@ -81,7 +81,7 @@ export default function Header() {
           <Link href={"/"}>
             <Image
               src={
-                isScrolled ? "/images/logo-gold.svg" : "/images/logo-white.svg"
+              ( pathname==="/" && !isScrolled )? "/images/logo-white.svg" : "/images/logo-gold.svg" 
               }
               alt="logo"
               width={80}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/utils";
+import Link from "next/link";
 
 export default function AboutUsSection() {
   return (
@@ -24,9 +25,11 @@ export default function AboutUsSection() {
               partner.
             </p>
           </div>
+         <Link href={"/about"}>
           <Button className="bg-[#D4B88C] px-8 py-3 text-base rounded-none font-light tracking-wider text-white shadow-sm hover:bg-[#C2A77B] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 w-fit uppercase">
             ABOUT US
           </Button>
+         </Link>
         </div>
         {/* Image - hidden on small screens */}
         <div className="relative h-full w-full overflow-hidden hidden md:block">

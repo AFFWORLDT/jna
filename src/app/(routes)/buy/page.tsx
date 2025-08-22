@@ -43,7 +43,7 @@ function Buy() {
 
   return (
     <div>
-      <section className="bg-[#141442] px-4 py-28">
+      <section className="bg-[#141442] px-4 h-72 flex justify-center items-end py-16">
         <div className="container mx-auto">
           {/* Search Form */}
           <div className="space-y-4">
