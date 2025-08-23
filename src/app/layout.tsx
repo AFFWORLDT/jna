@@ -8,12 +8,12 @@ import Footer from "../components/common/footer";
 const trajanPro = localFont({
   src: [
     {
-      path: "../../public/fonts/TrajanPro3Regular.otf",
+      path: "../../public/fonts/TrajanPro3Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../../public/fonts/TrajanPro3-Bold.otf",
+      path: "../../public/fonts/TrajanPro3-Bold.woff2",
       weight: "400",
       style: "normal",
     },
