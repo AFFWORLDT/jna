@@ -31,7 +31,7 @@ export default function Footer() {
               placeholder="Email"
               className="flex-grow bg-transparent text-white border-white/50 placeholder:text-white/70 focus-visible:ring-offset-0 focus-visible:ring-transparent rounded-none md:w-1/2 w-full"
             />
-            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-extralight tracking-wider py-2 px-4 transition-colors uppercase h-14 rounded-none md:w-1/3 w-full">
+            <Button className="bg-[#D4B28C] hover:bg-[#C2A17B] text-white font-sans tracking-wider py-2 px-4 transition-colors uppercase h-14 rounded-none md:w-1/3 w-full">
               Subscribe
             </Button>
           </div>
@@ -39,8 +39,8 @@ export default function Footer() {
 
         {/* Sitemap */}
         <div>
-          <h4 className="text-lg font-extralight mb-4 tracking-wide">Sitemap</h4>
-          <ul className="space-y-2 text-sm font-extralight">
+          <h4 className="text-lg  mb-4 font-sans">Sitemap</h4>
+          <ul className="space-y-2 text-sm font-sans">
             {sitemapLinks.map((link, i) => (
               <li key={i}>
                 <a
@@ -48,7 +48,7 @@ export default function Footer() {
                   className="relative inline-block hover:text-gray-300 transition-colors
                              after:content-[''] after:absolute after:left-0 after:bottom-0
                              after:h-[2px] after:w-0 after:bg-primary
-                             after:transition-all after:duration-300 hover:after:w-full"
+                             after:transition-all after:duration-300 hover:after:w-full font-sans"
                 >
                   {link.label}
                 </a>
@@ -58,20 +58,20 @@ export default function Footer() {
         </div>
 
         {/* Contact */}
-        <div className="">
-          <h4 className="text-lg font-extralight mb-4 tracking-wide">Contact</h4>
-          <address className="not-italic space-y-2 text-sm font-extralight leading-relaxed">
+        <div className="font-sans">
+          <h4 className="text-lg  mb-4 font-sans">Contact</h4>
+          <address className="not-italic space-y-2 text-sm font-sans leading-relaxed">
             <p>Aspin Commercial Tower Level 48,</p>
             <p>Sheikh Zayed Road,</p>
             <p>Dubai, UAE</p>
             <p>
-              <span className="font-extralight">E</span>{" "}
+              <span className="font-sans">E</span>{" "}
               <a
                 href="mailto:welcome@jna-properties.com"
                 className="relative inline-block hover:text-gray-300 transition-colors
                            after:content-[''] after:absolute after:left-0 after:bottom-0
                            after:h-[2px] after:w-0 after:bg-primary
-                           after:transition-all after:duration-300 hover:after:w-full"
+                           after:transition-all after:duration-300 hover:after:w-full font-sans"
               >
                 welcome@jna-properties.com
               </a>
@@ -81,8 +81,8 @@ export default function Footer() {
 
         {/* About Us */}
         <div>
-          <h4 className="text-lg font-extralight mb-4 tracking-wide">About Us</h4>
-          <p className="text-sm leading-relaxed font-extralight">
+          <h4 className="text-lg font-sans mb-4 tracking-wide">About Us</h4>
+          <p className="text-sm leading-relaxed font-sans">
             J&A Properties specializes in luxury Dubai real estate, offering personalized service,
             market insights, and tailored investment solutions for discerning clients.
           </p>
@@ -91,7 +91,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="container mx-auto border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-white/70">
-        <p className="font-extralight">&copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}</p>
+        <p className="font-sans">&copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}</p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a
             href="https://www.facebook.com/profile.php?id=61555781408625"

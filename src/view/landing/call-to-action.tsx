@@ -17,7 +17,7 @@ export function CallToAction() {
           <p className="text-sm uppercase text-white/70 font-extralight tracking-wider mb-2">
             JOIN THE ELITE
           </p>
-          <h2 className="text-3xl font-extralight mb-4 tracking-wide">
+          <h2 className="text-3xl  md:text-4xl font-custom mb-4 tracking-wide">
             Elevate Your Real Estate Journey
           </h2>
           <p className="text-base md:text-lg font-extralight max-w-4xl mx-auto mb-12 leading-relaxed">
