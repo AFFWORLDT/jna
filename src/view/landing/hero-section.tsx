@@ -38,13 +38,13 @@ export default function HeroSection() {
         quality={85}
         priority
       />
-      <div className="absolute inset-0 bg-black/20 z-10  md:hidden block" />
+      <div className="absolute inset-0 bg-black/20 z-10 " />
 
       <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11 max-sm:mt-20">
-        <h1 className="text-4xl  lg:text-5xl font-mono mb-4 leading-tight tracking-wide">
+        <h1 className="text-4xl  lg:text-5xl font-custom mb-4">
           Luxury Living Reimagined
         </h1>
-        <p className="text-sm sm:text-base md:text-lg font-light mb-8 sm:mb-12 tracking-wider uppercase max-w-4xl mx-auto">
+        <p className="text-[16px]  mb-8 sm:mb-12  uppercase max-w-4xl mx-auto text-neutral-300">
           EMBRACE TO A JOURNEY OF PURE SOPHISTICATION CULMINATING IN THE
           REFLECTION OF YOUR LIFESTYLE
         </p>

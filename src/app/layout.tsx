@@ -1,43 +1,45 @@
+import type React from "react";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/src/components/common/header";
-import Footer from "@/src/components/common/footer";
+import Header from "../components/common/header";
+import Footer from "../components/common/footer";
+
+const trajanPro = localFont({
+  src: [
+    {
+      path: "../../public/fonts/TrajanPro3Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/TrajanPro3-Bold.otf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-trajan",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "JNA Properties - Luxury Real Estate in Dubai",
-  description:
-    "Discover Dubai's finest luxury properties with JNA Properties. Premium apartments, villas, and penthouses in prime locations like Dubai Marina, Downtown Dubai, and Palm Jumeirah.",
-  keywords:
-    "Dubai real estate, luxury properties, Dubai Marina, Downtown Dubai, Palm Jumeirah, property investment, luxury apartments, villas Dubai",
-  authors: [{ name: "JNA Properties" }],
-  viewport: "width=device-width, initial-scale=1",
-  robots: "index, follow",
+  title: "Home - J&A Properties",
+  description: "",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <head>
-        <style>{`
-html {
-  font-family: ${GeistSans.style.fontFamily};
-  --font-sans: ${GeistSans.variable};
-  --font-mono: ${GeistMono.variable};
-}
-        `}</style>
-      </head>
-      <body>
-        <Header />
-       <main className="min-h-screen bg-gray-100">
-         {children}
-        </main>
-        <Footer />
+    <html lang="en" className={`${trajanPro.variable} antialiased`}>
+      <body >
+        <main>
+           <Header/>
+          {children}
+           <Footer/>
+          </main>
       </body>
     </html>
   );

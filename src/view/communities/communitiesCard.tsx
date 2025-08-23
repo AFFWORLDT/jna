@@ -40,7 +40,7 @@ export default function CommunitiesCard({ data }: { data: CommunityData }) {
 
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end text-white">
-          <h3 className="text-2xl font-light mb-2 tracking-wide">
+          <h3 className="text-2xl sm:text-3xl font-custom mb-2 tracking-wide">
             {data?.name}
           </h3>
           {data?.order_description && (
