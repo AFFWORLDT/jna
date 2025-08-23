@@ -29,7 +29,7 @@ export default function HeroSection() {
     return "Price";
   };
   return (
-    <section className="relative h-screen w-full flex items-center justify-center text-center bg-white md:bg-transparent">
+    <section className="relative h-[115vh] w-full flex items-center justify-center text-center bg-white md:bg-transparent">
       <Image
         src="/images/bgImage.webp"
         alt="Luxury Living in Dubai"
@@ -40,7 +40,7 @@ export default function HeroSection() {
       />
       <div className="absolute inset-0 bg-black/20 z-10 " />
 
-      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11 max-sm:mt-20">
+      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-auto py-11 max-sm:mt-40">
         <h1 className="text-4xl  lg:text-5xl font-custom mb-4">
           Luxury Living Reimagined
         </h1>
