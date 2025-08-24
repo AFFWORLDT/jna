@@ -119,10 +119,10 @@ export default function Header() {
 
         {/* Icons */}
         <div className="flex items-center gap-x-7">
-          <div className="text-white">
+          {/* <div className="text-white">
             <Heart className="h-5 w-5" fill="white" />
             <span className="sr-only">Favorites</span>
-          </div>
+          </div> */}
           <div className="text-white">
             <a
               href="https://wa.me/971471803105"
