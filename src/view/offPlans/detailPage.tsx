@@ -35,6 +35,22 @@ export default function DetailPage({ id }: any) {
     return () => clearInterval(interval);
   }, [property?.photos]);
 
+  const nextImage = () => {
+    setSelectedImageIndex((prev) => 
+      prev === property.photos.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  const prevImage = () => {
+    setSelectedImageIndex((prev) => 
+      prev === 0 ? property.photos.length - 1 : prev - 1
+    );
+  };
+
+  const goToImage = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
   if (!property?.photos || property.photos.length === 0) {
     return <div>Loading...</div>;
   }
@@ -147,47 +163,101 @@ export default function DetailPage({ id }: any) {
           </div>
         </div>
       </section>
+
+      {/* Image Carousel Section */}
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {property?.photos && property.photos.length > 0 && (
             <div className="mb-16">
-              <div className="relative h-[400px] md:h-[500px] lg:h-[600px] mb-4 overflow-hidden rounded-lg">
-                <Image
-                  src={property.photos[selectedImageIndex]}
-                  alt={`${property.name} - Image ${selectedImageIndex + 1}`}
-                  layout="fill"
-                  objectFit="cover"
-                  quality={90}
-                  className="transition-opacity duration-300"
-                />
-              </div>
-
-              <div className="grid grid-cols-5 gap-2 md:gap-4">
-                {property.photos
-                  .slice(0, 5)
-                  .map((photo: string, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`relative h-20 md:h-24 lg:h-28 overflow-hidden rounded transition-all duration-200 ${
-                        selectedImageIndex === index
-                          ? "ring-2 ring-primary opacity-100"
-                          : "opacity-70 hover:opacity-90"
-                      }`}
+              {/* Main Carousel Container */}
+              <div className="relative group">
+                {/* Main Image Display */}
+                <div className="relative h-[400px] md:h-[500px] lg:h-[600px] mb-6 overflow-hidden rounded-lg">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={selectedImageIndex}
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="absolute inset-0"
                     >
                       <Image
-                        src={photo || "/placeholder.svg"}
-                        alt={`${property.name} thumbnail ${index + 1}`}
+                        src={property.photos[selectedImageIndex]}
+                        alt={`${property.name} - Image ${selectedImageIndex + 1}`}
                         layout="fill"
                         objectFit="cover"
-                        quality={75}
+                        quality={90}
                       />
-                    </button>
-                  ))}
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Navigation Arrows */}
+                  {property.photos.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+                      >
+                        <Icon icon="teenyicons:left-outline" fontSize={30} />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 -translate-y-1/2  text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
+                      >
+                        <Icon icon="teenyicons:right-outline" fontSize={30} />
+                      </button>
+                    </>
+                  )}
+
+                 
+                </div>
+
+                {/* Thumbnail Carousel */}
+                <div className="relative">
+                  <div className="flex gap-2 md:gap-4 overflow-x-auto scrollbar-hide pb-2">
+                    <div className="flex gap-2 md:gap-4 min-w-max">
+                      {property.photos.map((photo: string, index: number) => (
+                        <button
+                          key={index}
+                          onClick={() => goToImage(index)}
+                          className={`relative flex-shrink-0 w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 overflow-hidden rounded transition-all duration-200 ${
+                            selectedImageIndex === index
+                              ? "ring-2 ring-primary opacity-100 scale-105"
+                              : "opacity-70 hover:opacity-90 hover:scale-102"
+                          }`}
+                        >
+                          <Image
+                            src={photo || "/placeholder.svg"}
+                            alt={`${property.name} thumbnail ${index + 1}`}
+                            layout="fill"
+                            objectFit="cover"
+                            quality={75}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Scroll Indicators for Thumbnails */}
+                  <div className="flex justify-center mt-4 space-x-1">
+                    {Array.from({ length: Math.ceil(property.photos.length / 5) }).map((_, pageIndex) => (
+                      <div
+                        key={pageIndex}
+                        className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                          Math.floor(selectedImageIndex / 5) === pageIndex
+                            ? "bg-primary"
+                            : "bg-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           )}
         </div>
+
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <AnimatePresence>
             <DialogContent className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#F2EEE8] rounded-none px-8 py-4">

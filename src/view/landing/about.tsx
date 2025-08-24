@@ -8,15 +8,15 @@ export default function AboutUsSection() {
     <section className="w-full py-5 md:h-screen h-auto">
       <div className="grid h-full grid-cols-1 md:grid-cols-2">
         {/* About Us Content */}
-        <div className={cn("py-32 text-center bg-[#F8F5EF] w-full container px-3")}>
-          <p className="text-sm font-light uppercase tracking-wider text-[#6B7280]">
+        <div className={cn("py-44 text-center bg-[#F2EEE8] w-full container px-3")}>
+          <p className="text-sm font-light uppercase tracking-wider text-black">
             ABOUT US
           </p>
           <div className="flex flex-col justify-center items-center space-y-6 h-full">
-            <h2 className="text-3xl sm:text-4xl font-light font-mono leading-tight tracking-wide text-[#333333]">
-              Crafting Dubai&apos;s Real Estate <br/> Legacy
+            <h2 className="text-3xl sm:text-4xl  font-mono leading-tight tracking-wide text-[#333333]">
+              Crafting Dubai&apos;s Real Estate  Legacy
             </h2>
-            <p className="max-w-[600px] text-sm font-light text-[#6B7280] leading-relaxed">
+            <p className="max-w-[650px] text-[16px] font-light text-[#6B7280] leading-relaxed">
               At J&A Properties, we blend unparalleled market expertise with a
               passion for luxury living. Our journey in Dubai&apos;s dynamic
               real estate landscape is rooted in trust, integrity, and a

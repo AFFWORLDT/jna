@@ -31,7 +31,7 @@ export default function Property() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F5EF] text-[#1A202C]">
+    <div className="min-h-screen bg-[#F2EEE8] text-[#1A202C]">
       <main className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
         <section className="text-center mb-12">
           <h2 className="text-black text-sm font-light tracking-widest mb-2 uppercase">
