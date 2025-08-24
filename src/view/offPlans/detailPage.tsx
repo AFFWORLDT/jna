@@ -261,7 +261,7 @@ export default function DetailPage({ id }: any) {
         </div>
 
         <div className="my-5">
-          <LocationSection location={property?.location} />
+          <LocationSection property={property} />
         </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <AnimatePresence>
