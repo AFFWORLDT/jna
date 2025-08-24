@@ -32,7 +32,7 @@ function page() {
   useEffect(() => {
     fetchproperty();
   }, []);
-  
+
   return (
     <div>
       <section className="pt-32 pb-12 px-4 bg-[#141442]">
@@ -40,7 +40,7 @@ function page() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-6 container mx-auto">
             <div className="md:col-span-1">
               <Select>
-                <SelectTrigger className="w-full  text-white backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-black bg-white border border-white/30 rounded-sm backdrop-blur-s">
+                <SelectTrigger className="w-full  text-white backdrop-blur-s focus:ring-offset-0 focus:ring-transparent [&>span]:text-black bg-white border border-white/30 rounded-none backdrop-blur-s">
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
@@ -54,7 +54,7 @@ function page() {
             <div className="md:col-span-1">
               <Input
                 placeholder="Name"
-                className="w-full text-blaack bg-white border border-white/30 rounded-sm backdrop-blur-s placeholder:text-black focus-visible:ring-offset-0 focus-visible:ring-transparent"
+                className="w-full text-blaack bg-white border border-white/30 rounded-none backdrop-blur-s placeholder:text-black focus-visible:ring-offset-0 focus-visible:ring-transparent"
               />
             </div>
 
@@ -62,11 +62,11 @@ function page() {
               <Input
                 type="text"
                 placeholder="Ref Number"
-                className="w-full text-blaack bg-white border border-white/30 rounded-sm backdrop-blur-s placeholder:text-black focus-visible:ring-offset-0 focus-visible:ring-transparent"
+                className="w-full text-blaack bg-white border border-white/30 rounded-none backdrop-blur-s placeholder:text-black focus-visible:ring-offset-0 focus-visible:ring-transparent"
               />
             </div>
             <div className="md:col-span-1">
-              <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-md transition-colors">
+              <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors">
                 Search
               </Button>
             </div>
