@@ -28,7 +28,7 @@ export default function PropertyCard({ data }: { data?: PropertyData }) {
     const router = useRouter();
   return (
     <Card className="overflow-hidden border-none p-0 shadow-sm border-2 rounded-none" onClick={() => router.push(`/offPlans/details/${data?.id}`)}>
-      <div className="relative w-full h-64 overflow-hidden group">
+      <div className="relative w-full h-96 overflow-hidden group">
         <Image
           src={data?.photos?.[0] ?? "/placeholder.jpg"}
           alt={`Image of ${data?.name}`}

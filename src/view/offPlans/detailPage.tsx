@@ -8,6 +8,7 @@ import EnquireForm from "@/src/components/common/enquireForm";
 import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import LocationSection from "./Location";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -36,13 +37,13 @@ export default function DetailPage({ id }: any) {
   }, [property?.photos]);
 
   const nextImage = () => {
-    setSelectedImageIndex((prev) => 
+    setSelectedImageIndex((prev) =>
       prev === property.photos.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
-    setSelectedImageIndex((prev) => 
+    setSelectedImageIndex((prev) =>
       prev === 0 ? property.photos.length - 1 : prev - 1
     );
   };
@@ -54,7 +55,6 @@ export default function DetailPage({ id }: any) {
   if (!property?.photos || property.photos.length === 0) {
     return <div>Loading...</div>;
   }
-
   return (
     <div>
       <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
@@ -184,7 +184,9 @@ export default function DetailPage({ id }: any) {
                     >
                       <Image
                         src={property.photos[selectedImageIndex]}
-                        alt={`${property.name} - Image ${selectedImageIndex + 1}`}
+                        alt={`${property.name} - Image ${
+                          selectedImageIndex + 1
+                        }`}
                         layout="fill"
                         objectFit="cover"
                         quality={90}
@@ -209,8 +211,6 @@ export default function DetailPage({ id }: any) {
                       </button>
                     </>
                   )}
-
-                 
                 </div>
 
                 {/* Thumbnail Carousel */}
@@ -238,10 +238,12 @@ export default function DetailPage({ id }: any) {
                       ))}
                     </div>
                   </div>
-                  
+
                   {/* Scroll Indicators for Thumbnails */}
                   <div className="flex justify-center mt-4 space-x-1">
-                    {Array.from({ length: Math.ceil(property.photos.length / 5) }).map((_, pageIndex) => (
+                    {Array.from({
+                      length: Math.ceil(property.photos.length / 5),
+                    }).map((_, pageIndex) => (
                       <div
                         key={pageIndex}
                         className={`w-2 h-2 rounded-full transition-colors duration-200 ${
@@ -258,6 +260,9 @@ export default function DetailPage({ id }: any) {
           )}
         </div>
 
+        <div className="my-5">
+          <LocationSection location={property?.location} />
+        </div>
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <AnimatePresence>
             <DialogContent className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#F2EEE8] rounded-none px-8 py-4">

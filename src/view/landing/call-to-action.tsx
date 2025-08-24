@@ -2,11 +2,22 @@
 import { Button } from "@/src/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export function CallToAction() {
   return (
-    <section className="relative py-16 md:py-24   overflow-hidden bg-[#F8F5EF]">
-      <div className="absolute inset-0 bg-center bg-cover opacity-20" />
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#F8F5EF]">
+]      <div className="absolute bottom-0 inset-x-0 w-full h-96 opacity-40">
+        <Image
+          src="/images/dubai-skyline-30.svg" 
+          alt="Dubai Skyline"
+          fill
+          className="object-bottom"
+          priority
+        />
+      </div>
+
+      {/* Content */}
       <div className="relative z-10 container mx-auto px-6 md:px-10 lg:px-20 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -14,13 +25,13 @@ export function CallToAction() {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <p className="text-sm uppercase text-white/70 font-extralight tracking-wider mb-2">
+          <p className="text-sm uppercase text-[#1A1A1A]/70 font-extralight tracking-wider mb-2">
             JOIN THE ELITE
           </p>
-          <h2 className="text-3xl  md:text-4xl font-custom mb-4 tracking-wide">
+          <h2 className="text-3xl md:text-4xl font-custom mb-4 tracking-wide text-[#1A1A1A]">
             Elevate Your Real Estate Journey
           </h2>
-          <p className="text-base md:text-lg font-extralight max-w-4xl mx-auto mb-12 leading-relaxed">
+          <p className="text-base md:text-lg font-extralight max-w-4xl mx-auto mb-12 leading-relaxed text-[#333]">
             Ready to embark on a luxurious real estate experience tailored just
             for you? Take the first step towards unparalleled living.
           </p>
