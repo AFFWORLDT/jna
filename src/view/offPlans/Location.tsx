@@ -5,7 +5,8 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { Separator } from "@/src/components/ui/separator";
 
-export default function LocationSection({ location }: any) {
+export default function LocationSection({ property }: any) {
+  const location = property?.location
   const amenities = [
     {
       icon: "arcticons:epic-plane",
@@ -70,16 +71,10 @@ export default function LocationSection({ location }: any) {
               transition={{ duration: 0.8 }}
             >
               <h2 className="text-4xl font-mono mb-4">Location</h2>
-              <p className="text-neutral-400 text-sm leading-relaxed">
-                Damac Lagoon Views enjoys a prime location within the DAMAC
-                Lagoons community, nestled along Hessa Street and directly
-                opposite DAMAC Hills. Residents benefit from easy access to
-                major highways like Mohammed Bin Zayed Road, Emirates Road, and
-                Al Khail Road, ensuring seamless connectivity across Dubai. From
-                shopping malls and international schools to hospitals and
-                leisure attractions like Global Village and Dubai Autodrome,
-                everything you need is just minutes away, making Lagoon Views
-                the perfect blend of convenience and tranquility.
+              <p className="text-neutral-400 text-sm leading-relaxed line-clamp-6">
+              {
+                property?.description
+              }
               </p>
 
               <motion.div>
