@@ -67,9 +67,9 @@ export default function HeroSection() {
         quality={85}
         priority
       />
-      <div className="absolute inset-0 bg-black/20 z-10 md:hidden" />
+<div className="absolute inset-0 bg-gradient-to-t from-black/30 to-white/0 z-10" />
 
-      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full mt-[450px] py-11 max-sm:mt-40">
+      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 container w-full mt-[470px] py-11 max-sm:mt-40">
         <h1 className="text-4xl  lg:text-5xl font-custom mb-4">
           Luxury Living Reimagined
         </h1>
@@ -78,7 +78,7 @@ export default function HeroSection() {
           REFLECTION OF YOUR LIFESTYLE
         </p>
 
-        <div className="w-full max-w-6xl mx-auto">
+        <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 p-4 sm:p-6 max-sm:bg-white">
             {/* Location */}
             <div className="lg:col-span-1 relative">
@@ -86,7 +86,7 @@ export default function HeroSection() {
                 Location
               </div>
               <Select>
-                <SelectTrigger className="w-full h-12 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
+                <SelectTrigger className="w-full h-9 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
