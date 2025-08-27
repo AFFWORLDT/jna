@@ -40,6 +40,7 @@ export default function Header() {
   const navLinks = [
     { href: "/buy", label: "BUY" },
     { href: "/offPlans", label: "OFF-PLAN" },
+    { href: "/rent", label: "RENT" },
     { href: "/communities", label: "COMMUNITIES" },
     { href: "/whyDubai", label: "WHY DUBAI" },
     { href: "/service", label: "SERVICES" },
@@ -49,8 +50,8 @@ export default function Header() {
   const headerLink = [
     { href: "/buy", label: "BUY" },
     { href: "/offPlans", label: "OFF-PLAN" },
+    { href: "/rent", label: "RENT" },
     { href: "/communities", label: "COMMUNITIES" },
-    { href: "/whyDubai", label: "WHY DUBAI" },
     { href: "/contactUs", label: "CONTACT US" },
   ];
   useEffect(() => {

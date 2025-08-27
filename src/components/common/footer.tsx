@@ -1,16 +1,17 @@
-import { Input } from "@/src/components/ui/input"
-import { Button } from "@/src/components/ui/button"
-import { Facebook, Instagram, Linkedin } from "lucide-react"
+import { Input } from "@/src/components/ui/input";
+import { Button } from "@/src/components/ui/button";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 
 const sitemapLinks = [
   { href: "/buy", label: "Buy" },
   { href: "/offPlans", label: "Off-Plan" },
+  { href: "/rent", label: "Rent" },
   { href: "/communities", label: "Communities" },
   { href: "/whyDubai", label: "Why Dubai" },
   { href: "/service", label: "Services" },
   { href: "/about", label: "About Us" },
   { href: "/contactUs", label: "Contact Us" },
-]
+];
 
 export default function Footer() {
   return (
@@ -19,7 +20,8 @@ export default function Footer() {
         {/* Newsletter Section */}
         <div className="md:col-span-3 lg:col-span-4 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full">
           <h3 className="text-xl font-extralight tracking-wide leading-relaxed w-full md:flex-none md:w-[40%]">
-            Receive our exceptional real estate listings delivered straight to your inbox.
+            Receive our exceptional real estate listings delivered straight to
+            your inbox.
           </h3>
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full md:flex-1">
             <label htmlFor="email-subscribe" className="sr-only">
@@ -83,15 +85,18 @@ export default function Footer() {
         <div>
           <h4 className="text-lg font-sans mb-4 tracking-wide">About Us</h4>
           <p className="text-sm leading-relaxed font-sans">
-            J&A Properties specializes in luxury Dubai real estate, offering personalized service,
-            market insights, and tailored investment solutions for discerning clients.
+            J&A Properties specializes in luxury Dubai real estate, offering
+            personalized service, market insights, and tailored investment
+            solutions for discerning clients.
           </p>
         </div>
       </div>
 
       {/* Bottom bar */}
       <div className="container mx-auto border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-white/70">
-        <p className="font-sans">&copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}</p>
+        <p className="font-sans">
+          &copy; {"2025 J&A Properties | Privacy Policy | Cookie Policy"}
+        </p>
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a
             href="https://www.facebook.com/profile.php?id=61555781408625"
@@ -120,5 +125,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
