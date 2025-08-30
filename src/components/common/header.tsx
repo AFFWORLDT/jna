@@ -75,7 +75,7 @@ export default function Header() {
     >
       <nav
         className={`container mx-auto flex items-center justify-between px-4 md:px-6 transition-all duration-300 ${
-          isScrolled ? "h-20" : "h-28"
+          isScrolled ? "h-20" : "h-32"
         }`}
       >
         <div className="flex items-center">
@@ -89,8 +89,8 @@ export default function Header() {
                   : "/images/logo-gold.svg"
               }
               alt="logo"
-              width={80}
-              height={80}
+              width={isScrolled ? 80 : 100}
+              height={isScrolled ? 80 : 100}
             />
           </Link>
         </div>
@@ -107,7 +107,7 @@ export default function Header() {
               key={i}
               href={link.href}
               className={cn(
-                "relative pb-1 transition-all duration-300 text-white uppercase text-sm font-normal",
+                "relative pb-1 transition-all duration-300 text-white uppercase text-[16px] font-normal",
                 "after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0",
                 "after:bg-primary after:transition-all after:duration-300 hover:after:w-full",
                 pathname === link.href && "after:w-full"
@@ -146,22 +146,20 @@ export default function Header() {
             </a>
           </div>
           <div
-            className="text-white group relative cursor-pointer w-6 h-6"
+            className="text-white group relative cursor-pointer w-12 h-8 flex items-center justify-center overflow-hidden"
             onClick={() => setIsOverlayOpen(true)}
           >
-            {/* Default Icon */}
-            <Icon
-              icon="codicon:menu"
-              fontSize={25}
-              className="absolute inset-0 opacity-100 scale-100 transition-all duration-300 ease-in-out group-hover:opacity-0 group-hover:scale-90"
-            />
+            {/* Single Menu Icon that transforms to ladder */}
+            <div className="relative z-10 flex flex-col justify-end items-start space-y-1">
+              {/* Top line - width 10 default, decreases from right */}
+              <span className="w-10 h-0.5 bg-white rounded-full transition-all duration-500 ease-out group-hover:w-10 group-hover:h-1 group-hover:bg-white/80"></span>
 
-            {/* Hover Icon */}
-            <Icon
-              icon="heroicons-solid:menu-alt-2"
-              fontSize={25}
-              className="absolute inset-0 opacity-0 scale-90 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:scale-100"
-            />
+              {/* Middle line - width 10 default, decreases from right */}
+              <span className="w-10 h-0.5 bg-white rounded-full transition-all duration-500 ease-out group-hover:w-9 group-hover:h-1 group-hover:bg-white/80"></span>
+
+              {/* Bottom line - width 10 default, decreases from right */}
+              <span className="w-10 h-0.5 bg-white rounded-full transition-all duration-500 ease-out group-hover:w-7 group-hover:h-1 group-hover:bg-white/80"></span>
+            </div>
 
             <span className="sr-only">Toggle Menu</span>
           </div>

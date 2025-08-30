@@ -1,190 +1,329 @@
-"use client"
-import { getAllProperties } from "@/src/api/offPlans"
-import { Button } from "@/src/components/ui/button"
-import { Input } from "@/src/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
-import { cn } from "@/src/lib/utils"
-import OffPlanCard from "@/src/view/offPlans/offPlanCard"
-import { Icon } from "@iconify/react/dist/iconify.js"
-import { Loader } from "lucide-react"
-import { useEffect, useState } from "react"
+"use client";
+import { getAllProperties } from "@/src/api/offPlans";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/src/components/ui/dialog";
+import { cn } from "@/src/lib/utils";
+import OffPlanCard from "@/src/view/offPlans/offPlanCard";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Loader, X, Search } from "lucide-react";
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { api } from "@/src/lib/axios";
 
-function page() {
-  const [property, setProperty] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+// Constants
+const COMPLETION_STATUS_OPTIONS = [
+  { label: "Completion Status", value: "all" },
+  { label: "Completed Secondary", value: "completed" },
+  { label: "Off Plan Secondary", value: "off_plan" },
+  { label: "Completed Primary", value: "completed_primary" },
+  { label: "Off Plan Primary", value: "off_plan_primary" },
+];
 
-  const fetchproperty = async () => {
-    setLoading(true)
-    const query = "sort_by=total_count&sort_order=desc&page=1&size=24"
+const PROPERTY_TYPES = [
+  "APARTMENT", "VILLA", "TOWNHOUSE", "PENTHOUSE", "HOTEL APARTMENT",
+  "DUPLEX", "RESIDENTIAL FLOOR", "RESIDENTIAL PLOT", "RESIDENTIAL BUILDING",
+  "PARKING", "STORE ROOM", "COMPOUND", "OFFICE", "SHOP", "COMMERCIAL BUILDING",
+  "COMMERCIAL FLOOR", "COMMERCIAL PLOT", "LABOR CAMP", "RETAIL", "SHOW ROOM",
+  "COMMERCIAL VILLA", "WAREHOUSE", "FARM", "FACTORY", "HOTEL", "HOSPITAL"
+];
+
+const PRICE_OPTIONS = [
+  "250000", "500000", "750000", "1000000", "1500000", "2000000", "2500000", "3000000",
+  "4000000", "5000000", "7500000", "10000000", "15000000", "20000000", "30000000",
+  "40000000", "50000000", "60000000", "70000000", "80000000", "90000000", "100000000"
+];
+
+const BEDROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
+
+function OffPlansPage() {
+  const [property, setProperty] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [developers, setDevelopers] = useState([]);
+  const [developerSearch, setDeveloperSearch] = useState("");
+  const [searchingDevelopers, setSearchingDevelopers] = useState(false);
+  
+  // Filter states
+  const [filters, setFilters] = useState({
+    title: "",
+    property_type: "any",
+    min_price: "any",
+    max_price: "any",
+    completion_status: "all",
+    developer_id: "any",
+    bedrooms: "any"
+  });
+
+  const fetchproperty = useCallback(async () => {
+    setLoading(true);
+    
+    const queryParams = new URLSearchParams({
+      sort_by: "total_count",
+      sort_order: "desc",
+      page: "1",
+      size: "24"
+    });
+    
+    // Add filter parameters
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value !== "any" && value !== "all") {
+        queryParams.append(key, value);
+      }
+    });
+    
     try {
-      const res = await getAllProperties(query)
-      setProperty(res?.projects)
+      const res = await getAllProperties(queryParams.toString());
+      setProperty(res?.projects || []);
     } catch (error) {
-      console.log(error)
+      console.error("Error fetching properties:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  }, [filters]);
+
+  // Debounced developer search
+  const searchDevelopers = useCallback((searchTerm: string) => {
+    if (searchTerm.length < 2) {
+      setDevelopers([]);
+      return;
+    }
+
+    setSearchingDevelopers(true);
+    const timeoutId = setTimeout(async () => {
+      try {
+        const response = await api.get(`/properties/get_developers?name=${searchTerm}`);
+        setDevelopers(response.data?.developers || response.data || []);
+      } catch (error) {
+        console.error("Error searching developers:", error);
+        setDevelopers([]);
+      } finally {
+        setSearchingDevelopers(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  const handleFilterChange = useCallback((key: string, value: string) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  const handleSearch = useCallback(() => {
+    fetchproperty();
+    if (showFilters) setShowFilters(false);
+  }, [fetchproperty, showFilters]);
+
+  const handleDeveloperSelect = useCallback((developer: any) => {
+    handleFilterChange("developer_id", developer.id);
+    setDeveloperSearch(developer.name);
+    setDevelopers([]);
+  }, [handleFilterChange]);
+
+  const toggleFilters = useCallback(() => {
+    setShowFilters(prev => !prev);
+  }, []);
+
   useEffect(() => {
-    fetchproperty()
-  }, [])
+    fetchproperty();
+  }, [filters]);
 
-  const priceOptions = [
-    { value: "250000", label: "250,000" },
-    { value: "500000", label: "500,000" },
-    { value: "750000", label: "750,000" },
-    { value: "1000000", label: "1,000,000" },
-    { value: "1500000", label: "1,500,000" },
-    { value: "2000000", label: "2,000,000" },
-    { value: "2500000", label: "2,500,000" },
-    { value: "3000000", label: "3,000,000" },
-    { value: "4000000", label: "4,000,000" },
-    { value: "5000000", label: "5,000,000" },
-    { value: "7500000", label: "7,500,000" },
-    { value: "10000000", label: "10,000,000" },
-    { value: "15000000", label: "15,000,000" },
-    { value: "20000000", label: "20,000,000" },
-    { value: "30000000", label: "30,000,000" },
-    { value: "40000000", label: "40,000,000" },
-    { value: "50000000", label: "50,000,000" },
-    { value: "60000000", label: "60,000,000" },
-    { value: "70000000", label: "70,000,000" },
-    { value: "80000000", label: "80,000,000" },
-    { value: "90000000", label: "90,000,000" },
-    { value: "100000000", label: "100,000,000" },
-  ]
+  useEffect(() => {
+    searchDevelopers(developerSearch);
+  }, [developerSearch, searchDevelopers]);
 
-  const developers = [
-    { value: "emaar", label: "Emaar" },
-    { value: "damac", label: "Damac" },
-    { value: "nakheel", label: "Nakheel" },
-    { value: "sobha", label: "Sobha" },
-    { value: "meraas", label: "Meraas" },
-    { value: "selectgroup", label: "Select Group" },
-  ]
+  // Close developer dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.developer-search')) {
+        setDevelopers([]);
+      }
+    };
 
-  const toggleFilter = () => {
-    setIsFilterOpen(!isFilterOpen)
-  }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
-  const closeFilter = () => {
-    setIsFilterOpen(false)
-  }
+  // Memoized components
+  const FilterButton = useMemo(() => (
+    <div className="block md:hidden">
+      <div className="flex items-center gap-3 p-4 backdrop-blur-md">
+        <div className="flex-1">
+          <Input
+            placeholder="Location or Project"
+            value={filters.title}
+            onChange={(e) => handleFilterChange("title", e.target.value)}
+            className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
+          />
+        </div>
+        <Button
+          onClick={toggleFilters}
+          size="lg"
+          variant="outline"
+          className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center"
+        >
+          <Icon icon="lucide:sliders-horizontal" className="text-gray-600 text-xl" />
+        </Button>
+        <Button
+          onClick={handleSearch}
+          size="lg"
+          className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
+        >
+          <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
+        </Button>
+      </div>
+    </div>
+  ), [filters.title, handleFilterChange, toggleFilters, handleSearch]);
+
+  const PropertyTypeSelect = useMemo(() => (
+    <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+      <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
+        <SelectValue placeholder="Property Type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="any">Any</SelectItem>
+        {PROPERTY_TYPES.map(type => (
+          <SelectItem key={type} value={type}>{type}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  ), [filters.property_type, handleFilterChange]);
+
+  const PriceSelect = useMemo(() => {
+    const MinPriceSelect = () => (
+      <Select 
+        value={filters.min_price} 
+        onValueChange={(value) => handleFilterChange("min_price", value)}
+      >
+        <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
+          <SelectValue placeholder="Min Price" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="any">Any</SelectItem>
+          {PRICE_OPTIONS.map(price => (
+            <SelectItem key={price} value={price}>
+              AED {parseInt(price).toLocaleString()}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+
+    const MaxPriceSelect = () => (
+      <Select 
+        value={filters.max_price} 
+        onValueChange={(value) => handleFilterChange("max_price", value)}
+      >
+        <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
+          <SelectValue placeholder="Max Price" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="any">Any</SelectItem>
+          {PRICE_OPTIONS.map(price => (
+            <SelectItem key={price} value={price}>
+              AED {parseInt(price).toLocaleString()}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    );
+
+    return { MinPriceSelect, MaxPriceSelect };
+  }, [filters.min_price, filters.max_price, handleFilterChange]);
 
   return (
     <div>
       <section className="pt-32 pb-16 px-6 bg-[#141442]">
         <div className="container mx-auto">
-          <div className="block md:hidden">
-            <div className="flex items-center gap-3 p-4 backdrop-blur-md">
-              <div className="flex-1">
-                <Input
-                  placeholder="Location or Project"
-                  className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
-                />
-              </div>
-              <Button
-                onClick={toggleFilter}
-                size="lg"
-                variant="outline"
-                className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center"
-              >
-                <Icon icon="lucide:sliders-horizontal" className="text-gray-600 text-xl" />
-              </Button>
-              <Button
-                size="lg"
-                className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
-              >
-                <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
-              </Button>
-            </div>
-          </div>
+          {FilterButton}
 
+          {/* Desktop Search Form */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
             {/* Location */}
-            <Input
-              placeholder="Location of Project"
-              className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 col-span-2"
-            />
+            <div className="col-span-2">
+              <Input
+                placeholder="Location of Project"
+                value={filters.title}
+                onChange={(e) => handleFilterChange("title", e.target.value)}
+                className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500"
+              />
+            </div>
 
             {/* Property Type */}
-            <Select>
-              <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
-                <SelectValue placeholder="Property Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any">Any</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="penthouse">Penthouse</SelectItem>
-                <SelectItem value="townhouse">Townhouse</SelectItem>
-                <SelectItem value="studio">Studio</SelectItem>
-                <SelectItem value="Plot">Plot</SelectItem>
-                <SelectItem value="Office">Office</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              {PropertyTypeSelect}
+            </div>
 
             {/* Min Price */}
-            <Select>
-              <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
-                <SelectValue placeholder="Min Price" />
-              </SelectTrigger>
-              <SelectContent>
-                {priceOptions.map((p) => (
-                  <SelectItem key={p.value} value={p.value}>
-                    AED {p.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+              <PriceSelect.MinPriceSelect />
+            </div>
 
             {/* Max Price */}
-            <Select>
-              <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
-                <SelectValue placeholder="Max Price" />
-              </SelectTrigger>
-              <SelectContent>
-                {priceOptions.map((p) => (
-                  <SelectItem key={p.value} value={p.value}>
-                    AED {p.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+              <PriceSelect.MaxPriceSelect />
+            </div>
 
             {/* Beds */}
-            <Select>
-              <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
-                <SelectValue placeholder="Beds" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="studio">Studio</SelectItem>
-                <SelectItem value="1">1 Bed</SelectItem>
-                <SelectItem value="2">2 Beds</SelectItem>
-                <SelectItem value="3">3 Beds</SelectItem>
-                <SelectItem value="4">4 Beds</SelectItem>
-                <SelectItem value="5+">5+ Beds</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
+                  <SelectValue placeholder="Beds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Any</SelectItem>
+                  {BEDROOM_OPTIONS.slice(1).map(bed => (
+                    <SelectItem key={bed} value={bed}>{bed === "5+" ? "5+ Beds" : `${bed} Bed`}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            {/* Developers */}
-            <Select>
-              <SelectTrigger className="w-full bg-white border border-gray-300 text-black">
-                <SelectValue placeholder="All Developers" />
-              </SelectTrigger>
-              <SelectContent>
-                {developers.map((d) => (
-                  <SelectItem key={d.value} value={d.value}>
-                    {d.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Developer Search */}
+            <div className="developer-search">
+              <div className="relative">
+                <Input
+                  placeholder="Search developers..."
+                  value={developerSearch}
+                  onChange={(e) => setDeveloperSearch(e.target.value)}
+                  className="w-full bg-white border border-gray-300 text-black placeholder:text-gray-500 pr-8"
+                />
+                {searchingDevelopers && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader className="w-4 h-4 animate-spin text-gray-400" />
+                  </div>
+                )}
+              </div>
+              {developers.length > 0 && (
+                <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white shadow-lg">
+                  {developers.map((developer: any) => (
+                    <div
+                      key={developer.id}
+                      className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                      onClick={() => handleDeveloperSelect(developer)}
+                    >
+                      <div className="text-sm font-medium text-gray-900">{developer.name}</div>
+                      {developer.location && (
+                        <div className="text-xs text-gray-500">{developer.location}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Search Button */}
             <div className="flex justify-start">
               <Button
+                onClick={handleSearch}
                 size="lg"
                 className="h-14 w-14 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
               >
@@ -195,118 +334,138 @@ function page() {
         </div>
       </section>
 
-      {isFilterOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
-            style={{
-              animation: "fadeIn 0.3s ease-out",
-            }}
-            onClick={closeFilter}
-          />
-
-          <div
-            className="fixed bottom-0 left-0 right-0 bg-white z-50 md:hidden shadow-2xl"
-            style={{
-              animation: "slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-              maxHeight: "85vh",
-              overflowY: "auto",
-            }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h3 className="text-xl font-semibold text-gray-900">Filters</h3>
-              <Button onClick={closeFilter} variant="ghost" size="sm" className="h-8 w-8 hover:bg-gray-100">
-                <Icon icon="lucide:x" className="text-gray-500 text-lg" />
+      {/* Mobile Filter Modal */}
+      <Dialog open={showFilters} onOpenChange={setShowFilters}>
+        <DialogContent className="sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span className="text-xl font-semibold">Search Filters</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowFilters(false)}
+                className="h-8 w-8 p-0"
+              >
+                <X className="h-4 w-4" />
               </Button>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            {/* Search Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Location</label>
+              <div className="relative">
+                <Input
+                  placeholder="Location of Project"
+                  value={filters.title}
+                  onChange={(e) => handleFilterChange("title", e.target.value)}
+                  className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
+                />
+                <Icon 
+                  icon="heroicons:magnifying-glass" 
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                />
+              </div>
             </div>
 
-            {/* Filter Content */}
-            <div className="p-6 space-y-6">
-              {/* Property Type */}
+            {/* Property Type */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Property Type</label>
+              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white max-h-60">
+                  <SelectItem value="any">Any Property Type</SelectItem>
+                  {PROPERTY_TYPES.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Completion Status */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Completion Status</label>
+              <Select value={filters.completion_status} onValueChange={(value) => handleFilterChange("completion_status", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  {COMPLETION_STATUS_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Developer Search */}
+            <div className="space-y-2 developer-search">
+              <label className="text-sm font-medium text-gray-700">Developer</label>
+              <div className="relative">
+                <Input
+                  placeholder="Search developers..."
+                  value={developerSearch}
+                  onChange={(e) => setDeveloperSearch(e.target.value)}
+                  className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary pr-10"
+                />
+                {searchingDevelopers && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <Loader className="w-5 h-5 animate-spin text-gray-400" />
+                  </div>
+                )}
+              </div>
+              {developers.length > 0 && (
+                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white">
+                  {developers.map((developer: any) => (
+                    <div
+                      key={developer.id}
+                      className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                      onClick={() => handleDeveloperSelect(developer)}
+                    >
+                      <div className="text-sm font-medium text-gray-900">{developer.name}</div>
+                      {developer.location && (
+                        <div className="text-xs text-gray-500">{developer.location}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Price Range */}
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Property Type</label>
-                <Select>
-                  <SelectTrigger className="w-full bg-gray-50 border border-gray-200 text-black h-12">
-                    <SelectValue placeholder="Select property type" />
+                <label className="text-sm font-medium text-gray-700">Min Price</label>
+                <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                    <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white max-h-60">
                     <SelectItem value="any">Any</SelectItem>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="penthouse">Penthouse</SelectItem>
-                    <SelectItem value="townhouse">Townhouse</SelectItem>
-                    <SelectItem value="studio">Studio</SelectItem>
-                    <SelectItem value="Plot">Plot</SelectItem>
-                    <SelectItem value="Office">Office</SelectItem>
+                    {PRICE_OPTIONS.map(price => (
+                      <SelectItem key={price} value={price}>
+                        AED {parseInt(price).toLocaleString()}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* Price Range */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Min Price</label>
-                  <Select>
-                    <SelectTrigger className="w-full bg-gray-50 border border-gray-200 text-black h-12">
-                      <SelectValue placeholder="Min" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {priceOptions.map((p) => (
-                        <SelectItem key={p.value} value={p.value}>
-                          AED {p.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Max Price</label>
-                  <Select>
-                    <SelectTrigger className="w-full bg-gray-50 border border-gray-200 text-black h-12">
-                      <SelectValue placeholder="Max" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {priceOptions.map((p) => (
-                        <SelectItem key={p.value} value={p.value}>
-                          AED {p.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Beds */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Bedrooms</label>
-                <Select>
-                  <SelectTrigger className="w-full bg-gray-50 border border-gray-200 text-black h-12">
-                    <SelectValue placeholder="Select bedrooms" />
+                <label className="text-sm font-medium text-gray-700">Max Price</label>
+                <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                    <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="studio">Studio</SelectItem>
-                    <SelectItem value="1">1 Bed</SelectItem>
-                    <SelectItem value="2">2 Beds</SelectItem>
-                    <SelectItem value="3">3 Beds</SelectItem>
-                    <SelectItem value="4">4 Beds</SelectItem>
-                    <SelectItem value="5+">5+ Beds</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Developers */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Developer</label>
-                <Select>
-                  <SelectTrigger className="w-full bg-gray-50 border border-gray-200 text-black h-12">
-                    <SelectValue placeholder="Select developer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {developers.map((d) => (
-                      <SelectItem key={d.value} value={d.value}>
-                        {d.label}
+                  <SelectContent className="bg-white max-h-60">
+                    <SelectItem value="any">Any</SelectItem>
+                    {PRICE_OPTIONS.map(price => (
+                      <SelectItem key={price} value={price}>
+                        AED {parseInt(price).toLocaleString()}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -314,45 +473,38 @@ function page() {
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-100 bg-gray-50">
-              <div className="flex gap-3">
-                <Button
-                  onClick={closeFilter}
-                  variant="outline"
-                  className="flex-1 h-12 border-gray-300 text-gray-700 hover:bg-gray-100 bg-transparent"
-                >
-                  Clear All
-                </Button>
-                <Button onClick={closeFilter} className="flex-1 h-12 bg-primary hover:bg-primary/90 text-white">
-                  Apply Filters
-                </Button>
+            {/* Bedrooms - Pretty Design */}
+            <div className="space-y-3">
+              <label className="text-sm font-medium text-gray-700">Bedrooms</label>
+              <div className="grid grid-cols-3 gap-2">
+                {BEDROOM_OPTIONS.map((bed) => (
+                  <button
+                    key={bed}
+                    onClick={() => handleFilterChange("bedrooms", bed)}
+                    className={cn(
+                      "py-3 px-4 rounded-lg border-2 transition-all duration-200 font-medium text-sm",
+                      filters.bedrooms === bed
+                        ? "border-primary bg-primary text-white shadow-md"
+                        : "border-gray-200 bg-white text-gray-700 hover:border-primary hover:bg-primary/5"
+                    )}
+                  >
+                    {bed === "any" ? "Any" : bed === "5+" ? "5+ Beds" : `${bed} Bed`}
+                  </button>
+                ))}
               </div>
             </div>
-          </div>
-        </>
-      )}
 
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            transform: translateY(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-        
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-          }
-          to {
-            opacity: 1;
-          }
-        }
-      `}</style>
+            {/* Search Button */}
+            <Button 
+              onClick={handleSearch}
+              className="w-full bg-primary hover:bg-primary/90 text-white font-medium h-12 rounded-md"
+            >
+              <Search className="w-5 h-5 mr-2" />
+              Search Properties
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="mx-auto px-4 py-12 max-w-5xl">
         <h1 className="text-center text-4xl font-mono">The Art of Selection</h1>
@@ -369,6 +521,7 @@ function page() {
           </span>
         </p>
       </div>
+      
       <div>
         {loading && (
           <div className="flex justify-center items-center h-64">
@@ -382,7 +535,7 @@ function page() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default OffPlansPage;
