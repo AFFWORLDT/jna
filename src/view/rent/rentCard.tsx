@@ -1,40 +1,41 @@
-"use client"
+"use client";
 
-import { Button } from "@/src/components/ui/button"
-import { Card, CardContent } from "@/src/components/ui/card"
-import { Bath, Bed, Heart, SquareGanttChart } from "lucide-react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { Button } from "@/src/components/ui/button";
+import { Card, CardContent } from "@/src/components/ui/card";
+import { Bath, Bed, Heart, SquareGanttChart } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface PropertyData {
-  id?: string | number
-  title?: string
-  price?: number
-  bedRooms?: number
-  bathrooms?: number | string
-  size?: number | string
-  propertyId?: string
-  photos?: string[]
+  id?: string | number;
+  title?: string;
+  price?: number;
+  bedRooms?: number;
+  bathrooms?: number | string;
+  size?: number | string;
+  propertyId?: string;
+  priceType: string;
+  photos?: string[];
   location?: {
-    city?: string
-    community?: string
-    sub_community?: string
-  }
-    ownPortal_agent_Id?: string
+    city?: string;
+    community?: string;
+    sub_community?: string;
+  };
+  ownPortal_agent_Id?: string;
 }
 
 interface RentCardProps {
-  data?: PropertyData
-  onFavorite?: (item: PropertyData) => void
+  data?: PropertyData;
+  onFavorite?: (item: PropertyData) => void;
 }
 
 export function RentCard({ data, onFavorite }: RentCardProps) {
-  const router = useRouter()
+  const router = useRouter();
   const handleFavorite = () => {
     if (data && onFavorite) {
-      onFavorite(data)
+      onFavorite(data);
     }
-  }
+  };
 
   if (!data) {
     return (
@@ -43,21 +44,23 @@ export function RentCard({ data, onFavorite }: RentCardProps) {
           No property data available
         </CardContent>
       </Card>
-    )
+    );
   }
 
-  const imageUrl = data.photos?.[0] || "/placeholder.svg?height=320&width=400"
-  const locationName = [
-    data.location?.community,
-    data.location?.sub_community
-  ].filter(Boolean).join(", ")
+  const imageUrl = data.photos?.[0] || "/placeholder.svg?height=320&width=400";
+  const locationName = [data.location?.community, data.location?.sub_community]
+    .filter(Boolean)
+    .join(", ");
 
   const formattedPrice = data.price
     ? `AED ${data.price.toLocaleString()}`
-    : "Price on request"
+    : "Price on request";
 
   return (
-    <Card className="relative overflow-hidden rounded-none shadow-sm bg-white p-0 border cursor-pointer" onClick={() => router.push(`/buy/details/${data.id}`)}>
+    <Card
+      className="relative overflow-hidden rounded-none shadow-sm bg-white p-0 border cursor-pointer"
+      onClick={() => router.push(`/buy/details/${data.id}`)}
+    >
       <div className="relative w-full h-80">
         <Image
           src={imageUrl}
@@ -98,7 +101,7 @@ export function RentCard({ data, onFavorite }: RentCardProps) {
           {locationName || "Location not specified"}
         </p>
         <p className="text-sm font-bold text-[#1A202C] tracking-wide">
-          {formattedPrice}
+          {formattedPrice}/{data?.priceType}
         </p>
 
         <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 font-light">
@@ -117,5 +120,5 @@ export function RentCard({ data, onFavorite }: RentCardProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

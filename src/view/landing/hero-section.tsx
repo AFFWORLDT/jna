@@ -69,7 +69,7 @@ export default function HeroSection() {
       />
 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-white/0 z-10" />
 
-      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 container w-full mt-[470px] py-11 max-sm:mt-40">
+      <div className="relative z-20 text-white px-4 sm:px-6 lg:px-8 container w-full mt-[530px] py-11 max-sm:mt-40">
         <h1 className="text-4xl  lg:text-5xl font-custom mb-4">
           Luxury Living Reimagined
         </h1>
