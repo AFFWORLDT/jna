@@ -219,7 +219,7 @@ function Buy() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-white">
-          <SelectItem value="any">Min Price</SelectItem>
+          <SelectItem value="any">Min </SelectItem>
           {PRICE_OPTIONS.map(price => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
@@ -238,7 +238,7 @@ function Buy() {
           <SelectValue />
         </SelectTrigger>
         <SelectContent className="bg-white">
-          <SelectItem value="any">Max Price</SelectItem>
+          <SelectItem value="any">Max</SelectItem>
           {PRICE_OPTIONS.map(price => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
@@ -300,7 +300,7 @@ function Buy() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
-                    <SelectItem value="any">Min Price</SelectItem>
+                    <SelectItem value="any">Min </SelectItem>
                     {PRICE_OPTIONS.map(price => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
@@ -320,7 +320,7 @@ function Buy() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
-                    <SelectItem value="any">Max Price</SelectItem>
+                    <SelectItem value="any">Max</SelectItem>
                     {PRICE_OPTIONS.map(price => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
