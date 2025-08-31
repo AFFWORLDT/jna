@@ -86,8 +86,8 @@ export default function HeroSection() {
                 Location
               </div>
               <Select>
-                <SelectTrigger className="w-full h-9 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
-                  <SelectValue placeholder="Any" />
+                <SelectTrigger className="w-full h-14 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
+                  <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
                   <SelectItem value="any">Any</SelectItem>
@@ -108,7 +108,7 @@ export default function HeroSection() {
               </div>
               <Select>
                 <SelectTrigger className="w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none  focus:ring-offset-0 focus:ring-transparent pt-5 pb-2">
-                  <SelectValue placeholder="Any" />
+                  <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
                   <SelectItem value="any">Any</SelectItem>
@@ -132,7 +132,7 @@ export default function HeroSection() {
                 className="relative w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none  focus:ring-offset-0 focus:ring-transparent cursor-pointer flex items-center px-3 pt-5 pb-2"
                 onClick={() => setIsPriceOpen(!isPriceOpen)}
               >
-                <span className="text-white max-sm:text-black">
+                <span className="text-white max-sm:text-black max-sm:hidden pt-2">
                   {getPriceDisplayValue()}
                 </span>
               </div>
@@ -198,7 +198,7 @@ export default function HeroSection() {
               </div>
               <Select>
                 <SelectTrigger className="w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border max-sm:border-gray-300 border-white/30 rounded-none  focus:ring-offset-0 focus:ring-transparent pt-5 pb-2">
-                  <SelectValue placeholder="Any" />
+                  <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
                   <SelectItem value="any">Any</SelectItem>
