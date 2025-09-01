@@ -64,7 +64,7 @@ function Rent() {
   
   // Filter states
   const [filters, setFilters] = React.useState({
-    type: "RENT",
+    listing_type: "RENT",
     title: "",
     property_type: "any",
     min_price: "any",
@@ -83,7 +83,8 @@ function Rent() {
       sort_by: "total_count",
       sort_order: "desc",
       page: "1",
-      size: "24"
+      size: "24",
+      status:"ACTIVE"
     });
     
     // Add filter parameters
@@ -129,11 +130,11 @@ function Rent() {
   const handleFilterChange = useCallback((key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
     
-    // Navigate when type changes
-    if (key === "type") {
+    // Navigate when listing_type changes
+    if (key === "listing_type") {
       if (value === "SELL") {
         router.push("/buy");
-      } else if (value === "rent") {
+      } else if (value === "RENT") {
         router.push("/rent");
       }
     }
@@ -277,9 +278,9 @@ function Rent() {
 
           {/* Desktop Search Form */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
-            {/* Type (Rent) */}
+            {/* Listing Type Filter */}
             <div>
-              <Select value={filters.type || "rent"} onValueChange={(value) => handleFilterChange("type", value)}>
+              <Select value={filters.listing_type} onValueChange={(value) => handleFilterChange("listing_type", value)}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
@@ -421,6 +422,20 @@ function Rent() {
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
                 />
               </div>
+            </div>
+
+            {/* Listing Type Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <Select value={filters.listing_type} onValueChange={(value) => handleFilterChange("listing_type", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="SELL">Buy</SelectItem>
+                  <SelectItem value="RENT">Rent</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Property Type */}
