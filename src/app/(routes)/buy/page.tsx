@@ -116,7 +116,7 @@ function Buy() {
 
   // Filter states
   const [filters, setFilters] = React.useState({
-    type: "buy",
+    listing_type: "SELL",
     title: "",
     property_type: "any",
     min_price: "any",
@@ -136,6 +136,7 @@ function Buy() {
       sort_order: "desc",
       page: "1",
       size: "24",
+      status:"ACTIVE"
     });
 
     // Add filter parameters
@@ -184,14 +185,14 @@ function Buy() {
     (key: string, value: string) => {
       setFilters((prev) => ({ ...prev, [key]: value }));
 
-      // Navigate when type changes
-      if (key === "type") {
-        if (value === "rent") {
-          router.push("/rent");
-        } else if (value === "buy") {
-          router.push("/buy");
-        }
+          // Navigate when listing_type changes
+    if (key === "listing_type") {
+      if (value === "RENT") {
+        router.push("/rent");
+      } else if (value === "SELL") {
+        router.push("/buy");
       }
+    }
     },
     [router]
   );
@@ -352,18 +353,18 @@ function Buy() {
           {/* Desktop Search Form */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
             {/* Buy/Sell Filter */}
-            {/* Type Filter */}
+            {/* Listing Type Filter */}
             <div>
               <Select
-                value={filters.type}
-                onValueChange={(value) => handleFilterChange("type", value)}
+                value={filters.listing_type}
+                onValueChange={(value) => handleFilterChange("listing_type", value)}
               >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="buy">Buy</SelectItem>
-                  <SelectItem value="rent">Rent</SelectItem>
+                  <SelectItem value="SELL">Buy</SelectItem>
+                  <SelectItem value="RENT">Rent</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -526,19 +527,19 @@ function Buy() {
               </div>
             </div>
 
-            {/* Type Filter */}
+            {/* Listing Type Filter */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Type</label>
               <Select
-                value={filters.type}
-                onValueChange={(value) => handleFilterChange("type", value)}
+                value={filters.listing_type}
+                onValueChange={(value) => handleFilterChange("listing_type", value)}
               >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="buy">Buy</SelectItem>
-                  <SelectItem value="rent">Rent</SelectItem>
+                  <SelectItem value="SELL">Buy</SelectItem>
+                  <SelectItem value="RENT">Rent</SelectItem>
                 </SelectContent>
               </Select>
             </div>
