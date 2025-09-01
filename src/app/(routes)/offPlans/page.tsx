@@ -22,6 +22,7 @@ import { Loader, X, Search } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Constants
 const COMPLETION_STATUS_OPTIONS = [
@@ -105,6 +106,7 @@ const HANDOVER_YEAR_OPTIONS = [
 ];
 
 function OffPlansPage() {
+  const router = useRouter();
   const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -114,7 +116,7 @@ function OffPlansPage() {
 
   // Filter states
   const [filters, setFilters] = useState({
-    buy_sell: "off_plan",
+    type: "off_plan",
     title: "",
     property_type: "any",
     min_price: "any",
@@ -180,7 +182,18 @@ function OffPlansPage() {
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
-  }, []);
+    
+    // Navigate when type changes
+    if (key === "type") {
+      if (value === "buy") {
+        router.push("/buy");
+      } else if (value === "rent") {
+        router.push("/rent");
+      } else if (value === "off_plan") {
+        router.push("/offPlans");
+      }
+    }
+  }, [router]);
 
   const handleSearch = useCallback(() => {
     fetchproperty();
@@ -331,7 +344,8 @@ function OffPlansPage() {
           {FilterButton}
 
           {/* Desktop Search Form */}
-          <div className="hidden md:grid grid-cols-1 md:grid-cols-7 gap-4 p-6 backdrop-blur-md">
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
+           
             {/* Location */}
             <div className="col-span-2">
               <Input
@@ -438,6 +452,21 @@ function OffPlansPage() {
                       {year}
                     </SelectItem>
                   ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Type Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <Select value={filters.type} onValueChange={(value) => handleFilterChange("type", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="buy">Buy</SelectItem>
+                  <SelectItem value="rent">Rent</SelectItem>
+                  <SelectItem value="off_plan">Off Plan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
