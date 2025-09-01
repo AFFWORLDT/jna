@@ -21,6 +21,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Constants
 const COMPLETION_STATUS_OPTIONS = [
@@ -32,37 +34,89 @@ const COMPLETION_STATUS_OPTIONS = [
 ];
 
 const PROPERTY_TYPES = [
-  "APARTMENT", "VILLA", "TOWNHOUSE", "PENTHOUSE", "HOTEL APARTMENT",
-  "DUPLEX", "RESIDENTIAL FLOOR", "RESIDENTIAL PLOT", "RESIDENTIAL BUILDING",
-  "PARKING", "STORE ROOM", "COMPOUND", "OFFICE", "SHOP", "COMMERCIAL BUILDING",
-  "COMMERCIAL FLOOR", "COMMERCIAL PLOT", "LABOR CAMP", "RETAIL", "SHOW ROOM",
-  "COMMERCIAL VILLA", "WAREHOUSE", "FARM", "FACTORY", "HOTEL", "HOSPITAL"
+  "APARTMENT",
+  "VILLA",
+  "TOWNHOUSE",
+  "PENTHOUSE",
+  "HOTEL APARTMENT",
+  "DUPLEX",
+  "RESIDENTIAL FLOOR",
+  "RESIDENTIAL PLOT",
+  "RESIDENTIAL BUILDING",
+  "PARKING",
+  "STORE ROOM",
+  "COMPOUND",
+  "OFFICE",
+  "SHOP",
+  "COMMERCIAL BUILDING",
+  "COMMERCIAL FLOOR",
+  "COMMERCIAL PLOT",
+  "LABOR CAMP",
+  "RETAIL",
+  "SHOW ROOM",
+  "COMMERCIAL VILLA",
+  "WAREHOUSE",
+  "FARM",
+  "FACTORY",
+  "HOTEL",
+  "HOSPITAL",
 ];
 
 const PRICE_OPTIONS = [
-  "250000", "500000", "750000", "1000000", "1500000", "2000000", "2500000",
-  "3000000", "4000000", "5000000", "7500000", "10000000", "15000000", "20000000",
-  "30000000", "40000000", "50000000", "60000000", "70000000", "80000000",
-  "90000000", "100000000"
+  "250000",
+  "500000",
+  "750000",
+  "1000000",
+  "1500000",
+  "2000000",
+  "2500000",
+  "3000000",
+  "4000000",
+  "5000000",
+  "7500000",
+  "10000000",
+  "15000000",
+  "20000000",
+  "30000000",
+  "40000000",
+  "50000000",
+  "60000000",
+  "70000000",
+  "80000000",
+  "90000000",
+  "100000000",
 ];
 
 const BEDROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
 const BATHROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
 const HANDOVER_YEAR_OPTIONS = [
-  "any", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035"
+  "any",
+  "2024",
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030",
+  "2031",
+  "2032",
+  "2033",
+  "2034",
+  "2035",
 ];
 
 function Buy() {
+  const router = useRouter();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
-  
+
   // Filter states
   const [filters, setFilters] = React.useState({
-    buy_sell: "SELL",
+    type: "buy",
     title: "",
     property_type: "any",
     min_price: "any",
@@ -71,26 +125,26 @@ function Buy() {
     developer_id: "any",
     bedrooms: "any",
     bathrooms: "any",
-    handover_year: "any"
+    handover_year: "any",
   });
 
   const fetchproperty = useCallback(async () => {
     setLoading(true);
-    
+
     const queryParams = new URLSearchParams({
       sort_by: "total_count",
       sort_order: "desc",
       page: "1",
-      size: "24"
+      size: "24",
     });
-    
+
     // Add filter parameters
     Object.entries(filters).forEach(([key, value]) => {
       if (value && value !== "any" && value !== "all") {
         queryParams.append(key, value);
       }
     });
-    
+
     try {
       const res = await getAllBuyProperties(queryParams.toString());
       setProperty(res?.properties || []);
@@ -111,7 +165,9 @@ function Buy() {
     setSearchingDevelopers(true);
     const timeoutId = setTimeout(async () => {
       try {
-        const response = await api.get(`/properties/get_developers?name=${searchTerm}`);
+        const response = await api.get(
+          `/properties/get_developers?name=${searchTerm}`
+        );
         setDevelopers(response.data?.developers || response.data || []);
       } catch (error) {
         console.error("Error searching developers:", error);
@@ -124,23 +180,38 @@ function Buy() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const handleFilterChange = useCallback((key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-  }, []);
+  const handleFilterChange = useCallback(
+    (key: string, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+
+      // Navigate when type changes
+      if (key === "type") {
+        if (value === "rent") {
+          router.push("/rent");
+        } else if (value === "buy") {
+          router.push("/buy");
+        }
+      }
+    },
+    [router]
+  );
 
   const handleSearch = useCallback(() => {
     fetchproperty();
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
 
-  const handleDeveloperSelect = useCallback((developer: any) => {
-    handleFilterChange("developer_id", developer.id);
-    setDeveloperSearch(developer.name);
-    setDevelopers([]);
-  }, [handleFilterChange]);
+  const handleDeveloperSelect = useCallback(
+    (developer: any) => {
+      handleFilterChange("developer_id", developer.id);
+      setDeveloperSearch(developer.name);
+      setDevelopers([]);
+    },
+    [handleFilterChange]
+  );
 
   const toggleFilters = useCallback(() => {
-    setShowFilters(prev => !prev);
+    setShowFilters((prev) => !prev);
   }, []);
 
   React.useEffect(() => {
@@ -155,14 +226,14 @@ function Buy() {
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.developer-search')) {
+      if (!target.closest(".developer-search")) {
         setDevelopers([]);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -172,54 +243,68 @@ function Buy() {
   }, []);
 
   // Memoized components
-  const FilterButton = useMemo(() => (
-    <div className="block md:hidden py-20">
-      <div className="flex items-center gap-3 p-4 backdrop-blur-md">
-        <div className="flex-1">
-          <Input
-            placeholder="Location or Project"
-            value={filters.title}
-            onChange={(e) => handleFilterChange("title", e.target.value)}
-            className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
-          />
+  const FilterButton = useMemo(
+    () => (
+      <div className="block md:hidden py-20">
+        <div className="flex items-center gap-3 p-4 backdrop-blur-md">
+          <div className="flex-1">
+            <Input
+              placeholder="Location or Project"
+              value={filters.title}
+              onChange={(e) => handleFilterChange("title", e.target.value)}
+              className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
+            />
+          </div>
+          <Button
+            onClick={toggleFilters}
+            size="lg"
+            variant="outline"
+            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center"
+          >
+            <Icon
+              icon="lucide:sliders-horizontal"
+              className="text-gray-600 text-xl"
+            />
+          </Button>
+          <Button
+            onClick={handleSearch}
+            size="lg"
+            className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
+          >
+            <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
+          </Button>
         </div>
-        <Button
-          onClick={toggleFilters}
-          size="lg"
-          variant="outline"
-          className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center"
-        >
-          <Icon icon="lucide:sliders-horizontal" className="text-gray-600 text-xl" />
-        </Button>
-        <Button
-          onClick={handleSearch}
-          size="lg"
-          className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
-        >
-          <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
-        </Button>
       </div>
-    </div>
-  ), [filters.title, handleFilterChange, toggleFilters, handleSearch]);
+    ),
+    [filters.title, handleFilterChange, toggleFilters, handleSearch]
+  );
 
-  const PropertyTypeSelect = useMemo(() => (
-    <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
-      <SelectTrigger className="w-full sm:w-40 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent className="bg-white">
-        <SelectItem value="any">Property Type</SelectItem>
-        {PROPERTY_TYPES.map(type => (
-          <SelectItem key={type} value={type}>{type}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  ), [filters.property_type, handleFilterChange]);
+  const PropertyTypeSelect = useMemo(
+    () => (
+      <Select
+        value={filters.property_type}
+        onValueChange={(value) => handleFilterChange("property_type", value)}
+      >
+        <SelectTrigger className="w-full sm:w-40 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectItem value="any">Property Type</SelectItem>
+          {PROPERTY_TYPES.map((type) => (
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    ),
+    [filters.property_type, handleFilterChange]
+  );
 
   const PriceSelect = useMemo(() => {
     const MinPriceSelect = () => (
-      <Select 
-        value={filters.min_price} 
+      <Select
+        value={filters.min_price}
         onValueChange={(value) => handleFilterChange("min_price", value)}
       >
         <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
@@ -227,7 +312,7 @@ function Buy() {
         </SelectTrigger>
         <SelectContent className="bg-white">
           <SelectItem value="any">Min </SelectItem>
-          {PRICE_OPTIONS.map(price => (
+          {PRICE_OPTIONS.map((price) => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
             </SelectItem>
@@ -237,8 +322,8 @@ function Buy() {
     );
 
     const MaxPriceSelect = () => (
-      <Select 
-        value={filters.max_price} 
+      <Select
+        value={filters.max_price}
         onValueChange={(value) => handleFilterChange("max_price", value)}
       >
         <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
@@ -246,7 +331,7 @@ function Buy() {
         </SelectTrigger>
         <SelectContent className="bg-white">
           <SelectItem value="any">Max</SelectItem>
-          {PRICE_OPTIONS.map(price => (
+          {PRICE_OPTIONS.map((price) => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
             </SelectItem>
@@ -261,20 +346,24 @@ function Buy() {
   return (
     <div>
       <section className="bg-[#141442] px-4 lg:h-72 h-auto flex justify-center items-end lg:py-16 py-6">
-        <div className="container mx-auto " >
+        <div className="container mx-auto ">
           {FilterButton}
 
           {/* Desktop Search Form */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
             {/* Buy/Sell Filter */}
+            {/* Type Filter */}
             <div>
-              <Select value={filters.buy_sell} onValueChange={(value) => handleFilterChange("buy_sell", value)}>
+              <Select
+                value={filters.type}
+                onValueChange={(value) => handleFilterChange("type", value)}
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
-                  <SelectValue placeholder="Buy/Sell" />
+                  <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="SELL">Buy</SelectItem>
-                  <SelectItem value="RENT">Rent</SelectItem>
+                  <SelectItem value="buy">Buy</SelectItem>
+                  <SelectItem value="rent">Rent</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -291,14 +380,21 @@ function Buy() {
 
             {/* Property Type */}
             <div>
-              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+              <Select
+                value={filters.property_type}
+                onValueChange={(value) =>
+                  handleFilterChange("property_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Property Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Property Type</SelectItem>
-                  {PROPERTY_TYPES.map(type => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  {PROPERTY_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -306,13 +402,18 @@ function Buy() {
 
             {/* Min Price */}
             <div>
-              <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+              <Select
+                value={filters.min_price}
+                onValueChange={(value) =>
+                  handleFilterChange("min_price", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Min Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Min Price</SelectItem>
-                  {PRICE_OPTIONS.map(price => (
+                  {PRICE_OPTIONS.map((price) => (
                     <SelectItem key={price} value={price}>
                       AED {parseInt(price).toLocaleString()}
                     </SelectItem>
@@ -323,13 +424,18 @@ function Buy() {
 
             {/* Max Price */}
             <div>
-              <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+              <Select
+                value={filters.max_price}
+                onValueChange={(value) =>
+                  handleFilterChange("max_price", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Max Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Max Price</SelectItem>
-                  {PRICE_OPTIONS.map(price => (
+                  {PRICE_OPTIONS.map((price) => (
                     <SelectItem key={price} value={price}>
                       AED {parseInt(price).toLocaleString()}
                     </SelectItem>
@@ -340,14 +446,19 @@ function Buy() {
 
             {/* Beds */}
             <div>
-              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+              <Select
+                value={filters.bedrooms}
+                onValueChange={(value) => handleFilterChange("bedrooms", value)}
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Beds" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="any">Beds</SelectItem>
-                  {BEDROOM_OPTIONS.slice(1).map(bed => (
-                    <SelectItem key={bed} value={bed}>{bed === "5+" ? "5+ Beds" : `${bed} Bed`}</SelectItem>
+                  {BEDROOM_OPTIONS.slice(1).map((bed) => (
+                    <SelectItem key={bed} value={bed}>
+                      {bed === "5+" ? "5+ Beds" : `${bed} Bed`}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -363,12 +474,15 @@ function Buy() {
                 <Icon icon="lucide:sliders-horizontal" className="w-4 h-4" />
                 More Filters
               </Button>
-              
+
               <Button
                 onClick={handleSearch}
                 className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg"
               >
-                <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
+                <Icon
+                  icon="iconamoon:search-fill"
+                  className="text-white text-xl"
+                />
               </Button>
             </div>
           </div>
@@ -391,11 +505,13 @@ function Buy() {
               </Button>
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-6 py-4">
             {/* Search Input */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Location</label>
+              <label className="text-sm font-medium text-gray-700">
+                Location
+              </label>
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
@@ -403,24 +519,50 @@ function Buy() {
                   onChange={(e) => handleFilterChange("title", e.target.value)}
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
-                <Icon 
-                  icon="heroicons:magnifying-glass" 
+                <Icon
+                  icon="heroicons:magnifying-glass"
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
                 />
               </div>
             </div>
 
+            {/* Type Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Type</label>
+              <Select
+                value={filters.type}
+                onValueChange={(value) => handleFilterChange("type", value)}
+              >
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="buy">Buy</SelectItem>
+                  <SelectItem value="rent">Rent</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Property Type */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Property Type</label>
-              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Property Type
+              </label>
+              <Select
+                value={filters.property_type}
+                onValueChange={(value) =>
+                  handleFilterChange("property_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white max-h-60">
                   <SelectItem value="any">Any Property Type</SelectItem>
-                  {PROPERTY_TYPES.map(type => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  {PROPERTY_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -428,8 +570,15 @@ function Buy() {
 
             {/* Completion Status */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Completion Status</label>
-              <Select value={filters.completion_status} onValueChange={(value) => handleFilterChange("completion_status", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Completion Status
+              </label>
+              <Select
+                value={filters.completion_status}
+                onValueChange={(value) =>
+                  handleFilterChange("completion_status", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -445,7 +594,9 @@ function Buy() {
 
             {/* Developer Search */}
             <div className="space-y-2 developer-search">
-              <label className="text-sm font-medium text-gray-700">Developer</label>
+              <label className="text-sm font-medium text-gray-700">
+                Developer
+              </label>
               <div className="relative">
                 <Input
                   placeholder="Search developers..."
@@ -467,9 +618,13 @@ function Buy() {
                       className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                       onClick={() => handleDeveloperSelect(developer)}
                     >
-                      <div className="text-sm font-medium text-gray-900">{developer.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {developer.name}
+                      </div>
                       {developer.location && (
-                        <div className="text-xs text-gray-500">{developer.location}</div>
+                        <div className="text-xs text-gray-500">
+                          {developer.location}
+                        </div>
                       )}
                     </div>
                   ))}
@@ -480,14 +635,21 @@ function Buy() {
             {/* Price Range */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Min Price</label>
-                <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+                <label className="text-sm font-medium text-gray-700">
+                  Min Price
+                </label>
+                <Select
+                  value={filters.min_price}
+                  onValueChange={(value) =>
+                    handleFilterChange("min_price", value)
+                  }
+                >
                   <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
                     <SelectItem value="any">Any</SelectItem>
-                    {PRICE_OPTIONS.map(price => (
+                    {PRICE_OPTIONS.map((price) => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
                       </SelectItem>
@@ -497,14 +659,21 @@ function Buy() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Max Price</label>
-                <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+                <label className="text-sm font-medium text-gray-700">
+                  Max Price
+                </label>
+                <Select
+                  value={filters.max_price}
+                  onValueChange={(value) =>
+                    handleFilterChange("max_price", value)
+                  }
+                >
                   <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
                     <SelectItem value="any">Any</SelectItem>
-                    {PRICE_OPTIONS.map(price => (
+                    {PRICE_OPTIONS.map((price) => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
                       </SelectItem>
@@ -516,8 +685,13 @@ function Buy() {
 
             {/* Bedrooms */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Bedrooms</label>
-              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Bedrooms
+              </label>
+              <Select
+                value={filters.bedrooms}
+                onValueChange={(value) => handleFilterChange("bedrooms", value)}
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -534,8 +708,15 @@ function Buy() {
 
             {/* Bathrooms */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Bathrooms</label>
-              <Select value={filters.bathrooms} onValueChange={(value) => handleFilterChange("bathrooms", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Bathrooms
+              </label>
+              <Select
+                value={filters.bathrooms}
+                onValueChange={(value) =>
+                  handleFilterChange("bathrooms", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -552,22 +733,31 @@ function Buy() {
 
             {/* Handover Year */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Handover Year</label>
-              <Select value={filters.handover_year} onValueChange={(value) => handleFilterChange("handover_year", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Handover Year
+              </label>
+              <Select
+                value={filters.handover_year}
+                onValueChange={(value) =>
+                  handleFilterChange("handover_year", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Any Year</SelectItem>
                   {HANDOVER_YEAR_OPTIONS.slice(1).map((year) => (
-                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
             {/* Search Button */}
-            <Button 
+            <Button
               onClick={handleSearch}
               className="w-full bg-primary hover:bg-primary/90 text-white font-medium h-14 rounded-md"
             >
@@ -588,15 +778,17 @@ function Buy() {
         </p>
       </div>
       <p className="text-center mb-11">
-        <span
-          className={cn(
-            "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
-            "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
-            "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-          )}
-        >
-          Learn More
-        </span>
+        <Link href={"/whyDubai"}>
+          <span
+            className={cn(
+              "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
+              "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
+              "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            )}
+          >
+            Learn More
+          </span>
+        </Link>
       </p>
 
       {loading ? (

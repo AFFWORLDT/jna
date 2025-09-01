@@ -21,6 +21,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import React, { useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // Constants
 const COMPLETION_STATUS_OPTIONS = [
@@ -52,6 +54,7 @@ const HANDOVER_YEAR_OPTIONS = [
 ];
 
 function Rent() {
+  const router = useRouter();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
@@ -125,7 +128,16 @@ function Rent() {
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-  }, []);
+    
+    // Navigate when type changes
+    if (key === "type") {
+      if (value === "SELL") {
+        router.push("/buy");
+      } else if (value === "rent") {
+        router.push("/rent");
+      }
+    }
+  }, [router]);
 
   const handleSearch = useCallback(() => {
     fetchproperty();
@@ -273,7 +285,7 @@ function Rent() {
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="SELL">Buy</SelectItem>
-                  <SelectItem value="RENY">Rent</SelectItem>
+                  <SelectItem value="RENT">Rent</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -589,7 +601,8 @@ function Rent() {
         </p>
       </div>
       <p className="text-center mb-11">
-        <span
+      <Link href={"/whyDubai"}>
+      <span
           className={cn(
             "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
             "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
@@ -598,6 +611,7 @@ function Rent() {
         >
           Learn More
         </span>
+      </Link>
       </p>
 
       {loading ? (

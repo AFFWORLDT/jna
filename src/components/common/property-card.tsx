@@ -49,7 +49,7 @@ export default function PropertyCard({ data }: { data?: PropertyData }) {
         <CardDescription className="text-sm text-gray-500 mb-1 font-light">
           #{data?.area_id ?? "-"}
         </CardDescription>
-        <CardTitle className="text-2xl font-light text-[#1A202C] mb-2 tracking-wide">
+        <CardTitle className="text-2xl font-mono font-light text-[#1A202C] mb-2 tracking-wide">
           {data?.name ?? "Unnamed Property"}
         </CardTitle>
         <p className="text-sm uppercase tracking-wider text-primary font-light">

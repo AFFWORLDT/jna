@@ -43,7 +43,7 @@ export default function Feature() {
           <PropertyCard data={property} key={i} />
         ))}
       </div>
-      <div className="w-full flex justify-center items-center my-3">
+      <div className="w-full flex justify-center items-center my-11">
         <Link href={"/offPlans"}>
          <Button className="w-48 h-11 bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors uppercase">
           View All Project
