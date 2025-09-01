@@ -46,6 +46,10 @@ const RENT_PRICE_OPTIONS = [
 ];
 
 const BEDROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
+const BATHROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
+const HANDOVER_YEAR_OPTIONS = [
+  "any", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035"
+];
 
 function Rent() {
   const [property, setProperty] = React.useState([]);
@@ -57,13 +61,16 @@ function Rent() {
   
   // Filter states
   const [filters, setFilters] = React.useState({
+    type: "RENT",
     title: "",
     property_type: "any",
     min_price: "any",
     max_price: "any",
     completion_status: "all",
     developer_id: "any",
-    bedrooms: "any"
+    bedrooms: "any",
+    bathrooms: "any",
+    handover_year: "any"
   });
 
   const fetchproperty = useCallback(async () => {
@@ -257,132 +264,112 @@ function Rent() {
           {FilterButton}
 
           {/* Desktop Search Form */}
-          <div className="hidden lg:block space-y-4 transition-all duration-300">
-            {/* Single Row of Filters */}
-            <div className="flex flex-wrap gap-2 lg:gap-3 items-center justify-center">
-              {/* Search Input */}
-              <div className="relative flex-1 max-w-md w-full sm:w-auto">
-                <Input
-                  placeholder="City, building or community"
-                  value={filters.title}
-                  onChange={(e) => handleFilterChange("title", e.target.value)}
-                  className="w-full bg-white border-0 rounded-none h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-0 focus-visible:ring-offset-0 pl-12 pr-4"
-                />
-                <Icon 
-                  icon="heroicons:magnifying-glass" 
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                />
-              </div>
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
+            {/* Type (Rent) */}
+            <div>
+              <Select value={filters.type || "rent"} onValueChange={(value) => handleFilterChange("type", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="SELL">Buy</SelectItem>
+                  <SelectItem value="RENY">Rent</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-              {/* Property Type */}
-              <div className="relative w-full sm:w-auto">
-                <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
-                  <SelectTrigger className="w-full sm:w-40 bg-white border-0 rounded-none h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="any">Property Type</SelectItem>
-                    {PROPERTY_TYPES.map(type => (
-                      <SelectItem key={type} value={type}>{type}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* Location */}
+            <div className="col-span-2">
+              <Input
+                placeholder="City, building or community"
+                value={filters.title}
+                onChange={(e) => handleFilterChange("title", e.target.value)}
+                className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-14"
+              />
+            </div>
 
-              {/* Min Price */}
-              <div className="relative w-full sm:w-auto">
-                <Select 
-                  value={filters.min_price} 
-                  onValueChange={(value) => handleFilterChange("min_price", value)}
-                >
-                  <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-none h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="any">Min</SelectItem>
-                    {RENT_PRICE_OPTIONS.map(price => (
-                      <SelectItem key={price} value={price}>
-                        {parseInt(price).toLocaleString()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* Property Type */}
+            <div>
+              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
+                  <SelectValue placeholder="Property Type" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Property Type</SelectItem>
+                  {PROPERTY_TYPES.map(type => (
+                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-              {/* Max Price */}
-              <div className="relative w-full sm:w-auto">
-                <Select 
-                  value={filters.max_price} 
-                  onValueChange={(value) => handleFilterChange("max_price", value)}
-                >
-                  <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-none h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="any">Max</SelectItem>
-                    {RENT_PRICE_OPTIONS.map(price => (
-                      <SelectItem key={price} value={price}>
-                        {parseInt(price).toLocaleString()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* Min Price */}
+            <div>
+              <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
+                  <SelectValue placeholder="Min Price" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Min Price</SelectItem>
+                  {RENT_PRICE_OPTIONS.map(price => (
+                    <SelectItem key={price} value={price}>
+                      AED {parseInt(price).toLocaleString()}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-              {/* Beds */}
-              <div className="relative w-full sm:w-auto">
-                <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
-                  <SelectTrigger className="w-full sm:w-20 bg-white border-0 rounded-none h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    <SelectItem value="any">Beds</SelectItem>
-                    {BEDROOM_OPTIONS.slice(1).map(bed => (
-                      <SelectItem key={bed} value={bed}>{bed}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            {/* Max Price */}
+            <div>
+              <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
+                  <SelectValue placeholder="Max Price" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Max Price</SelectItem>
+                  {RENT_PRICE_OPTIONS.map(price => (
+                    <SelectItem key={price} value={price}>
+                      AED {parseInt(price).toLocaleString()}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-              {/* Developer Search */}
-              <div className="relative w-full sm:w-auto developer-search">
-                <div className="relative">
-                  <Input
-                    placeholder="Search developers..."
-                    value={developerSearch}
-                    onChange={(e) => setDeveloperSearch(e.target.value)}
-                    className="w-40 bg-white border-0 rounded-none h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-0 focus-visible:ring-offset-0 px-4 pr-8"
-                  />
-                  {searchingDevelopers && (
-                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                      <Loader className="w-4 h-4 animate-spin text-gray-400" />
-                    </div>
-                  )}
-                </div>
-                {developers.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-40 overflow-y-auto border border-gray-200 rounded-md bg-white shadow-lg">
-                    {developers.map((developer: any) => (
-                      <div
-                        key={developer.id}
-                        className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                        onClick={() => handleDeveloperSelect(developer)}
-                      >
-                        <div className="text-sm font-medium text-gray-900">{developer.name}</div>
-                        {developer.location && (
-                          <div className="text-xs text-gray-500">{developer.location}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+            {/* Beds */}
+            <div>
+              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
+                  <SelectValue placeholder="Beds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Beds</SelectItem>
+                  {BEDROOM_OPTIONS.slice(1).map(bed => (
+                    <SelectItem key={bed} value={bed}>{bed === "5+" ? "5+ Beds" : `${bed} Bed`}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-              {/* Search Button */}
-              <Button 
-                onClick={handleSearch}
-                className="w-full sm:w-12 h-12 bg-primary hover:bg-primary/90 text-white rounded-md sm:rounded-full flex items-center justify-center p-0"
+
+
+            {/* More Filters Button and Search Button in same column */}
+            <div className="flex gap-2">
+              <Button
+                onClick={toggleFilters}
+                variant="outline"
+                className="w-32 h-14 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 flex items-center justify-center gap-2"
               >
-                <Icon icon="heroicons:magnifying-glass" className="w-5 h-5" />
+                <Icon icon="lucide:sliders-horizontal" className="w-4 h-4" />
+                More Filters
+              </Button>
+              
+              <Button
+                onClick={handleSearch}
+                className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg"
+              >
+                <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
               </Button>
             </div>
           </div>
@@ -391,7 +378,7 @@ function Rent() {
 
       {/* Mobile Filter Modal */}
       <Dialog open={showFilters} onOpenChange={setShowFilters}>
-        <DialogContent className="sm:max-w-[95vw] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
               <span className="text-xl font-semibold">Search Filters</span>
@@ -415,7 +402,7 @@ function Rent() {
                   placeholder="City, building or community"
                   value={filters.title}
                   onChange={(e) => handleFilterChange("title", e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
+                  className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon 
                   icon="heroicons:magnifying-glass" 
@@ -428,7 +415,7 @@ function Rent() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Property Type</label>
               <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
-                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white max-h-60">
@@ -444,7 +431,7 @@ function Rent() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Completion Status</label>
               <Select value={filters.completion_status} onValueChange={(value) => handleFilterChange("completion_status", value)}>
-                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
@@ -465,7 +452,7 @@ function Rent() {
                   placeholder="Search developers..."
                   value={developerSearch}
                   onChange={(e) => setDeveloperSearch(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary pr-10"
+                  className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary pr-10"
                 />
                 {searchingDevelopers && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -496,7 +483,7 @@ function Rent() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Min Price</label>
                 <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
-                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
@@ -513,7 +500,7 @@ function Rent() {
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Max Price</label>
                 <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
-                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
@@ -528,31 +515,62 @@ function Rent() {
               </div>
             </div>
 
-            {/* Bedrooms - Pretty Design */}
-            <div className="space-y-3">
+            {/* Bedrooms */}
+            <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Bedrooms</label>
-              <div className="grid grid-cols-3 gap-2">
-                {BEDROOM_OPTIONS.map((bed) => (
-                  <button
-                    key={bed}
-                    onClick={() => handleFilterChange("bedrooms", bed)}
-                    className={cn(
-                      "py-3 px-4 rounded-lg border-2 transition-all duration-200 font-medium text-sm",
-                      filters.bedrooms === bed
-                        ? "border-primary bg-primary text-white shadow-md"
-                        : "border-gray-200 bg-white text-gray-700 hover:border-primary hover:bg-primary/5"
-                    )}
-                  >
-                    {bed === "any" ? "Any" : bed}
-                  </button>
-                ))}
-              </div>
+              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Any Bedrooms</SelectItem>
+                  {BEDROOM_OPTIONS.slice(1).map((bed) => (
+                    <SelectItem key={bed} value={bed}>
+                      {bed === "5+" ? "5+ Beds" : `${bed} Bed`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Bathrooms */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Bathrooms</label>
+              <Select value={filters.bathrooms} onValueChange={(value) => handleFilterChange("bathrooms", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Any Bathrooms</SelectItem>
+                  {BATHROOM_OPTIONS.slice(1).map((bath) => (
+                    <SelectItem key={bath} value={bath}>
+                      {bath === "5+" ? "5+ Baths" : `${bath} Bath`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Handover Year */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Handover Year</label>
+              <Select value={filters.handover_year} onValueChange={(value) => handleFilterChange("handover_year", value)}>
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="any">Any Year</SelectItem>
+                  {HANDOVER_YEAR_OPTIONS.slice(1).map((year) => (
+                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             {/* Search Button */}
             <Button 
               onClick={handleSearch}
-              className="w-full bg-primary hover:bg-primary/90 text-white font-medium h-12 rounded-md"
+              className="w-full bg-primary hover:bg-primary/90 text-white font-medium h-14 rounded-md"
             >
               <Search className="w-5 h-5 mr-2" />
               Search Properties
