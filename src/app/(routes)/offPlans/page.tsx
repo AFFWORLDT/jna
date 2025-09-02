@@ -456,8 +456,8 @@ function OffPlansPage() {
               </Select>
             </div>
 
-            {/* Type Filter */}
-            <div className="space-y-2">
+            {/* Type Filter - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Type</label>
               <Select value={filters.type} onValueChange={(value) => handleFilterChange("type", value)}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
@@ -470,8 +470,8 @@ function OffPlansPage() {
                 </SelectContent>
               </Select>
             </div>
-            {/* Search Input */}
-            <div className="space-y-2">
+            {/* Search Input - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Location
               </label>
@@ -489,8 +489,8 @@ function OffPlansPage() {
               </div>
             </div>
 
-            {/* Property Type */}
-            <div className="space-y-2">
+            {/* Property Type - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Property Type
               </label>
@@ -578,8 +578,8 @@ function OffPlansPage() {
               )}
             </div>
 
-            {/* Price Range */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Price Range - Hidden on large screens since it's shown in desktop form */}
+            <div className="grid grid-cols-2 gap-4 md:hidden">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Min Price
@@ -629,8 +629,8 @@ function OffPlansPage() {
               </div>
             </div>
 
-            {/* Bedrooms */}
-            <div className="space-y-2">
+            {/* Bedrooms - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Bedrooms
               </label>

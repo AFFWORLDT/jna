@@ -407,8 +407,8 @@ function Rent() {
           </DialogHeader>
           
           <div className="space-y-6 py-4">
-            {/* Search Input */}
-            <div className="space-y-2">
+            {/* Search Input - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Location</label>
               <div className="relative">
                 <Input
@@ -424,8 +424,8 @@ function Rent() {
               </div>
             </div>
 
-            {/* Listing Type Filter */}
-            <div className="space-y-2">
+            {/* Listing Type Filter - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Type</label>
               <Select value={filters.listing_type} onValueChange={(value) => handleFilterChange("listing_type", value)}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
@@ -438,8 +438,8 @@ function Rent() {
               </Select>
             </div>
 
-            {/* Property Type */}
-            <div className="space-y-2">
+            {/* Property Type - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Property Type</label>
               <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
@@ -505,8 +505,8 @@ function Rent() {
               )}
             </div>
 
-            {/* Price Range */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Price Range - Hidden on large screens since it's shown in desktop form */}
+            <div className="grid grid-cols-2 gap-4 md:hidden">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Min Price</label>
                 <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
@@ -542,8 +542,8 @@ function Rent() {
               </div>
             </div>
 
-            {/* Bedrooms */}
-            <div className="space-y-2">
+            {/* Bedrooms - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Bedrooms</label>
               <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
