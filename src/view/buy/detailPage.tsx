@@ -44,38 +44,38 @@ export default function DetailPage({ id }: any) {
       <div className="bg-[#141442] h-24" />
       <div className="grid grid-cols-1 lg:grid-cols-2 items-start px-4">
         <section className="w-full my-2 relative">
-            <div className="relative w-full h-96">
-              {property?.photos?.map((photo: string, index: number) => (
-                <Image
-                  key={index}
-                  src={photo}
-                  alt="Luxury Living in Dubai"
-                  layout="fill"
-                  objectFit="cover"
-                  quality={85}
-                  priority={index === 0}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out text-white${
-                    index === heroImageIndex
-                      ? "opacity-100 z-10"
-                      : "opacity-0 z-0"
-                  }`}
-                />
-              ))}
-            </div>
-            <div className="absolute inset-0 bg-black/20 z-20" />
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
-              {property?.photos?.map((_: any, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => setHeroImageIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === heroImageIndex
-                      ? "bg-white scale-125"
-                      : "bg-white/50 hover:bg-white/75"
-                  }`}
-                />
-              ))}
-            </div>
+          <div className="relative w-full h-96">
+            {property?.photos?.map((photo: string, index: number) => (
+              <Image
+                key={index}
+                src={photo}
+                alt="Luxury Living in Dubai"
+                layout="fill"
+                objectFit="cover"
+                quality={85}
+                priority={index === 0}
+                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out text-white${
+                  index === heroImageIndex
+                    ? "opacity-100 z-10"
+                    : "opacity-0 z-0"
+                }`}
+              />
+            ))}
+          </div>
+          <div className="absolute inset-0 bg-black/20 z-20" />
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
+            {property?.photos?.map((_: any, index: number) => (
+              <button
+                key={index}
+                onClick={() => setHeroImageIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === heroImageIndex
+                    ? "bg-white scale-125"
+                    : "bg-white/50 hover:bg-white/75"
+                }`}
+              />
+            ))}
+          </div>
         </section>
         <section className="w-full my-2 bg-[#F2EEE8] h-96 py-16">
           <p className="text-neutral-400 text-base font-mono text-center">
@@ -238,6 +238,34 @@ export default function DetailPage({ id }: any) {
             </div>
           )}
         </div>
+
+        {property?.permitQRCode && (
+          <div className="flex justify-center">
+            <div className="bg-[#F2EEE8] border border-white rounded-lg p-4 flex items-center gap-4 shadow-sm max-w-sm">
+              {/* QR Code with Palm Tree Emblem */}
+              <div className="relative">
+                <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center border-2 border-gray-200 overflow-hidden">
+                  <Image
+                    src={property?.permitQRCode}
+                    alt="QR Code"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Verification Text */}
+              <div className="text-gray-700">
+                <p className="text-sm">
+                  This Listing has been verified by{" "}
+                  <span className="font-bold">Dubai Land Department</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8">
           <h2 className="text-3xl font-serif text-primary mb-8">Enquire</h2>
           <EnquireForm type="contact" />

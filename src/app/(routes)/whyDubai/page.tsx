@@ -83,7 +83,7 @@ export default function WhyDubai() {
                   unparalleled service, concierge-assisted lifestyle, and
                   personalized attention.
                 </li>
-                <li>
+                <li id="off-plan-investment">
                   Legacy Investment: Own a valuable and
                   exceptional asset and pass it down to future generations.
                 </li>
@@ -95,9 +95,9 @@ export default function WhyDubai() {
         <hr className="border-gray-200 my-12 md:my-16" />
 
         {/* Off-Plan Property Investment */}
-        <section className="mb-12 md:mb-16">
-          <h2 className="text-2xl font-serif font-normal mb-6">
-            off-Plan Property Investment
+        <section className="mb-12 md:mb-16" >
+          <h2  className="text-2xl font-serif font-normal mb-6">
+            Off-Plan Property Investment
           </h2>
           <p className="mb-6 text-gray-600 leading-relaxed text-[15px]">
             For seasoned and first-time property investors seeking unique
@@ -199,7 +199,7 @@ export default function WhyDubai() {
               </ul>
             </div>
           </div>
-          <p className="mt-6 text-gray-600 leading-relaxed text-[15px]">
+          <p className="mt-6 text-gray-600 leading-relaxed text-[15px]" id="rent-investment">
             As J&A Properties applies a thorough due diligence process,
             understands the legal framework, and chooses to work exclusively
             with the most reputable developers with a proven track record within

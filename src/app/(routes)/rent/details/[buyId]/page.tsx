@@ -1,5 +1,5 @@
 "use client";
-import DetailPage from "@/src/view/buy/detailPage";
+import DetailPage from "@/src/view/rent/detailPage";
 import SocialMediaFloat from "@/src/components/common/socialMediaFlotionButtons";
 import { useParams } from "next/navigation";
 import React from "react";

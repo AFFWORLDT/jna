@@ -259,6 +259,32 @@ export default function DetailPage({ id }: any) {
             </div>
           )}
         </div>
+        {property?.permitQRCode && (
+          <div className="flex justify-center">
+            <div className="bg-[#F2EEE8] border border-white rounded-lg p-4 flex items-center gap-4 shadow-sm max-w-sm">
+              {/* QR Code with Palm Tree Emblem */}
+              <div className="relative">
+                <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center border-2 border-gray-200 overflow-hidden">
+                  <Image
+                    src={property?.permitQRCode}
+                    alt="QR Code"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Verification Text */}
+              <div className="text-gray-700">
+                <p className="text-sm">
+                  This Listing has been verified by{" "}
+                  <span className="font-bold">Dubai Land Department</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="my-5">
           <LocationSection property={property} />
