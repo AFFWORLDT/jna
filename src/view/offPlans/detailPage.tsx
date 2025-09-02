@@ -259,14 +259,14 @@ export default function DetailPage({ id }: any) {
             </div>
           )}
         </div>
-        {property?.permitQRCode && (
+        {property?.newParam?.permitQRCode && (
           <div className="flex justify-center">
             <div className="bg-[#F2EEE8] border border-white rounded-lg p-4 flex items-center gap-4 shadow-sm max-w-sm">
               {/* QR Code with Palm Tree Emblem */}
               <div className="relative">
                 <div className="w-32 h-32 bg-white rounded-lg flex items-center justify-center border-2 border-gray-200 overflow-hidden">
                   <Image
-                    src={property?.permitQRCode}
+                    src={property?.newParam?.permitQRCode}
                     alt="QR Code"
                     width={64}
                     height={64}
