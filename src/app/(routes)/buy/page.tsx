@@ -508,8 +508,8 @@ function Buy() {
           </DialogHeader>
 
           <div className="space-y-6 py-4">
-            {/* Search Input */}
-            <div className="space-y-2">
+            {/* Search Input - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Location
               </label>
@@ -527,8 +527,8 @@ function Buy() {
               </div>
             </div>
 
-            {/* Listing Type Filter */}
-            <div className="space-y-2">
+            {/* Listing Type Filter - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Type</label>
               <Select
                 value={filters.listing_type}
@@ -544,8 +544,8 @@ function Buy() {
               </Select>
             </div>
 
-            {/* Property Type */}
-            <div className="space-y-2">
+            {/* Property Type - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Property Type
               </label>
@@ -633,8 +633,8 @@ function Buy() {
               )}
             </div>
 
-            {/* Price Range */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Price Range - Hidden on large screens since it's shown in desktop form */}
+            <div className="grid grid-cols-2 gap-4 md:hidden">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">
                   Min Price
@@ -684,8 +684,8 @@ function Buy() {
               </div>
             </div>
 
-            {/* Bedrooms */}
-            <div className="space-y-2">
+            {/* Bedrooms - Hidden on large screens since it's shown in desktop form */}
+            <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">
                 Bedrooms
               </label>
