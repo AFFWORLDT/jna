@@ -695,7 +695,7 @@ function OffPlansPage() {
           Curated off-plan investments for discerning investors.
         </p>
         <p className="text-center my-6">
-          <Link href={"/whyDubai"}>
+          <Link href={"/whyDubai#off-plan-investment"}>
             <span
               className={cn(
                 "relative pb-1 transition-all duration-300 text-primary uppercase",

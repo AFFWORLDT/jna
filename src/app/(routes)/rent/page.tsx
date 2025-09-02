@@ -616,7 +616,7 @@ function Rent() {
         </p>
       </div>
       <p className="text-center mb-11">
-      <Link href={"/whyDubai"}>
+      <Link href={"/whyDubai#rent-investment"}>
       <span
           className={cn(
             "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
