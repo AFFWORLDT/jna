@@ -87,7 +87,7 @@ const HANDOVER_YEAR_OPTIONS = [
 function Buy() {
   const router = useRouter();
   const [property, setProperty] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
@@ -771,7 +771,7 @@ function Buy() {
         </Link>
       </p>
 
-      {loading ? (
+      {loading || property.length === 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
           {Array.from({ length: 6 }).map((_, i) => (
             <PropertyCardSkeleton key={i} />

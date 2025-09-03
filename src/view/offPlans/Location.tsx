@@ -79,8 +79,8 @@ export default function LocationSection({ property }: any) {
 
               <motion.div>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-center mt-4">
-                  {amenities?.map((obj) => (
-                    <div className="flex flex-col items-center">
+                  {amenities?.map((obj, idx) => (
+                    <div key={`${obj?.title}-${idx}`} className="flex flex-col items-center">
                       <div className="flex  items-start justify-center gap-2">
                         <Icon
                           icon={obj?.icon}

@@ -19,6 +19,7 @@ import { cn } from "@/src/lib/utils";
 import { RentCard } from "@/src/view/rent/rentCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
+import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
 import React, { useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter } from "next/navigation";
@@ -55,7 +56,7 @@ const HANDOVER_YEAR_OPTIONS = [
 function Rent() {
   const router = useRouter();
   const [property, setProperty] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
@@ -628,9 +629,11 @@ function Rent() {
       </Link>
       </p>
 
-      {loading ? (
+      {loading || property.length === 0 ? (
         <div className="text-center py-12">
-          <Loader className="w-12 h-12 animate-spin text-primary mx-auto" />
+          {Array.from({ length: 6 }).map((_, i) => (
+              <PropertyCardSkeleton key={i} />
+            ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
