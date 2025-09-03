@@ -63,9 +63,11 @@ export default function Footer() {
         <div className="font-sans">
           <h4 className="text-lg  mb-4 font-sans">Contact</h4>
           <address className="not-italic space-y-2 text-sm font-sans leading-relaxed">
+            <a href="https://maps.app.goo.gl/wLiAhQ2tcH6J9iC89" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors block">
             <p>Aspin Commercial Tower Level 48,</p>
             <p>Sheikh Zayed Road,</p>
             <p>Dubai, UAE</p>
+            </a>
             <p>
               <span className="font-sans">E</span>{" "}
               <a
