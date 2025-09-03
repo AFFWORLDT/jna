@@ -37,9 +37,11 @@ export default function OffPlanCard({ data }: { data?: PropertyData }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
-        <div className="absolute bottom-4 left-4 bg-white text-sm font-light tracking-wider px-3 py-1 rounded-full shadow-md uppercase">
-        {data?.newParam?.totalUnits}  UNITS
-        </div>
+        {data?.newParam?.totalUnits ? (
+          <div className="absolute bottom-4 left-4 bg-white text-sm font-light tracking-wider px-3 py-1 rounded-full shadow-md uppercase">
+            {data.newParam.totalUnits} UNITS
+          </div>
+        ) : null}
         <div className="absolute bottom-4 right-4 bg-white text-sm font-light px-3 py-1 rounded-full shadow-md text-[#1A202C]">
           FROM {data?.newParam?.price?.toLocaleString() ?? "N/A"}
           <span className="font-light text-gray-500 ml-1">د.إ</span>
