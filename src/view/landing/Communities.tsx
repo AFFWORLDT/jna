@@ -127,9 +127,9 @@ export default function Component() {
           className="w-full"
         >
           <CarouselContent className="-ml-6">
-            {communities?.map((community: any) => (
+            {communities?.map((community: any, idx: number) => (
               <CarouselItem
-                key={community.id}
+                key={`${community.id ?? idx}-${idx}`}
                 className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
               >
                 <Card className="relative w-full h-[650px] rounded-none overflow-hidden shadow-lg group border-none">

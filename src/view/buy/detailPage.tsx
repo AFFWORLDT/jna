@@ -45,22 +45,18 @@ export default function DetailPage({ id }: any) {
       <div className="grid grid-cols-1 lg:grid-cols-2 items-start px-4">
         <section className="w-full my-2 relative">
           <div className="relative w-full h-96">
-            {property?.photos?.map((photo: string, index: number) => (
+            {property?.photos && property.photos.length > 0 && (
               <Image
-                key={index}
-                src={photo}
+                key={heroImageIndex}
+                src={property.photos[heroImageIndex]}
                 alt="Luxury Living in Dubai"
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
                 quality={85}
-                priority={index === 0}
-                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out text-white${
-                  index === heroImageIndex
-                    ? "opacity-100 z-10"
-                    : "opacity-0 z-0"
-                }`}
+                priority
+                className="absolute inset-0 transition-opacity duration-700 ease-in-out text-white"
               />
-            ))}
+            )}
           </div>
           <div className="absolute inset-0 bg-black/20 z-20" />
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-30">
@@ -228,8 +224,9 @@ export default function DetailPage({ id }: any) {
                       <Image
                         src={photo || "/placeholder.svg"}
                         alt={`${property.name} thumbnail ${index + 1}`}
-                        layout="fill"
-                        objectFit="cover"
+                        fill
+                        style={{ objectFit: "cover" }}
+                        loading="lazy"
                         quality={75}
                       />
                     </button>
