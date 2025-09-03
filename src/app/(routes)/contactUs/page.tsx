@@ -25,8 +25,10 @@ function ContactUs() {
             hearing from you!
           </p>
           <div className="space-y-2 pt-4">
+            <a href="https://maps.app.goo.gl/wLiAhQ2tcH6J9iC89" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors block space-y-2">
             <p className="text-gray-600 text-base font-mono">Aspin Commercial Tower Level 48, Sheikh Zayed Road</p>
             <p className="text-gray-600 text-base font-mono">Dubai, UAE</p>
+            </a>
             <p className="text-gray-600 text-base flex items-center justify-center lg:justify-start gap-2 font-mono">
               <span className="font-bold font-mono">E</span>
               <a
