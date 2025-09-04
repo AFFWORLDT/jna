@@ -93,7 +93,7 @@ export default function DetailPage({ id }: any) {
           </div>
         </div>
         <div className="relative z-30 text-white px-4 mt-[60vh]">
-          <span>#{property?.agent_Id}</span>
+          <span>#{id}</span>
           <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">
             {property?.name}
           </h1>
@@ -127,9 +127,13 @@ export default function DetailPage({ id }: any) {
                 From
               </h3>
               <p className="text-sm font-light text-gray-700">
-                {property?.price_from
+                {property?.newParam?.price
+                  ? `AED ${property.newParam.price.toLocaleString()}`
+                  : property?.price_from
                   ? `AED ${property.price_from.toLocaleString()}`
-                  : "1,406,000"}
+                  : property?.price
+                  ? `AED ${property.price.toLocaleString()}`
+                  : "Price on request"}
               </p>
             </div>
             <div>
@@ -137,17 +141,22 @@ export default function DetailPage({ id }: any) {
                 Completion Date
               </h3>
               <p className="text-sm font-light text-gray-700">
-                {property?.newParam?.handoverTime &&
-                  moment(property?.newParam?.handoverTime).format(
-                    "DD / MM / YYYY"
-                  )}
+                {property?.newParam?.handoverTime
+                  ? moment(property?.newParam?.handoverTime).format("MMMM YYYY")
+                  : property?.completionDate
+                  ? moment(property?.completionDate).format("MMMM YYYY")
+                  : property?.handoverTime
+                  ? moment(property?.handoverTime).format("MMMM YYYY")
+                  : "TBA"}
               </p>
             </div>
             <div>
               <h3 className="text-sm font-light uppercase text-primary mb-2 border-b border-primary inline-block pb-1">
                 Construction Stage
               </h3>
-              <p className="text-sm font-light text-gray-700">{"Off-plan"}</p>
+              <p className="text-sm font-light text-gray-700">
+                {property?.constructionStage || property?.completionStatus || "Off-plan"}
+              </p>
             </div>
           </div>
 
