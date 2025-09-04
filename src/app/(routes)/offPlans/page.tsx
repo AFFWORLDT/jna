@@ -22,7 +22,7 @@ import { Loader, X, Search } from "lucide-react";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Constants
 const COMPLETION_STATUS_OPTIONS = [
@@ -107,6 +107,7 @@ const HANDOVER_YEAR_OPTIONS = [
 
 function OffPlansPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -126,6 +127,7 @@ function OffPlansPage() {
     bedrooms: "any",
     bathrooms: "any",
     handover_year: "any",
+    ref_number: "",
   });
 
   const fetchproperty = useCallback(async () => {
@@ -213,9 +215,59 @@ function OffPlansPage() {
     setShowFilters((prev) => !prev);
   }, []);
 
+  // Initial API call and when filters change
   useEffect(() => {
+    console.log("Off-plans page - Initial load or filters changed, calling API with:", filters);
     fetchproperty();
-  }, [filters]);
+  }, [filters, fetchproperty]);
+
+  // Initial API call on page load
+  useEffect(() => {
+    console.log("Off-plans page - Page loaded, making initial API call");
+    fetchproperty();
+  }, []);
+
+  // Handle query parameters from hero section
+  useEffect(() => {
+    const propertyType = searchParams.get("property_type");
+    const location = searchParams.get("title");
+    const bedrooms = searchParams.get("bedrooms");
+    const refNumber = searchParams.get("ref_number");
+    const minPrice = searchParams.get("min_price");
+    const maxPrice = searchParams.get("max_price");
+    
+    console.log("Off-plans page - Query parameters received:", {
+      propertyType,
+      location,
+      bedrooms,
+      refNumber,
+      minPrice,
+      maxPrice
+    });
+    
+    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+      const newFilters = {
+        property_type: propertyType || "any",
+        title: location || "",
+        bedrooms: bedrooms || "any",
+        ref_number: refNumber || "",
+        min_price: minPrice || "any",
+        max_price: maxPrice || "any",
+      };
+      
+      console.log("Off-plans page - Setting new filters:", newFilters);
+      console.log("Off-plans page - Current filters before update:", filters);
+      
+      setFilters(prev => {
+        const updatedFilters = {
+          ...prev,
+          ...newFilters
+        };
+        console.log("Off-plans page - Updated filters:", updatedFilters);
+        return updatedFilters;
+      });
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     searchDevelopers(developerSearch);

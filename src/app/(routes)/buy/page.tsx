@@ -19,9 +19,9 @@ import { cn } from "@/src/lib/utils";
 import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect } from "react";
 import { api } from "@/src/lib/axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // Constants
@@ -60,6 +60,17 @@ const PROPERTY_TYPES = [
   "FACTORY",
   "HOTEL",
   "HOSPITAL",
+];
+
+// Property type mapping for hero section
+const HERO_PROPERTY_TYPES = [
+  { value: "apartment", label: "Apartment" },
+  { value: "villa", label: "Villa" },
+  { value: "townhouse", label: "Townhouse" },
+  { value: "penthouse", label: "Penthouse" },
+  { value: "studio", label: "Studio" },
+  { value: "plot", label: "Plot" },
+  { value: "office", label: "Office" },
 ];
 
 const PRICE_OPTIONS = [
@@ -107,6 +118,7 @@ const HANDOVER_YEAR_OPTIONS = [
 
 function Buy() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [showFilters, setShowFilters] = React.useState(false);
@@ -126,10 +138,13 @@ function Buy() {
     bedrooms: "any",
     bathrooms: "any",
     handover_year: "any",
+    ref_number: "",
   });
 
   const fetchproperty = useCallback(async () => {
     setLoading(true);
+
+    console.log("Buy page - fetchproperty called with filters:", filters);
 
     const queryParams = new URLSearchParams({
       sort_by: "total_count",
@@ -143,11 +158,18 @@ function Buy() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value && value !== "any" && value !== "all") {
         queryParams.append(key, value);
+        console.log(`Buy page - Adding filter: ${key} = ${value}`);
       }
     });
 
+    const finalQueryString = queryParams.toString();
+    console.log("Buy page - Final API query string:", finalQueryString);
+
     try {
-      const res = await getAllBuyProperties(queryParams.toString());
+      console.log("Buy page - Calling API with URL params:", finalQueryString);
+      const res = await getAllBuyProperties(finalQueryString);
+      console.log("Buy page - API response:", res);
+      console.log("Buy page - Properties count:", res?.properties?.length || 0);
       setProperty(res?.properties || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -181,11 +203,53 @@ function Buy() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  // Handle query parameters from hero section
+  useEffect(() => {
+    const propertyType = searchParams.get("property_type");
+    const location = searchParams.get("title");
+    const bedrooms = searchParams.get("bedrooms");
+    const refNumber = searchParams.get("ref_number");
+    const minPrice = searchParams.get("min_price");
+    const maxPrice = searchParams.get("max_price");
+    
+    console.log("Buy page - Query parameters received:", {
+      propertyType,
+      location,
+      bedrooms,
+      refNumber,
+      minPrice,
+      maxPrice
+    });
+    
+    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+      const newFilters = {
+        property_type: propertyType || "any",
+        title: location || "",
+        bedrooms: bedrooms || "any",
+        ref_number: refNumber || "",
+        min_price: minPrice || "any",
+        max_price: maxPrice || "any",
+      };
+      
+      console.log("Buy page - Setting new filters:", newFilters);
+      console.log("Buy page - Current filters before update:", filters);
+      
+      setFilters(prev => {
+        const updatedFilters = {
+          ...prev,
+          ...newFilters
+        };
+        console.log("Buy page - Updated filters:", updatedFilters);
+        return updatedFilters;
+      });
+    }
+  }, [searchParams]);
+
   const handleFilterChange = useCallback(
     (key: string, value: string) => {
       setFilters((prev) => ({ ...prev, [key]: value }));
 
-          // Navigate when listing_type changes
+      // Navigate when listing_type changes
     if (key === "listing_type") {
       if (value === "RENT") {
         router.push("/rent");
@@ -215,9 +279,11 @@ function Buy() {
     setShowFilters((prev) => !prev);
   }, []);
 
-  React.useEffect(() => {
+  // Single useEffect to handle API calls - only when filters change
+  useEffect(() => {
+    console.log("Buy page - Filters changed, calling API with:", filters);
     fetchproperty();
-  }, [filters]);
+  }, [filters, fetchproperty]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
