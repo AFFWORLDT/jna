@@ -92,9 +92,6 @@ export function RentCard({ data, onFavorite }: RentCardProps) {
           <h3 className="text-lg font-mono text-[#1A202C] tracking-wide">
             {data?.title}
           </h3>
-          <p className="text-sm text-gray-500 font-light">
-            #{data?.ownPortal_agent_Id}
-          </p>
         </div>
 
         <p className="text-sm text-primary uppercase font-light tracking-wider">

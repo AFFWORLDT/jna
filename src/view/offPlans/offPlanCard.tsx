@@ -48,9 +48,6 @@ export default function OffPlanCard({ data }: { data?: PropertyData }) {
         </div>
       </div>
       <CardContent className="p-6">
-        <CardDescription className="text-sm text-gray-500 mb-1 font-light">
-          #{data?.area_id ?? "-"}
-        </CardDescription>
         <CardTitle className="text-2xl font-mono font-light text-[#1A202C] mb-2 tracking-wide">
           {data?.name ?? "Unnamed Property"}
         </CardTitle>
