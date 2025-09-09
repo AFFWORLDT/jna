@@ -9,13 +9,76 @@ import {
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const router = useRouter();
+  const [propertyType, setPropertyType] = useState("any");
+  const [propertyTypeFilter, setPropertyTypeFilter] = useState("any");
+  const [location, setLocation] = useState("any");
+  const [bedrooms, setBedrooms] = useState("any");
+  const [refNumber, setRefNumber] = useState("");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [isPriceOpen, setIsPriceOpen] = useState(false);
 
   const handlePriceChange = (field: "min" | "max", value: string) => {
     setPriceRange((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePropertyTypeChange = (value: string) => {
+    setPropertyType(value);
+    // No automatic navigation - only store the selected value
+  };
+
+  const handleSearch = () => {
+    // Build query parameters
+    const params = new URLSearchParams();
+    
+    if (propertyTypeFilter && propertyTypeFilter !== "any") {
+      params.append("property_type", propertyTypeFilter);
+    }
+    
+    if (location && location !== "any") {
+      params.append("title", location);
+    }
+    
+    if (bedrooms && bedrooms !== "any") {
+      params.append("bedrooms", bedrooms);
+    }
+    
+    if (refNumber && refNumber.trim() !== "") {
+      params.append("ref_number", refNumber.trim());
+    }
+    
+    if (priceRange.min && priceRange.min !== "any") {
+      params.append("min_price", priceRange.min);
+    }
+    
+    if (priceRange.max && priceRange.max !== "any") {
+      params.append("max_price", priceRange.max);
+    }
+    
+    // Navigate based on selected property type
+    const queryString = params.toString();
+    
+    console.log("Hero section - Search clicked with filters:", {
+      propertyType,
+      propertyTypeFilter,
+      location,
+      bedrooms,
+      refNumber,
+      priceRange,
+      queryString
+    });
+    
+    if (propertyType === "rent") {
+      router.push(`/rent${queryString ? `?${queryString}` : ""}`);
+    } else if (propertyType === "off_plan") {
+      router.push(`/offPlans${queryString ? `?${queryString}` : ""}`);
+    } else {
+      // Default to buy page
+      router.push(`/buy${queryString ? `?${queryString}` : ""}`);
+    }
   };
 
   const getPriceDisplayValue = () => {
@@ -79,13 +142,31 @@ export default function HeroSection() {
         </p>
 
         <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 p-4 sm:p-6 max-sm:bg-white">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 sm:gap-4 p-4 sm:p-6 max-sm:bg-white">
+            {/* Property Type */}
+            <div className="lg:col-span-1 relative">
+              <div className="absolute top-2 left-3 text-xs text-white/70 max-sm:text-gray-500 z-10">
+                Property Type
+              </div>
+              <Select value={propertyType} onValueChange={handlePropertyTypeChange}>
+                <SelectTrigger className="w-full h-14 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
+                  <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
+                </SelectTrigger>
+                <SelectContent className="bg-white text-gray-900">
+                  <SelectItem value="any">Any</SelectItem>
+                  <SelectItem value="buy">Buy</SelectItem>
+                  <SelectItem value="rent">Rent</SelectItem>
+                  <SelectItem value="off_plan">Off Plan</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             {/* Location */}
             <div className="lg:col-span-1 relative">
               <div className="absolute top-2 left-3 text-xs text-white/70 max-sm:text-gray-500 z-10">
                 Location
               </div>
-              <Select>
+              <Select value={location} onValueChange={setLocation}>
                 <SelectTrigger className="w-full h-14 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
                   <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
@@ -106,19 +187,38 @@ export default function HeroSection() {
               <div className="absolute top-2 left-3 text-xs text-white/70 max-sm:text-gray-500 z-10">
                 Type
               </div>
-              <Select>
+              <Select value={propertyTypeFilter} onValueChange={setPropertyTypeFilter}>
                 <SelectTrigger className="w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none  focus:ring-offset-0 focus:ring-transparent pt-5 pb-2">
                   <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-gray-900">
+                <SelectContent className="bg-white text-gray-900 max-h-60 overflow-y-auto">
                   <SelectItem value="any">Any</SelectItem>
-                  <SelectItem value="apartment">Apartment</SelectItem>
-                  <SelectItem value="villa">Villa</SelectItem>
-                  <SelectItem value="penthouse">Penthouse</SelectItem>
-                  <SelectItem value="townhouse">Townhouse</SelectItem>
-                  <SelectItem value="studio">Studio</SelectItem>
-                  <SelectItem value="Plot">Plot</SelectItem>
-                  <SelectItem value="Office">Office</SelectItem>
+                  <SelectItem value="APARTMENT">Apartment</SelectItem>
+                  <SelectItem value="VILLA">Villa</SelectItem>
+                  <SelectItem value="TOWNHOUSE">Townhouse</SelectItem>
+                  <SelectItem value="PENTHOUSE">Penthouse</SelectItem>
+                  <SelectItem value="HOTEL APARTMENT">Hotel Apartment</SelectItem>
+                  <SelectItem value="DUPLEX">Duplex</SelectItem>
+                  <SelectItem value="RESIDENTIAL FLOOR">Residential Floor</SelectItem>
+                  <SelectItem value="RESIDENTIAL PLOT">Residential Plot</SelectItem>
+                  <SelectItem value="RESIDENTIAL BUILDING">Residential Building</SelectItem>
+                  <SelectItem value="PARKING">Parking</SelectItem>
+                  <SelectItem value="STORE ROOM">Store Room</SelectItem>
+                  <SelectItem value="COMPOUND">Compound</SelectItem>
+                  <SelectItem value="OFFICE">Office</SelectItem>
+                  <SelectItem value="SHOP">Shop</SelectItem>
+                  <SelectItem value="COMMERCIAL BUILDING">Commercial Building</SelectItem>
+                  <SelectItem value="COMMERCIAL FLOOR">Commercial Floor</SelectItem>
+                  <SelectItem value="COMMERCIAL PLOT">Commercial Plot</SelectItem>
+                  <SelectItem value="LABOR CAMP">Labor Camp</SelectItem>
+                  <SelectItem value="RETAIL">Retail</SelectItem>
+                  <SelectItem value="SHOW ROOM">Show Room</SelectItem>
+                  <SelectItem value="COMMERCIAL VILLA">Commercial Villa</SelectItem>
+                  <SelectItem value="WAREHOUSE">Warehouse</SelectItem>
+                  <SelectItem value="FARM">Farm</SelectItem>
+                  <SelectItem value="FACTORY">Factory</SelectItem>
+                  <SelectItem value="HOTEL">Hotel</SelectItem>
+                  <SelectItem value="HOSPITAL">Hospital</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -196,7 +296,7 @@ export default function HeroSection() {
               <div className="absolute top-2 left-3 text-xs text-white/70 max-sm:text-gray-500 z-10">
                 Bedrooms
               </div>
-              <Select>
+              <Select value={bedrooms} onValueChange={setBedrooms}>
                 <SelectTrigger className="w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border max-sm:border-gray-300 border-white/30 rounded-none  focus:ring-offset-0 focus:ring-transparent pt-5 pb-2">
                   <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
@@ -221,13 +321,18 @@ export default function HeroSection() {
               <Input
                 type="text"
                 placeholder=""
+                value={refNumber}
+                onChange={(e) => setRefNumber(e.target.value)}
                 className="w-full h-12 sm:h-14 text-white max-sm:text-black bg-white/10 max-sm:bg-white border max-sm:border-gray-300 border-white/30 rounded-none  placeholder:text-white/70 max-sm:placeholder:text-black/70 focus-visible:ring-offset-0 focus-visible:ring-transparent pt-5 pb-2"
               />
             </div>
 
             {/* Search Button */}
             <div className="lg:col-span-1 sm:col-span-2">
-              <Button className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors h-12 sm:h-14 uppercase tracking-wider">
+              <Button 
+                onClick={handleSearch}
+                className="w-full bg-[#dbbb90] hover:bg-[#C2A17B] text-white font-semibold py-2 px-4 rounded-none transition-colors h-12 sm:h-14 uppercase tracking-wider"
+              >
                 Search
               </Button>
             </div>

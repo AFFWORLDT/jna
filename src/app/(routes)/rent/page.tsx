@@ -22,7 +22,7 @@ import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
 import React, { useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // Constants
@@ -55,6 +55,7 @@ const HANDOVER_YEAR_OPTIONS = [
 
 function Rent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
@@ -65,7 +66,7 @@ function Rent() {
   // Filter states
   const [filters, setFilters] = React.useState({
     listing_type: "RENT",
-    title: "",
+    location: "",
     property_type: "any",
     min_price: "any",
     max_price: "any",
@@ -73,14 +74,14 @@ function Rent() {
     developer_id: "any",
     bedrooms: "any",
     bathrooms: "any",
-    handover_year: "any"
+    handover_year: "any",
+    ref_number: ""
   });
 
   const fetchproperty = useCallback(async () => {
     setLoading(true);
     
     const queryParams = new URLSearchParams({
-      sort_by: "total_count",
       sort_order: "desc",
       page: "1",
       size: "24",
@@ -155,9 +156,59 @@ function Rent() {
     setShowFilters(prev => !prev);
   }, []);
 
+  // Initial API call and when filters change
   React.useEffect(() => {
+    console.log("Rent page - Initial load or filters changed, calling API with:", filters);
     fetchproperty();
-  }, [filters]);
+  }, [filters, fetchproperty]);
+
+  // Initial API call on page load
+  React.useEffect(() => {
+    console.log("Rent page - Page loaded, making initial API call");
+    fetchproperty();
+  }, []);
+
+  // Handle query parameters from hero section
+  React.useEffect(() => {
+    const propertyType = searchParams.get("property_type");
+    const location = searchParams.get("location");
+    const bedrooms = searchParams.get("bedrooms");
+    const refNumber = searchParams.get("ref_number");
+    const minPrice = searchParams.get("min_price");
+    const maxPrice = searchParams.get("max_price");
+    
+    console.log("Rent page - Query parameters received:", {
+      propertyType,
+      location,
+      bedrooms,
+      refNumber,
+      minPrice,
+      maxPrice
+    });
+    
+    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+      const newFilters = {
+        property_type: propertyType || "any",
+        location: location || "",
+        bedrooms: bedrooms || "any",
+        ref_number: refNumber || "",
+        min_price: minPrice || "any",
+        max_price: maxPrice || "any",
+      };
+      
+      console.log("Rent page - Setting new filters:", newFilters);
+      console.log("Rent page - Current filters before update:", filters);
+      
+      setFilters(prev => {
+        const updatedFilters = {
+          ...prev,
+          ...newFilters
+        };
+        console.log("Rent page - Updated filters:", updatedFilters);
+        return updatedFilters;
+      });
+    }
+  }, [searchParams]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
@@ -190,8 +241,8 @@ function Rent() {
         <div className="flex-1">
           <Input
             placeholder="Location or Project"
-            value={filters.title}
-            onChange={(e) => handleFilterChange("title", e.target.value)}
+            value={filters.location}
+            onChange={(e) => handleFilterChange("location", e.target.value)}
             className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
           />
         </div>
@@ -212,7 +263,7 @@ function Rent() {
         </Button>
       </div>
     </div>
-  ), [filters.title, handleFilterChange, toggleFilters, handleSearch]);
+  ), [filters.location, handleFilterChange, toggleFilters, handleSearch]);
 
   const PropertyTypeSelect = useMemo(() => (
     <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
@@ -295,8 +346,8 @@ function Rent() {
             <div className="col-span-2">
               <Input
                 placeholder="City, building or community"
-                value={filters.title}
-                onChange={(e) => handleFilterChange("title", e.target.value)}
+                value={filters.location}
+                onChange={(e) => handleFilterChange("location", e.target.value)}
                 className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-14"
               />
             </div>
@@ -413,8 +464,8 @@ function Rent() {
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
-                  value={filters.title}
-                  onChange={(e) => handleFilterChange("title", e.target.value)}
+                  value={filters.location}
+                  onChange={(e) => handleFilterChange("location", e.target.value)}
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon 

@@ -20,9 +20,9 @@ import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { api } from "@/src/lib/axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 // Constants
@@ -39,6 +39,17 @@ const PROPERTY_TYPES = [
   "PENTHOUSE",
   "TOWNHOUSE",
   "VILLA",
+];
+
+// Property type mapping for hero section
+const HERO_PROPERTY_TYPES = [
+  { value: "apartment", label: "Apartment" },
+  { value: "villa", label: "Villa" },
+  { value: "townhouse", label: "Townhouse" },
+  { value: "penthouse", label: "Penthouse" },
+  { value: "studio", label: "Studio" },
+  { value: "plot", label: "Plot" },
+  { value: "office", label: "Office" },
 ];
 
 const PRICE_OPTIONS = [
@@ -86,6 +97,7 @@ const HANDOVER_YEAR_OPTIONS = [
 
 function Buy() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
@@ -96,7 +108,7 @@ function Buy() {
   // Filter states
   const [filters, setFilters] = React.useState({
     listing_type: "SELL",
-    title: "",
+    location: "",
     property_type: "any",
     min_price: "any",
     max_price: "any",
@@ -105,13 +117,15 @@ function Buy() {
     bedrooms: "any",
     bathrooms: "any",
     handover_year: "any",
+    ref_number: "",
   });
 
   const fetchproperty = useCallback(async () => {
     setLoading(true);
 
+    console.log("Buy page - fetchproperty called with filters:", filters);
+
     const queryParams = new URLSearchParams({
-      sort_by: "total_count",
       sort_order: "desc",
       page: "1",
       size: "24",
@@ -122,11 +136,18 @@ function Buy() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value && value !== "any" && value !== "all") {
         queryParams.append(key, value);
+        console.log(`Buy page - Adding filter: ${key} = ${value}`);
       }
     });
 
+    const finalQueryString = queryParams.toString();
+    console.log("Buy page - Final API query string:", finalQueryString);
+
     try {
-      const res = await getAllBuyProperties(queryParams.toString());
+      console.log("Buy page - Calling API with URL params:", finalQueryString);
+      const res = await getAllBuyProperties(finalQueryString);
+      console.log("Buy page - API response:", res);
+      console.log("Buy page - Properties count:", res?.properties?.length || 0);
       setProperty(res?.properties || []);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -160,11 +181,53 @@ function Buy() {
     return () => clearTimeout(timeoutId);
   }, []);
 
+  // Handle query parameters from hero section
+  useEffect(() => {
+    const propertyType = searchParams.get("property_type");
+    const location = searchParams.get("location");
+    const bedrooms = searchParams.get("bedrooms");
+    const refNumber = searchParams.get("ref_number");
+    const minPrice = searchParams.get("min_price");
+    const maxPrice = searchParams.get("max_price");
+    
+    console.log("Buy page - Query parameters received:", {
+      propertyType,
+      location,
+      bedrooms,
+      refNumber,
+      minPrice,
+      maxPrice
+    });
+    
+    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+      const newFilters = {
+        property_type: propertyType || "any",
+        location: location || "",
+        bedrooms: bedrooms || "any",
+        ref_number: refNumber || "",
+        min_price: minPrice || "any",
+        max_price: maxPrice || "any",
+      };
+      
+      console.log("Buy page - Setting new filters:", newFilters);
+      console.log("Buy page - Current filters before update:", filters);
+      
+      setFilters(prev => {
+        const updatedFilters = {
+          ...prev,
+          ...newFilters
+        };
+        console.log("Buy page - Updated filters:", updatedFilters);
+        return updatedFilters;
+      });
+    }
+  }, [searchParams]);
+
   const handleFilterChange = useCallback(
     (key: string, value: string) => {
       setFilters((prev) => ({ ...prev, [key]: value }));
 
-          // Navigate when listing_type changes
+      // Navigate when listing_type changes
     if (key === "listing_type") {
       if (value === "RENT") {
         router.push("/rent");
@@ -194,9 +257,11 @@ function Buy() {
     setShowFilters((prev) => !prev);
   }, []);
 
-  React.useEffect(() => {
+  // Single useEffect to handle API calls - only when filters change
+  useEffect(() => {
+    console.log("Buy page - Filters changed, calling API with:", filters);
     fetchproperty();
-  }, [filters]);
+  }, [filters, fetchproperty]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
@@ -230,8 +295,8 @@ function Buy() {
           <div className="flex-1">
             <Input
               placeholder="Location or Project"
-              value={filters.title}
-              onChange={(e) => handleFilterChange("title", e.target.value)}
+              value={filters.location}
+              onChange={(e) => handleFilterChange("location", e.target.value)}
               className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
             />
           </div>
@@ -256,7 +321,7 @@ function Buy() {
         </div>
       </div>
     ),
-    [filters.title, handleFilterChange, toggleFilters, handleSearch]
+    [filters.location, handleFilterChange, toggleFilters, handleSearch]
   );
 
   const PropertyTypeSelect = useMemo(
@@ -352,8 +417,8 @@ function Buy() {
             <div className="col-span-2">
               <Input
                 placeholder="City, building or community"
-                value={filters.title}
-                onChange={(e) => handleFilterChange("title", e.target.value)}
+                value={filters.location}
+                onChange={(e) => handleFilterChange("location", e.target.value)}
                 className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-14"
               />
             </div>
@@ -495,8 +560,8 @@ function Buy() {
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
-                  value={filters.title}
-                  onChange={(e) => handleFilterChange("title", e.target.value)}
+                  value={filters.location}
+                  onChange={(e) => handleFilterChange("location", e.target.value)}
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon
