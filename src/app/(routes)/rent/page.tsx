@@ -82,7 +82,6 @@ function Rent() {
     setLoading(true);
     
     const queryParams = new URLSearchParams({
-      sort_by: "total_count",
       sort_order: "desc",
       page: "1",
       size: "24",

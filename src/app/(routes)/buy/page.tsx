@@ -126,7 +126,6 @@ function Buy() {
     console.log("Buy page - fetchproperty called with filters:", filters);
 
     const queryParams = new URLSearchParams({
-      sort_by: "total_count",
       sort_order: "desc",
       page: "1",
       size: "24",
