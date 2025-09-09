@@ -37,18 +37,17 @@ export default function PropertyCard({ data }: { data?: PropertyData }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
         />
-        <div className="absolute bottom-4 left-4 bg-white text-xs font-light tracking-wider px-3 py-1 rounded-full shadow-md uppercase">
-        {data?.newParam?.totalUnits}  UNITS
-        </div>
+        {data?.newParam?.totalUnits ? (
+          <div className="absolute bottom-4 left-4 bg-white text-xs font-light tracking-wider px-3 py-1 rounded-full shadow-md uppercase">
+            {data.newParam.totalUnits} UNITS
+          </div>
+        ) : null}
         <div className="absolute bottom-4 right-4 bg-white text-sm font-light px-3 py-1 rounded-full shadow-md text-[#1A202C]">
           FROM {data?.newParam?.price?.toLocaleString() ?? "N/A"}
           <span className="font-light text-gray-500 ml-1">د.إ</span>
         </div>
       </div>
       <CardContent className="p-6">
-        <CardDescription className="text-sm text-gray-500 mb-1 font-light">
-          #{data?.area_id ?? "-"}
-        </CardDescription>
         <CardTitle className="text-2xl font-mono font-light text-[#1A202C] mb-2 tracking-wide">
           {data?.name ?? "Unnamed Property"}
         </CardTitle>

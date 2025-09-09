@@ -19,7 +19,8 @@ import { cn } from "@/src/lib/utils";
 import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
-import React, { useCallback, useMemo, useEffect } from "react";
+import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
+import React, { useCallback, useMemo } from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -35,31 +36,9 @@ const COMPLETION_STATUS_OPTIONS = [
 
 const PROPERTY_TYPES = [
   "APARTMENT",
-  "VILLA",
-  "TOWNHOUSE",
   "PENTHOUSE",
-  "HOTEL APARTMENT",
-  "DUPLEX",
-  "RESIDENTIAL FLOOR",
-  "RESIDENTIAL PLOT",
-  "RESIDENTIAL BUILDING",
-  "PARKING",
-  "STORE ROOM",
-  "COMPOUND",
-  "OFFICE",
-  "SHOP",
-  "COMMERCIAL BUILDING",
-  "COMMERCIAL FLOOR",
-  "COMMERCIAL PLOT",
-  "LABOR CAMP",
-  "RETAIL",
-  "SHOW ROOM",
-  "COMMERCIAL VILLA",
-  "WAREHOUSE",
-  "FARM",
-  "FACTORY",
-  "HOTEL",
-  "HOSPITAL",
+  "TOWNHOUSE",
+  "VILLA",
 ];
 
 // Property type mapping for hero section
@@ -120,7 +99,7 @@ function Buy() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
@@ -858,9 +837,11 @@ function Buy() {
         </Link>
       </p>
 
-      {loading ? (
-        <div className="text-center py-12">
-          <Loader className="w-12 h-12 animate-spin text-primary mx-auto" />
+      {loading || property.length === 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PropertyCardSkeleton key={i} />
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">

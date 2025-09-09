@@ -79,7 +79,7 @@ export default function DetailPage({ id }: any) {
         </section>
         <section className="w-full my-2 bg-[#F2EEE8] h-96 py-16">
           <p className="text-neutral-400 text-base font-mono text-center">
-            #{property?.id}
+            #{id}
           </p>
           <div className="  flex gap-2 items-center justify-center my-3">
             <span className="bg-[#D4B88C] text-white px-3 py-1 text-xs tracking-wider uppercase">
@@ -100,7 +100,9 @@ export default function DetailPage({ id }: any) {
           <p className="text-sm font-light text-gray-700 text-center">
             {property?.price_from
               ? `AED ${property.price_from.toLocaleString()}`
-              : "1,406,000"}
+              : property?.price
+              ? `AED ${property.price.toLocaleString()}`
+              : "Price on request"}
           </p>
           <div className="flex items-end gap-11 text-gray-600 text-sm mt-2 font-light justify-center">
             <div className="flex items-center gap-1">

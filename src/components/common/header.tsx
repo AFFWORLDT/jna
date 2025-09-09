@@ -130,7 +130,7 @@ export default function Header() {
           </div> */}
           <div className="text-white">
             <a
-              href="https://wa.me/971471803105"
+              href="https://wa.me/971565024240"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="WhatsApp"
@@ -140,7 +140,7 @@ export default function Header() {
             </a>
           </div>
           <div className="text-white">
-            <a href="tel:+971471803105" aria-label="Call Us">
+            <a href="tel:+971565024240" aria-label="Call Us">
               <Icon icon={"line-md:phone-call-filled"} className="h-6 w-6" />
               <span className="sr-only">Call Us</span>
             </a>
