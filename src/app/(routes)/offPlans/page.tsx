@@ -96,7 +96,7 @@ function OffPlansPage() {
   // Filter states
   const [filters, setFilters] = useState({
     type: "off_plan",
-    title: "",
+    location: "",
     property_type: "any",
     min_price: "any",
     max_price: "any",
@@ -208,7 +208,7 @@ function OffPlansPage() {
   // Handle query parameters from hero section
   useEffect(() => {
     const propertyType = searchParams.get("property_type");
-    const location = searchParams.get("title");
+    const location = searchParams.get("location");
     const bedrooms = searchParams.get("bedrooms");
     const refNumber = searchParams.get("ref_number");
     const minPrice = searchParams.get("min_price");
@@ -226,7 +226,7 @@ function OffPlansPage() {
     if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
       const newFilters = {
         property_type: propertyType || "any",
-        title: location || "",
+        location: location || "",
         bedrooms: bedrooms || "any",
         ref_number: refNumber || "",
         min_price: minPrice || "any",
@@ -274,8 +274,8 @@ function OffPlansPage() {
           <div className="flex-1">
             <Input
               placeholder="City, building or community"
-              value={filters.title}
-              onChange={(e) => handleFilterChange("title", e.target.value)}
+              value={filters.location}
+              onChange={(e) => handleFilterChange("location", e.target.value)}
               className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
             />
           </div>
@@ -300,7 +300,7 @@ function OffPlansPage() {
         </div>
       </div>
     ),
-    [filters.title, handleFilterChange, toggleFilters, handleSearch]
+    [filters.location, handleFilterChange, toggleFilters, handleSearch]
   );
 
   const PropertyTypeSelect = useMemo(
@@ -380,8 +380,8 @@ function OffPlansPage() {
             <div className="col-span-2">
               <Input
                 placeholder="City, building or community"
-                value={filters.title}
-                onChange={(e) => handleFilterChange("title", e.target.value)}
+                value={filters.location}
+                onChange={(e) => handleFilterChange("location", e.target.value)}
                 className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500"
               />
             </div>
@@ -508,8 +508,8 @@ function OffPlansPage() {
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
-                  value={filters.title}
-                  onChange={(e) => handleFilterChange("title", e.target.value)}
+                  value={filters.location}
+                  onChange={(e) => handleFilterChange("location", e.target.value)}
                   className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon

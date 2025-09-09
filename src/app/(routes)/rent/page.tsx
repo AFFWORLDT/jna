@@ -66,7 +66,7 @@ function Rent() {
   // Filter states
   const [filters, setFilters] = React.useState({
     listing_type: "RENT",
-    title: "",
+    location: "",
     property_type: "any",
     min_price: "any",
     max_price: "any",
@@ -172,7 +172,7 @@ function Rent() {
   // Handle query parameters from hero section
   React.useEffect(() => {
     const propertyType = searchParams.get("property_type");
-    const location = searchParams.get("title");
+    const location = searchParams.get("location");
     const bedrooms = searchParams.get("bedrooms");
     const refNumber = searchParams.get("ref_number");
     const minPrice = searchParams.get("min_price");
@@ -190,7 +190,7 @@ function Rent() {
     if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
       const newFilters = {
         property_type: propertyType || "any",
-        title: location || "",
+        location: location || "",
         bedrooms: bedrooms || "any",
         ref_number: refNumber || "",
         min_price: minPrice || "any",
@@ -242,8 +242,8 @@ function Rent() {
         <div className="flex-1">
           <Input
             placeholder="Location or Project"
-            value={filters.title}
-            onChange={(e) => handleFilterChange("title", e.target.value)}
+            value={filters.location}
+            onChange={(e) => handleFilterChange("location", e.target.value)}
             className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
           />
         </div>
@@ -264,7 +264,7 @@ function Rent() {
         </Button>
       </div>
     </div>
-  ), [filters.title, handleFilterChange, toggleFilters, handleSearch]);
+  ), [filters.location, handleFilterChange, toggleFilters, handleSearch]);
 
   const PropertyTypeSelect = useMemo(() => (
     <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
@@ -347,8 +347,8 @@ function Rent() {
             <div className="col-span-2">
               <Input
                 placeholder="City, building or community"
-                value={filters.title}
-                onChange={(e) => handleFilterChange("title", e.target.value)}
+                value={filters.location}
+                onChange={(e) => handleFilterChange("location", e.target.value)}
                 className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-14"
               />
             </div>
@@ -465,8 +465,8 @@ function Rent() {
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
-                  value={filters.title}
-                  onChange={(e) => handleFilterChange("title", e.target.value)}
+                  value={filters.location}
+                  onChange={(e) => handleFilterChange("location", e.target.value)}
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon 
