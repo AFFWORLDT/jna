@@ -8,7 +8,6 @@ import {
   Plus,
   Search,
   Send,
-  RssIcon as Reddit,
   AtSign,
   Share2,
   MessageSquare,
@@ -45,7 +44,6 @@ const socialLinksData = [
     url: "https://wa.me/1234567890",
   },
   { name: "Telegram", icon: <Send size={20} />, url: "https://telegram.org" },
-  { name: "Reddit", icon: <Reddit size={20} />, url: "https://reddit.com" },
   { name: "Threads", icon: <AtSign size={20} />, url: "https://threads.net" },
   { name: "Mix", icon: <Share2 size={20} />, url: "https://mix.com" },
   {
