@@ -20,7 +20,7 @@ import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
-import React, { useCallback, useEffect, useMemo, Suspense } from "react";
+import React, { useCallback, useEffect, useMemo, Suspense, useRef } from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -100,10 +100,14 @@ function BuyContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
   const [filters, setFilters] = React.useState({
@@ -120,14 +124,18 @@ function BuyContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async () => {
-    setLoading(true);
-
-    console.log("Buy page - fetchproperty called with filters:", filters);
+  const fetchproperty = useCallback(async (page = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setCurrentPage(1);
+      setHasMore(true);
+    }
 
     const queryParams = new URLSearchParams({
       sort_order: "desc",
-      page: "1",
+      page: page.toString(),
       size: "24",
       status:"ACTIVE"
     });
@@ -136,23 +144,30 @@ function BuyContent() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value && value !== "any" && value !== "all") {
         queryParams.append(key, value);
-        console.log(`Buy page - Adding filter: ${key} = ${value}`);
       }
     });
 
     const finalQueryString = queryParams.toString();
-    console.log("Buy page - Final API query string:", finalQueryString);
 
     try {
-      console.log("Buy page - Calling API with URL params:", finalQueryString);
       const res = await getAllBuyProperties(finalQueryString);
-      console.log("Buy page - API response:", res);
-      console.log("Buy page - Properties count:", res?.properties?.length || 0);
-      setProperty(res?.properties || []);
+      const newProperties = res?.properties || [];
+      
+      if (append) {
+        setProperty(prev => [...prev, ...newProperties]);
+      } else {
+        setProperty(newProperties);
+      }
+      
+      // Check if there are more pages
+      const hasMoreData = newProperties.length === 24;
+      setHasMore(hasMoreData);
+      setCurrentPage(page);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -190,15 +205,6 @@ function BuyContent() {
     const minPrice = searchParams.get("min_price");
     const maxPrice = searchParams.get("max_price");
     
-    console.log("Buy page - Query parameters received:", {
-      propertyType,
-      location,
-      bedrooms,
-      refNumber,
-      minPrice,
-      maxPrice
-    });
-    
     if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
       const newFilters = {
         property_type: propertyType || "any",
@@ -209,17 +215,10 @@ function BuyContent() {
         max_price: maxPrice || "any",
       };
       
-      console.log("Buy page - Setting new filters:", newFilters);
-      console.log("Buy page - Current filters before update:", filters);
-      
-      setFilters(prev => {
-        const updatedFilters = {
-          ...prev,
-          ...newFilters
-        };
-        console.log("Buy page - Updated filters:", updatedFilters);
-        return updatedFilters;
-      });
+      setFilters(prev => ({
+        ...prev,
+        ...newFilters
+      }));
     }
   }, [searchParams]);
 
@@ -240,9 +239,15 @@ function BuyContent() {
   );
 
   const handleSearch = useCallback(() => {
-    fetchproperty();
+    fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
+
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchproperty(currentPage + 1, true);
+    }
+  }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
@@ -259,13 +264,35 @@ function BuyContent() {
 
   // Single useEffect to handle API calls - only when filters change
   useEffect(() => {
-    console.log("Buy page - Filters changed, calling API with:", filters);
-    fetchproperty();
+    fetchproperty(1, false);
   }, [filters, fetchproperty]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
   }, [developerSearch, searchDevelopers]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = observerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMore]);
 
   // Close developer dropdown when clicking outside
   React.useEffect(() => {
@@ -836,22 +863,45 @@ function BuyContent() {
         </Link>
       </p>
 
-      {loading || property.length === 0 ? (
+      {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
           {Array.from({ length: 6 }).map((_, i) => (
             <PropertyCardSkeleton key={i} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
-          {property?.map((item: any, index: number) => (
-            <BuyCard
-              key={item.id ?? index}
-              data={item}
-              onFavorite={handleFavorite}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
+            {property?.map((item: any, index: number) => (
+              <BuyCard
+                key={item.id ?? index}
+                data={item}
+                onFavorite={handleFavorite}
+              />
+            ))}
+          </div>
+          
+          {/* Loading more indicator */}
+          {loadingMore && (
+            <div className="flex justify-center items-center py-8">
+              <Loader className="animate-spin h-8 w-8 text-primary" />
+              <span className="ml-2 text-gray-600">Loading more properties...</span>
+            </div>
+          )}
+          
+          {/* Intersection Observer target */}
+          {!loading && (
+            <div ref={observerRef} className="h-4" />
+          )}
+          
+          {/* No more properties message */}
+          {!hasMore && property.length > 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No more properties to load
+            </div>
+          )}
+          
+        </>
       )}
     </div>
   );

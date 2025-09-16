@@ -138,27 +138,16 @@ function OffPlansPageContent() {
       const res = await getAllProperties(queryParams.toString());
       const newProperties = res?.projects || [];
       
-      console.log(`Fetching page ${page}, append: ${append}, properties count: ${newProperties.length}`);
-      console.log('API Response:', res);
-      
       if (append) {
-        setProperty(prev => {
-          const updated = [...prev, ...newProperties];
-          console.log(`Appending ${newProperties.length} properties. Total now: ${updated.length}`);
-          return updated;
-        });
+        setProperty(prev => [...prev, ...newProperties]);
       } else {
         setProperty(newProperties);
-        console.log(`Setting initial ${newProperties.length} properties`);
       }
       
       // Check if there are more pages
       const hasMoreData = newProperties.length === 24;
-      const totalProjects = res?.totalProjects || 0;
-      
       setHasMore(hasMoreData);
       setCurrentPage(page);
-      console.log(`Has more data: ${hasMoreData}, Total projects: ${totalProjects}, New properties: ${newProperties.length}, Current page: ${page}`);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
@@ -213,12 +202,8 @@ function OffPlansPageContent() {
   }, [fetchproperty, showFilters]);
 
   const loadMore = useCallback(() => {
-    console.log('loadMore called:', { loadingMore, hasMore, currentPage });
     if (!loadingMore && hasMore) {
-      console.log(`Loading page ${currentPage + 1}`);
       fetchproperty(currentPage + 1, true);
-    } else {
-      console.log('Not loading more because:', { loadingMore, hasMore });
     }
   }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
@@ -237,13 +222,11 @@ function OffPlansPageContent() {
 
   // Initial API call and when filters change
   useEffect(() => {
-    console.log("Off-plans page - Initial load or filters changed, calling API with:", filters);
     fetchproperty(1, false);
   }, [filters, fetchproperty]);
 
   // Initial API call on page load
   useEffect(() => {
-    console.log("Off-plans page - Page loaded, making initial API call");
     fetchproperty(1, false);
   }, []);
 
@@ -256,15 +239,6 @@ function OffPlansPageContent() {
     const minPrice = searchParams.get("min_price");
     const maxPrice = searchParams.get("max_price");
     
-    console.log("Off-plans page - Query parameters received:", {
-      propertyType,
-      location,
-      bedrooms,
-      refNumber,
-      minPrice,
-      maxPrice
-    });
-    
     if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
       const newFilters = {
         property_type: propertyType || "any",
@@ -275,17 +249,10 @@ function OffPlansPageContent() {
         max_price: maxPrice || "any",
       };
       
-      console.log("Off-plans page - Setting new filters:", newFilters);
-      console.log("Off-plans page - Current filters before update:", filters);
-      
-      setFilters(prev => {
-        const updatedFilters = {
-          ...prev,
-          ...newFilters
-        };
-        console.log("Off-plans page - Updated filters:", updatedFilters);
-        return updatedFilters;
-      });
+      setFilters(prev => ({
+        ...prev,
+        ...newFilters
+      }));
     }
   }, [searchParams]);
 
@@ -297,15 +264,7 @@ function OffPlansPageContent() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        console.log('Intersection observer triggered:', {
-          isIntersecting: entries[0].isIntersecting,
-          hasMore,
-          loadingMore,
-          currentPage
-        });
-        
         if (entries[0].isIntersecting && hasMore && !loadingMore) {
-          console.log('Loading more data...');
           loadMore();
         }
       },
@@ -314,10 +273,7 @@ function OffPlansPageContent() {
 
     const currentRef = observerRef.current;
     if (currentRef) {
-      console.log('Setting up intersection observer');
       observer.observe(currentRef);
-    } else {
-      console.log('Observer ref is null');
     }
 
     return () => {
@@ -847,21 +803,6 @@ function OffPlansPageContent() {
           </div>
         )}
         
-        {/* Debug info and manual load button */}
-        <div className="text-center py-4 text-sm text-gray-500">
-          <div>Current Page: {currentPage}</div>
-          <div>Has More: {hasMore ? 'Yes' : 'No'}</div>
-          <div>Loading More: {loadingMore ? 'Yes' : 'No'}</div>
-          <div>Total Properties: {property.length}</div>
-          {hasMore && (
-            <button 
-              onClick={loadMore}
-              className="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
-            >
-              Load More (Manual)
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
