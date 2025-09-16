@@ -19,7 +19,7 @@ import { cn } from "@/src/lib/utils";
 import OffPlanCard from "@/src/view/offPlans/offPlanCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, X, Search } from "lucide-react";
-import { useEffect, useState, useCallback, useMemo, Suspense } from "react";
+import { useEffect, useState, useCallback, useMemo, Suspense, useRef } from "react";
 import { api } from "@/src/lib/axios";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -88,10 +88,14 @@ function OffPlansPageContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [developers, setDevelopers] = useState([]);
   const [developerSearch, setDeveloperSearch] = useState("");
   const [searchingDevelopers, setSearchingDevelopers] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -108,12 +112,18 @@ function OffPlansPageContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async () => {
-    setLoading(true);
+  const fetchproperty = useCallback(async (page = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setCurrentPage(1);
+      setHasMore(true);
+    }
 
     const queryParams = new URLSearchParams({
       sort_order: "desc",
-      page: "1",
+      page: page.toString(),
       size: "24",
     });
 
@@ -126,11 +136,34 @@ function OffPlansPageContent() {
 
     try {
       const res = await getAllProperties(queryParams.toString());
-      setProperty(res?.projects || []);
+      const newProperties = res?.projects || [];
+      
+      console.log(`Fetching page ${page}, append: ${append}, properties count: ${newProperties.length}`);
+      console.log('API Response:', res);
+      
+      if (append) {
+        setProperty(prev => {
+          const updated = [...prev, ...newProperties];
+          console.log(`Appending ${newProperties.length} properties. Total now: ${updated.length}`);
+          return updated;
+        });
+      } else {
+        setProperty(newProperties);
+        console.log(`Setting initial ${newProperties.length} properties`);
+      }
+      
+      // Check if there are more pages
+      const hasMoreData = newProperties.length === 24;
+      const totalProjects = res?.totalProjects || 0;
+      
+      setHasMore(hasMoreData);
+      setCurrentPage(page);
+      console.log(`Has more data: ${hasMoreData}, Total projects: ${totalProjects}, New properties: ${newProperties.length}, Current page: ${page}`);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -175,9 +208,19 @@ function OffPlansPageContent() {
   }, [router]);
 
   const handleSearch = useCallback(() => {
-    fetchproperty();
+    fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
+
+  const loadMore = useCallback(() => {
+    console.log('loadMore called:', { loadingMore, hasMore, currentPage });
+    if (!loadingMore && hasMore) {
+      console.log(`Loading page ${currentPage + 1}`);
+      fetchproperty(currentPage + 1, true);
+    } else {
+      console.log('Not loading more because:', { loadingMore, hasMore });
+    }
+  }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
@@ -195,13 +238,13 @@ function OffPlansPageContent() {
   // Initial API call and when filters change
   useEffect(() => {
     console.log("Off-plans page - Initial load or filters changed, calling API with:", filters);
-    fetchproperty();
+    fetchproperty(1, false);
   }, [filters, fetchproperty]);
 
   // Initial API call on page load
   useEffect(() => {
     console.log("Off-plans page - Page loaded, making initial API call");
-    fetchproperty();
+    fetchproperty(1, false);
   }, []);
 
   // Handle query parameters from hero section
@@ -249,6 +292,40 @@ function OffPlansPageContent() {
   useEffect(() => {
     searchDevelopers(developerSearch);
   }, [developerSearch, searchDevelopers]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        console.log('Intersection observer triggered:', {
+          isIntersecting: entries[0].isIntersecting,
+          hasMore,
+          loadingMore,
+          currentPage
+        });
+        
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          console.log('Loading more data...');
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = observerRef.current;
+    if (currentRef) {
+      console.log('Setting up intersection observer');
+      observer.observe(currentRef);
+    } else {
+      console.log('Observer ref is null');
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMore]);
 
   // Close developer dropdown when clicking outside
   useEffect(() => {
@@ -748,6 +825,42 @@ function OffPlansPageContent() {
           {property?.map((property, i) => (
             <OffPlanCard data={property} key={i} />
           ))}
+        </div>
+        
+        {/* Loading more indicator */}
+        {loadingMore && (
+          <div className="flex justify-center items-center py-8">
+            <Loader className="animate-spin h-8 w-8 text-primary" />
+            <span className="ml-2 text-gray-600">Loading more properties...</span>
+          </div>
+        )}
+        
+        {/* Intersection Observer target */}
+        {!loading && (
+          <div ref={observerRef} className="h-4" />
+        )}
+        
+        {/* No more properties message */}
+        {!hasMore && property.length > 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No more properties to load
+          </div>
+        )}
+        
+        {/* Debug info and manual load button */}
+        <div className="text-center py-4 text-sm text-gray-500">
+          <div>Current Page: {currentPage}</div>
+          <div>Has More: {hasMore ? 'Yes' : 'No'}</div>
+          <div>Loading More: {loadingMore ? 'Yes' : 'No'}</div>
+          <div>Total Properties: {property.length}</div>
+          {hasMore && (
+            <button 
+              onClick={loadMore}
+              className="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-primary/90"
+            >
+              Load More (Manual)
+            </button>
+          )}
         </div>
       </div>
     </div>
