@@ -74,9 +74,6 @@ export default function DetailPage({ id }: any) {
           </div>
         </section>
         <section className="w-full my-2 bg-[#F2EEE8] h-96 py-16">
-          <p className="text-neutral-400 text-base font-mono text-center">
-            #{id}
-          </p>
           <div className="  flex gap-2 items-center justify-center my-3">
             <span className="bg-[#D4B88C] text-white px-3 py-1 text-xs tracking-wider uppercase">
               For Sale

@@ -93,7 +93,6 @@ export default function DetailPage({ id }: any) {
           </div>
         </div>
         <div className="relative z-30 text-white px-4 mt-[60vh]">
-          <span>#{id}</span>
           <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">
             {property?.name}
           </h1>
