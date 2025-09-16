@@ -25,6 +25,13 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Constants
+const COMPLETION_STATUS_OPTIONS = [
+  { label: "Completion Status", value: "all" },
+  { label: "Completed Secondary", value: "completed" },
+  { label: "Off Plan Secondary", value: "off_plan" },
+  { label: "Completed Primary", value: "completed_primary" },
+  { label: "Off Plan Primary", value: "off_plan_primary" },
+];
 
 const PROPERTY_TYPES = [
   "APARTMENT",
@@ -97,6 +104,7 @@ function OffPlansPageContent() {
     property_type: "any",
     min_price: "any",
     max_price: "any",
+    completion_status: "all",
     developer_id: "any",
     bedrooms: "any",
     bathrooms: "any",
@@ -568,6 +576,29 @@ function OffPlansPageContent() {
               </Select>
             </div>
 
+            {/* Completion Status */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
+                Completion Status
+              </label>
+              <Select
+                value={filters.completion_status}
+                onValueChange={(value) =>
+                  handleFilterChange("completion_status", value)
+                }
+              >
+                <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-12 text-gray-900 focus:ring-2 focus:ring-primary">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  {COMPLETION_STATUS_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             {/* Developer Search */}
             <div className="space-y-2 developer-search">
