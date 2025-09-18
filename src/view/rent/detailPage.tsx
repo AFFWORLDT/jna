@@ -12,6 +12,7 @@ export default function DetailPage({ id }: any) {
   const [loading, setLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const fetchPropertyDetails = async () => {
     setLoading(true);
@@ -193,9 +194,19 @@ export default function DetailPage({ id }: any) {
             <h2 className="text-4xl font-serif text-gray-800 mb-8">
               Description
             </h2>
-            <p className="text-sm font-light text-gray-600 leading-relaxed mb-6 line-clamp-4">
-              {property?.description}
-            </p>
+            <div className="text-sm font-light text-gray-600 leading-relaxed mb-6">
+              <p className={isDescriptionExpanded ? "" : "line-clamp-4"}>
+                {property?.description}
+              </p>
+              {property?.description && property.description.length > 200 && (
+                <button
+                  onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                  className="mt-4 text-primary hover:text-primary/80 font-medium transition-colors duration-200 underline"
+                >
+                  {isDescriptionExpanded ? "Read Less" : "Read More"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </section>
