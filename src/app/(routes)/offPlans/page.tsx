@@ -201,6 +201,24 @@ function OffPlansPageContent() {
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
 
+  const clearAllFilters = useCallback(() => {
+    setFilters({
+      type: "off_plan",
+      location: "",
+      property_type: "any",
+      min_price: "any",
+      max_price: "any",
+      completion_status: "all",
+      developer_id: "any",
+      bedrooms: "any",
+      bathrooms: "any",
+      handover_year: "any",
+      ref_number: "",
+    });
+    setDeveloperSearch("");
+    setDevelopers([]);
+  }, []);
+
   const loadMore = useCallback(() => {
     if (!loadingMore && hasMore) {
       fetchproperty(currentPage + 1, true);
@@ -315,24 +333,35 @@ function OffPlansPageContent() {
             onClick={toggleFilters}
             size="lg"
             variant="outline"
-            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center"
+            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
           >
             <Icon
               icon="lucide:sliders-horizontal"
-              className="text-gray-600 text-xl"
+              className="text-gray-600 w-5 h-5"
+            />
+          </Button>
+          <Button
+            onClick={clearAllFilters}
+            size="lg"
+            variant="outline"
+            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
+          >
+            <Icon
+              icon="lucide:x-circle"
+              className="text-gray-600 w-5 h-5"
             />
           </Button>
           <Button
             onClick={handleSearch}
             size="lg"
-            className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg"
+            className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg rounded-lg transition-all duration-200"
           >
-            <Icon icon="iconamoon:search-fill" className="text-white text-xl" />
+            <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
           </Button>
         </div>
       </div>
     ),
-    [filters.location, handleFilterChange, toggleFilters, handleSearch]
+    [filters.location, handleFilterChange, toggleFilters, handleSearch, clearAllFilters]
   );
 
   const PropertyTypeSelect = useMemo(
@@ -451,25 +480,32 @@ function OffPlansPageContent() {
               </Select>
             </div>
 
-            {/* More Filters Button and Search Button in same column */}
-            <div className="flex gap-2">
+            {/* Action Buttons */}
+            <div className="flex gap-3">
               <Button
                 onClick={toggleFilters}
                 variant="outline"
-                className="w-32 h-14 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 flex items-center justify-center gap-2"
+                className="h-14 w-14 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 flex items-center justify-center font-medium transition-all duration-200"
+                title="More Filters"
               >
-                <Icon icon="lucide:sliders-horizontal" className="w-4 h-4" />
-                More Filters
+                <Icon icon="lucide:sliders-horizontal" className="w-5 h-5" />
+              </Button>
+
+              <Button
+                onClick={clearAllFilters}
+                variant="outline"
+                className="h-14 w-14 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 flex items-center justify-center font-medium transition-all duration-200"
+                title="Clear Filters"
+              >
+                <Icon icon="lucide:x-circle" className="w-5 h-5" />
               </Button>
 
               <Button
                 onClick={handleSearch}
-                className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg"
+                className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg font-medium transition-all duration-200"
+                title="Search"
               >
-                <Icon
-                  icon="iconamoon:search-fill"
-                  className="text-white text-xl"
-                />
+                <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -739,14 +775,24 @@ function OffPlansPageContent() {
               </Select>
             </div>
 
-            {/* Search Button */}
-            <Button
-              onClick={handleSearch}
-              className="w-full bg-primary hover:bg-primary/90 text-white font-medium h-12 rounded-md"
-            >
-              <Search className="w-5 h-5 mr-2" />
-              Search Properties
-            </Button>
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <Button
+                onClick={clearAllFilters}
+                variant="outline"
+                className="flex-1 bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium h-14 rounded-lg transition-all duration-200"
+              >
+                <Icon icon="lucide:x-circle" className="w-5 h-5 mr-2" />
+                Clear Filters
+              </Button>
+              <Button
+                onClick={handleSearch}
+                className="flex-1 bg-primary hover:bg-primary/90 text-white font-medium h-14 rounded-lg transition-all duration-200 shadow-lg"
+              >
+                <Search className="w-5 h-5 mr-2" />
+                Search
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
