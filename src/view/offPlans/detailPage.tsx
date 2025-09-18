@@ -191,14 +191,14 @@ export default function DetailPage({ id }: any) {
               {/* Main Carousel Container */}
               <div className="relative group">
                 {/* Main Image Display */}
-                <div className="relative h-[400px] md:h-[500px] lg:h-[600px] mb-6 overflow-hidden rounded-lg">
-                  <AnimatePresence mode="wait">
+                <div className="relative h-[400px] md:h-[500px] lg:h-[600px] mb-6 overflow-hidden rounded-lg bg-gray-900">
+                  <AnimatePresence initial={false}>
                     <motion.div
                       key={selectedImageIndex}
-                      initial={{ opacity: 0, x: 100 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -100 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      initial={{ x: "100%" }}
+                      animate={{ x: 0 }}
+                      exit={{ x: "-100%" }}
+                      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                       className="absolute inset-0"
                     >
                       <Image
