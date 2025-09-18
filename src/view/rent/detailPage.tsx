@@ -2,6 +2,9 @@ import { getAllBuyPropertiesById } from "@/src/api/buy";
 import EnquireForm from "@/src/components/common/enquireForm";
 import { Badge } from "@/src/components/ui/badge";
 import { Card } from "@/src/components/ui/card";
+import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
+import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { Bed, Bath, Square, SquareGanttChart, Heart } from "lucide-react";
 import moment from "moment";
 import Image from "next/image";
@@ -13,6 +16,7 @@ export default function DetailPage({ id }: any) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const fetchPropertyDetails = async () => {
     setLoading(true);
@@ -124,7 +128,10 @@ export default function DetailPage({ id }: any) {
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center gap-2 text-lg font-light uppercase text-primary mb-12">
-            <a href="#" className="hover:underline">
+            <a
+              className="hover:underline cursor-pointer"
+              onClick={() => setIsOpen(true)}
+            >
               Enquire Now
             </a>
             <span className="text-gray-300">|</span>
@@ -282,6 +289,39 @@ export default function DetailPage({ id }: any) {
           <h2 className="text-3xl font-serif text-primary mb-8">Enquire</h2>
           <EnquireForm type="contact" />
         </div>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <AnimatePresence>
+            <DialogContent className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl bg-[#F2EEE8] rounded-none px-8 py-4">
+              <motion.div
+                key="dialog"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <DialogTitle className="mb-6 flex justify-between">
+                  <div>
+                    <h2 className="text-2xl  font-mono font-thin text-black text-center">
+                      Take the First Step
+                    </h2>
+                    <p className="font-mono font-thin text-center text-[15px] text-neutral-400">
+                      Get a free consultation, personalized investment strategy,
+                      and exclusive access to Dubai best properties.
+                    </p>
+                  </div>
+                  <Icon
+                    icon={"material-symbols-light:cancel-outline"}
+                    fontSize={25}
+                    className="text-neutral-400 cursor-pointer"
+                    onClick={() => setIsOpen(false)}
+                  />
+                </DialogTitle>
+
+                <EnquireForm type="rent" />
+              </motion.div>
+            </DialogContent>
+          </AnimatePresence>
+        </Dialog>
       </section>
     </div>
   );

@@ -78,8 +78,8 @@ export default function Header() {
           isScrolled ? "h-20" : "h-32"
         }`}
       >
-        <div className="flex items-center">
-          <Link href={"/"}>
+        <div className="flex items-center justify-center">
+          <Link href={"/"} className="flex items-center">
             <Image
               src={
                 (pathname === "/" ||
@@ -91,13 +91,14 @@ export default function Header() {
               alt="logo"
               width={isScrolled ? 80 : 100}
               height={isScrolled ? 80 : 100}
+              className="object-contain"
             />
           </Link>
         </div>
 
         {/* Desktop Nav */}
         <div
-          className="hidden md:flex items-center space-x-10 text-sm font-light uppercase tracking-[1.5px]"
+          className="hidden md:flex items-center justify-center space-x-10 text-sm font-light uppercase tracking-[1.5px]"
           style={{
             fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
           }}
@@ -123,7 +124,7 @@ export default function Header() {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center gap-x-7">
+        <div className="flex items-center justify-center gap-x-7">
           {/* <div className="text-white">
             <Heart className="h-5 w-5" fill="white" />
             <span className="sr-only">Favorites</span>
