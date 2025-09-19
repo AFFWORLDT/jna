@@ -131,10 +131,10 @@ export default function DetailPage({ id }: any) {
             <a href="#" className="hover:underline">
               Brochure
             </a>
-            <span className="text-gray-300">|</span>
+            {/* <span className="text-gray-300">|</span>
             <a href="#" className="hover:underline">
               <Heart className="w-4 h-4 inline-block" />
-            </a>
+            </a> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
