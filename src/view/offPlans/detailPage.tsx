@@ -113,10 +113,10 @@ export default function DetailPage({ id }: any) {
             >
               Enquire Now
             </a>
-            <span className="text-gray-300">|</span>
+            {/* <span className="text-gray-300">|</span>
             <a href="#" className="hover:underline">
               Properties List
-            </a>
+            </a> */}
           </div>
 
           <hr className="border-t border-gray-200 mb-12" />
