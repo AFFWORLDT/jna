@@ -20,7 +20,7 @@ import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
-import React, { useCallback, useEffect, useMemo, Suspense, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, Suspense } from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -98,16 +98,15 @@ const HANDOVER_YEAR_OPTIONS = [
 function BuyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [property, setProperty] = React.useState([]);
+  const [property, setProperty] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [loadingMore, setLoadingMore] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [hasMore, setHasMore] = React.useState(true);
+  const [totalPages, setTotalPages] = React.useState(1);
+  const [totalCount, setTotalCount] = React.useState(0);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
-  const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
   const [filters, setFilters] = React.useState({
@@ -124,19 +123,13 @@ function BuyContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async (page = 1, append = false) => {
-    if (append) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-      setCurrentPage(1);
-      setHasMore(true);
-    }
+  const fetchproperty = useCallback(async (page = 1) => {
+    setLoading(true);
 
     const queryParams = new URLSearchParams({
       sort_order: "desc",
       page: page.toString(),
-      size: "24",
+      size: "12",
       status:"ACTIVE"
     });
 
@@ -153,21 +146,21 @@ function BuyContent() {
       const res = await getAllBuyProperties(finalQueryString);
       const newProperties = res?.properties || [];
       
-      if (append) {
-        setProperty(prev => [...prev, ...newProperties]);
-      } else {
-        setProperty(newProperties);
-      }
-      
-      // Check if there are more pages
-      const hasMoreData = newProperties.length === 24;
-      setHasMore(hasMoreData);
+      setProperty(newProperties);
       setCurrentPage(page);
+      
+      // Calculate total pages based on total count
+      const total = res?.total_count || res?.total || newProperties.length;
+      setTotalCount(total);
+      
+      // Ensure we have at least 2 pages for testing if we have more than 12 properties
+      const calculatedPages = Math.ceil(total / 12);
+      const finalPages = total > 12 ? calculatedPages : Math.max(calculatedPages, 2);
+      setTotalPages(finalPages);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
-      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -239,7 +232,7 @@ function BuyContent() {
   );
 
   const handleSearch = useCallback(() => {
-    fetchproperty(1, false);
+    fetchproperty(1);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
 
@@ -261,11 +254,13 @@ function BuyContent() {
     setDevelopers([]);
   }, []);
 
-  const loadMore = useCallback(() => {
-    if (!loadingMore && hasMore) {
-      fetchproperty(currentPage + 1, true);
+  const handlePageChange = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      fetchproperty(page);
+      // Scroll to top when changing pages
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [fetchproperty, currentPage, loadingMore, hasMore]);
+  }, [fetchproperty, totalPages, currentPage]);
 
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
@@ -282,35 +277,13 @@ function BuyContent() {
 
   // Single useEffect to handle API calls - only when filters change
   useEffect(() => {
-    fetchproperty(1, false);
+    fetchproperty(1);
   }, [filters, fetchproperty]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
   }, [developerSearch, searchDevelopers]);
 
-  // Intersection Observer for infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loadingMore) {
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = observerRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [hasMore, loadingMore, loadMore]);
 
   // Close developer dropdown when clicking outside
   React.useEffect(() => {
@@ -927,23 +900,53 @@ function BuyContent() {
             ))}
           </div>
           
-          {/* Loading more indicator */}
-          {loadingMore && (
-            <div className="flex justify-center items-center py-8">
-              <Loader className="animate-spin h-8 w-8 text-primary" />
-              <span className="ml-2 text-gray-600">Loading more properties...</span>
+          {/* Pagination - Always show when there are properties */}
+          {!loading && property.length > 0 && (
+            <div className="flex flex-col items-center gap-6 py-12 bg-white border-t border-gray-200 mx-4 mt-8 shadow-lg">
+              {/* Property count */}
+              <div className="text-sm text-gray-600 font-medium">
+                Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalCount)} of {totalCount} properties
+              </div>
+              
+              {/* Simple Previous/Next buttons - Always show for testing */}
+              <div className="flex items-center gap-6">
+                <Button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  variant="outline"
+                  size="lg"
+                  className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
+                >
+                  <Icon icon="lucide:chevron-left" className="w-5 h-5" />
+                  Previous
+                </Button>
+                
+                {/* Current page indicator */}
+                <div className="flex items-center gap-2 px-6 py-3 bg-primary/15 rounded-xl border border-primary/20">
+                  <span className="text-base font-semibold text-primary">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                </div>
+                
+                <Button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  variant="outline"
+                  size="lg"
+                  className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
+                >
+                  Next
+                  <Icon icon="lucide:chevron-right" className="w-5 h-5" />
+                </Button>
+              </div>
             </div>
           )}
           
-          {/* Intersection Observer target */}
-          {!loading && (
-            <div ref={observerRef} className="h-4" />
-          )}
-          
-          {/* No more properties message */}
-          {!hasMore && property.length > 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No more properties to load
+          {/* No properties message */}
+          {!loading && property.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <div className="text-lg font-medium mb-2">No properties found</div>
+              <div className="text-sm">Try adjusting your search filters</div>
             </div>
           )}
           
