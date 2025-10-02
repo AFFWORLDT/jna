@@ -113,6 +113,8 @@ function OffPlansPageContent() {
   });
 
   const fetchproperty = useCallback(async (page = 1, append = false) => {
+    console.log("fetchproperty called:", { page, append, loadingMore, hasMore });
+    
     if (append) {
       setLoadingMore(true);
     } else {
@@ -134,20 +136,35 @@ function OffPlansPageContent() {
       }
     });
 
+    const finalQueryString = queryParams.toString();
+    console.log("Making API call with params:", finalQueryString);
+
     try {
-      const res = await getAllProperties(queryParams.toString());
+      const res = await getAllProperties(finalQueryString);
       const newProperties = res?.projects || [];
       
+      console.log("API response:", { 
+        totalProperties: newProperties.length, 
+        currentPropertyCount: property.length,
+        append 
+      });
+      
       if (append) {
-        setProperty(prev => [...prev, ...newProperties]);
+        setProperty(prev => {
+          const updated = [...prev, ...newProperties];
+          console.log("Appended properties. New total:", updated.length);
+          return updated;
+        });
       } else {
         setProperty(newProperties);
+        console.log("Set new properties:", newProperties.length);
       }
       
       setCurrentPage(page);
       
       // Check if there are more pages
       const hasMoreData = newProperties.length === 6;
+      console.log("Has more data:", hasMoreData);
       setHasMore(hasMoreData);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -221,8 +238,12 @@ function OffPlansPageContent() {
   }, []);
 
   const loadMore = useCallback(() => {
+    console.log("loadMore called:", { loadingMore, hasMore, currentPage });
     if (!loadingMore && hasMore) {
+      console.log("Fetching next page:", currentPage + 1);
       fetchproperty(currentPage + 1, true);
+    } else {
+      console.log("Load more blocked:", { loadingMore, hasMore });
     }
   }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
@@ -248,7 +269,16 @@ function OffPlansPageContent() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        console.log("Intersection observer triggered:", {
+          isIntersecting: entries[0].isIntersecting,
+          hasMore,
+          loadingMore,
+          currentPage,
+          propertyLength: property.length
+        });
+        
         if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          console.log("Loading more properties - Page:", currentPage + 1);
           loadMore();
         }
       },
@@ -257,7 +287,10 @@ function OffPlansPageContent() {
 
     const currentRef = observerRef.current;
     if (currentRef) {
+      console.log("Setting up intersection observer");
       observer.observe(currentRef);
+    } else {
+      console.log("Observer ref not found");
     }
 
     return () => {
@@ -265,7 +298,7 @@ function OffPlansPageContent() {
         observer.unobserve(currentRef);
       }
     };
-  }, [hasMore, loadingMore, loadMore]);
+  }, [hasMore, loadingMore, loadMore, currentPage, property.length]);
 
   // Handle query parameters from hero section
   useEffect(() => {
@@ -666,9 +699,9 @@ function OffPlansPageContent() {
                         <div className="text-xs text-gray-500">
                           {developer.location}
                         </div>
-                      )}
+                      )} 
                     </div>
-                  ))}
+                  ))} 
                 </div>
               )}
             </div>
@@ -833,10 +866,10 @@ function OffPlansPageContent() {
             <span className="ml-2 text-gray-600">Loading more properties...</span>
           </div>
         )}
-        
+         
         {/* Intersection Observer target */}
         {!loading && (
-          <div ref={observerRef} className="h-10" />
+          <div ref={observerRef} className="h-8"/>
         )}
         
         {/* No more properties message */}
