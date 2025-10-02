@@ -87,6 +87,7 @@ function OffPlansPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [property, setProperty] = useState([]);
+  const [totalProperties, setTotalProperties] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -142,7 +143,8 @@ function OffPlansPageContent() {
     try {
       const res = await getAllProperties(finalQueryString);
       const newProperties = res?.projects || [];
-      
+
+      setTotalProperties(res?.totalProjects || 0);
       console.log("API response:", { 
         totalProperties: newProperties.length, 
         currentPropertyCount: property.length,
@@ -845,6 +847,15 @@ function OffPlansPageContent() {
             </span>
           </Link>
         </p>
+        <div className="h-8">
+          {
+            totalProperties !== 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <div className="text-lg font-medium mb-2">Total properties: {totalProperties}</div>
+              </div>
+            )
+          }
+        </div>
       </div>
 
       <div>
@@ -873,14 +884,14 @@ function OffPlansPageContent() {
         )}
         
         {/* No more properties message */}
-        {!hasMore && property.length > 0 && (
+        {!hasMore && property?.length > 0 && (
           <div className="text-center py-8 text-gray-500">
             No more properties to load
           </div>
         )}
         
         {/* No properties message */}
-        {!loading && property.length === 0 && (
+        {!loading && property?.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             <div className="text-lg font-medium mb-2">No properties found</div>
             <div className="text-sm">Try adjusting your search filters</div>
