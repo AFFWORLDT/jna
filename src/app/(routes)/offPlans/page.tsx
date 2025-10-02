@@ -19,7 +19,7 @@ import { cn } from "@/src/lib/utils";
 import OffPlanCard from "@/src/view/offPlans/offPlanCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, X, Search } from "lucide-react";
-import { useEffect, useState, useCallback, useMemo, Suspense } from "react";
+import { useEffect, useState, useCallback, useMemo, Suspense, useRef } from "react";
 import { api } from "@/src/lib/axios";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -88,13 +88,14 @@ function OffPlansPageContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [developers, setDevelopers] = useState([]);
   const [developerSearch, setDeveloperSearch] = useState("");
   const [searchingDevelopers, setSearchingDevelopers] = useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -111,13 +112,19 @@ function OffPlansPageContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async (page = 1) => {
-    setLoading(true);
+  const fetchproperty = useCallback(async (page = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setCurrentPage(1);
+      setHasMore(true);
+    }
 
     const queryParams = new URLSearchParams({
       sort_order: "desc",
       page: page.toString(),
-      size: "12",
+      size: "6",
     });
 
     // Add filter parameters
@@ -131,21 +138,22 @@ function OffPlansPageContent() {
       const res = await getAllProperties(queryParams.toString());
       const newProperties = res?.projects || [];
       
-      setProperty(newProperties);
+      if (append) {
+        setProperty(prev => [...prev, ...newProperties]);
+      } else {
+        setProperty(newProperties);
+      }
+      
       setCurrentPage(page);
       
-      // Calculate total pages based on total count
-      const total = res?.total_count || res?.total || newProperties.length;
-      setTotalCount(total);
-      
-      // Ensure we have at least 2 pages for testing if we have more than 12 properties
-      const calculatedPages = Math.ceil(total / 12);
-      const finalPages = total > 12 ? calculatedPages : Math.max(calculatedPages, 2);
-      setTotalPages(finalPages);
+      // Check if there are more pages
+      const hasMoreData = newProperties.length === 6;
+      setHasMore(hasMoreData);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -190,7 +198,7 @@ function OffPlansPageContent() {
   }, [router]);
 
   const handleSearch = useCallback(() => {
-    fetchproperty(1);
+    fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
 
@@ -212,13 +220,11 @@ function OffPlansPageContent() {
     setDevelopers([]);
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    if (page >= 1 && page <= totalPages && page !== currentPage) {
-      fetchproperty(page);
-      // Scroll to top when changing pages
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchproperty(currentPage + 1, true);
     }
-  }, [fetchproperty, totalPages, currentPage]);
+  }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
@@ -233,15 +239,33 @@ function OffPlansPageContent() {
     setShowFilters((prev) => !prev);
   }, []);
 
-  // Initial API call and when filters change
+  // Initial load and when filters change
   useEffect(() => {
-    fetchproperty(1);
-  }, [filters, fetchproperty]);
+    fetchproperty(1, false);
+  }, [filters]);
 
-  // Initial API call on page load
+  // Intersection Observer for infinite scroll
   useEffect(() => {
-    fetchproperty(1);
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = observerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMore]);
 
   // Handle query parameters from hero section
   useEffect(() => {
@@ -802,82 +826,23 @@ function OffPlansPageContent() {
           ))}
         </div>
         
-        {/* Properties count indicator */}
-        {/* <div className="text-center py-4 text-sm text-gray-500">
-          Displaying {property.length} properties on page {currentPage}
-        </div> */}
+        {/* Loading more indicator */}
+        {loadingMore && (
+          <div className="flex justify-center items-center py-8">
+            <Loader className="animate-spin h-8 w-8 text-primary" />
+            <span className="ml-2 text-gray-600">Loading more properties...</span>
+          </div>
+        )}
         
-        {/* Pagination - Always show when there are properties */}
-        {!loading && property.length > 0 && (
-          <div className="flex flex-col items-center gap-6 py-12 bg-white border-t border-gray-200 mx-4 mt-8 shadow-lg">
-            {/* Property count */}
-            <div className="text-sm text-gray-600 font-medium">
-              Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalCount)} of {totalCount} properties
-            </div>
-            
-            {/* Simple Previous/Next buttons - Always show for testing */}
-            <div className="flex items-center gap-6">
-              <Button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                variant="outline"
-                size="lg"
-                className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
-              >
-                <Icon icon="lucide:chevron-left" className="w-5 h-5" />
-                Previous
-              </Button>
-              
-              {/* Current page indicator */}
-              <div className="flex items-center gap-2 px-6 py-3 bg-primary/15 rounded-xl border border-primary/20">
-                <span className="text-base font-semibold text-primary">
-                  Page {currentPage} of {totalPages}
-                </span>
-              </div>
-              
-              <Button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                variant="outline"
-                size="lg"
-                className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
-              >
-                Next
-                <Icon icon="lucide:chevron-right" className="w-5 h-5" />
-              </Button>
-            </div>
-            
-            {/* Show message about pagination */}
-            {/* <div className="text-center py-4">
-              <div className="text-sm text-gray-600 bg-gray-50 px-6 py-3 rounded-lg border border-gray-200">
-                {totalPages > 1 
-                  ? `Navigate through ${totalPages} pages of properties using the Previous/Next buttons above`
-                  : `All ${totalCount} properties are displayed on this page`
-                }
-              </div>
-            </div> */}
-            
-            {/* Page numbers for quick navigation */}
-            {/* {totalPages <= 10 && (
-              <div className="flex items-center gap-2 mt-2">
-                <span className="text-sm text-gray-500 mr-2">Go to page:</span>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <Button
-                    key={i + 1}
-                    onClick={() => handlePageChange(i + 1)}
-                    variant={currentPage === i + 1 ? "default" : "outline"}
-                    size="sm"
-                    className={`w-10 h-10 rounded-full font-semibold transition-all duration-200 ${
-                      currentPage === i + 1
-                        ? "bg-primary text-white hover:bg-primary/90 shadow-md"
-                        : "bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-300 hover:border-primary hover:text-primary"
-                    }`}
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-              </div>
-            )} */}
+        {/* Intersection Observer target */}
+        {!loading && (
+          <div ref={observerRef} className="h-9" />
+        )}
+        
+        {/* No more properties message */}
+        {!hasMore && property.length > 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No more properties to load
           </div>
         )}
         

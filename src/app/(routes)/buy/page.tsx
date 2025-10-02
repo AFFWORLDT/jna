@@ -20,7 +20,13 @@ import { BuyCard } from "@/src/view/buy/buyCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
-import React, { useCallback, useEffect, useMemo, Suspense } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  Suspense,
+  useRef,
+} from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -34,12 +40,7 @@ const COMPLETION_STATUS_OPTIONS = [
   { label: "Off Plan Primary", value: "off_plan_primary" },
 ];
 
-const PROPERTY_TYPES = [
-  "APARTMENT",
-  "PENTHOUSE",
-  "TOWNHOUSE",
-  "VILLA",
-];
+const PROPERTY_TYPES = ["APARTMENT", "PENTHOUSE", "TOWNHOUSE", "VILLA"];
 
 // Property type mapping for hero section
 const HERO_PROPERTY_TYPES = [
@@ -100,13 +101,14 @@ function BuyContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingMore, setLoadingMore] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [totalCount, setTotalCount] = React.useState(0);
+  const [hasMore, setHasMore] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
   const [filters, setFilters] = React.useState({
@@ -123,46 +125,76 @@ function BuyContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async (page = 1) => {
-    setLoading(true);
+  const fetchproperty = useCallback(
+    async (page = 1, append = false) => {
+      console.log("fetchproperty called:", {
+        page,
+        append,
+        loadingMore,
+        hasMore,
+      });
 
-    const queryParams = new URLSearchParams({
-      sort_order: "desc",
-      page: page.toString(),
-      size: "12",
-      status:"ACTIVE"
-    });
-
-    // Add filter parameters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value && value !== "any" && value !== "all") {
-        queryParams.append(key, value);
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+        setCurrentPage(1);
+        setHasMore(true);
       }
-    });
 
-    const finalQueryString = queryParams.toString();
+      const queryParams = new URLSearchParams({
+        sort_order: "desc",
+        page: page.toString(),
+        size: "6",
+        status: "ACTIVE",
+      });
 
-    try {
-      const res = await getAllBuyProperties(finalQueryString);
-      const newProperties = res?.properties || [];
-      
-      setProperty(newProperties);
-      setCurrentPage(page);
-      
-      // Calculate total pages based on total count
-      const total = res?.total_count || res?.total || newProperties.length;
-      setTotalCount(total);
-      
-      // Ensure we have at least 2 pages for testing if we have more than 12 properties
-      const calculatedPages = Math.ceil(total / 12);
-      const finalPages = total > 12 ? calculatedPages : Math.max(calculatedPages, 2);
-      setTotalPages(finalPages);
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [filters]);
+      // Add filter parameters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value !== "any" && value !== "all") {
+          queryParams.append(key, value);
+        }
+      });
+
+      const finalQueryString = queryParams.toString();
+      console.log("Making API call with params:", finalQueryString);
+
+      try {
+        const res = await getAllBuyProperties(finalQueryString);
+        const newProperties = res?.properties || [];
+
+        console.log("API response:", {
+          totalProperties: newProperties.length,
+          currentPropertyCount: property.length,
+          append,
+        });
+
+        if (append) {
+          setProperty((prev) => {
+            const updated = [...prev, ...newProperties];
+            console.log("Appended properties. New total:", updated.length);
+            return updated;
+          });
+        } else {
+          setProperty(newProperties);
+          console.log("Set new properties:", newProperties.length);
+        }
+
+        setCurrentPage(page);
+
+        // Check if there are more pages
+        const hasMoreData = newProperties.length === 6;
+        console.log("Has more data:", hasMoreData);
+        setHasMore(hasMoreData);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    },
+    [filters]
+  );
 
   // Debounced developer search
   const searchDevelopers = useCallback((searchTerm: string) => {
@@ -197,8 +229,15 @@ function BuyContent() {
     const refNumber = searchParams.get("ref_number");
     const minPrice = searchParams.get("min_price");
     const maxPrice = searchParams.get("max_price");
-    
-    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+
+    if (
+      propertyType ||
+      location ||
+      bedrooms ||
+      refNumber ||
+      minPrice ||
+      maxPrice
+    ) {
       const newFilters = {
         property_type: propertyType || "any",
         location: location || "",
@@ -207,10 +246,10 @@ function BuyContent() {
         min_price: minPrice || "any",
         max_price: maxPrice || "any",
       };
-      
-      setFilters(prev => ({
+
+      setFilters((prev) => ({
         ...prev,
-        ...newFilters
+        ...newFilters,
       }));
     }
   }, [searchParams]);
@@ -220,19 +259,19 @@ function BuyContent() {
       setFilters((prev) => ({ ...prev, [key]: value }));
 
       // Navigate when listing_type changes
-    if (key === "listing_type") {
-      if (value === "RENT") {
-        router.push("/rent");
-      } else if (value === "SELL") {
-        router.push("/buy");
+      if (key === "listing_type") {
+        if (value === "RENT") {
+          router.push("/rent");
+        } else if (value === "SELL") {
+          router.push("/buy");
+        }
       }
-    }
     },
     [router]
   );
 
   const handleSearch = useCallback(() => {
-    fetchproperty(1);
+    fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
 
@@ -254,13 +293,15 @@ function BuyContent() {
     setDevelopers([]);
   }, []);
 
-  const handlePageChange = useCallback((page: number) => {
-    if (page >= 1 && page <= totalPages && page !== currentPage) {
-      fetchproperty(page);
-      // Scroll to top when changing pages
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  const loadMore = useCallback(() => {
+    console.log("loadMore called:", { loadingMore, hasMore, currentPage });
+    if (!loadingMore && hasMore) {
+      console.log("Fetching next page:", currentPage + 1);
+      fetchproperty(currentPage + 1, true);
+    } else {
+      console.log("Load more blocked:", { loadingMore, hasMore });
     }
-  }, [fetchproperty, totalPages, currentPage]);
+  }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
@@ -275,15 +316,49 @@ function BuyContent() {
     setShowFilters((prev) => !prev);
   }, []);
 
-  // Single useEffect to handle API calls - only when filters change
+  // Initial load and when filters change
   useEffect(() => {
-    fetchproperty(1);
-  }, [filters, fetchproperty]);
+    fetchproperty(1, false);
+  }, [filters]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        console.log("Intersection observer triggered:", {
+          isIntersecting: entries[0].isIntersecting,
+          hasMore,
+          loadingMore,
+          currentPage,
+          propertyLength: property.length,
+        });
+
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          console.log("Loading more properties - Page:", currentPage + 1);
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = observerRef.current;
+    if (currentRef) {
+      console.log("Setting up intersection observer");
+      observer.observe(currentRef);
+    } else {
+      console.log("Observer ref not found");
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMore, currentPage, property.length]);
 
   React.useEffect(() => {
     searchDevelopers(developerSearch);
   }, [developerSearch, searchDevelopers]);
-
 
   // Close developer dropdown when clicking outside
   React.useEffect(() => {
@@ -335,10 +410,7 @@ function BuyContent() {
             variant="outline"
             className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
           >
-            <Icon
-              icon="lucide:x-circle"
-              className="text-gray-600 w-5 h-5"
-            />
+            <Icon icon="lucide:x-circle" className="text-gray-600 w-5 h-5" />
           </Button>
           <Button
             onClick={handleSearch}
@@ -350,7 +422,13 @@ function BuyContent() {
         </div>
       </div>
     ),
-    [filters.location, handleFilterChange, toggleFilters, handleSearch, clearAllFilters]
+    [
+      filters.location,
+      handleFilterChange,
+      toggleFilters,
+      handleSearch,
+      clearAllFilters,
+    ]
   );
 
   const PropertyTypeSelect = useMemo(
@@ -430,7 +508,9 @@ function BuyContent() {
             <div>
               <Select
                 value={filters.listing_type}
-                onValueChange={(value) => handleFilterChange("listing_type", value)}
+                onValueChange={(value) =>
+                  handleFilterChange("listing_type", value)
+                }
               >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Type" />
@@ -563,7 +643,10 @@ function BuyContent() {
                 className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg font-medium transition-all duration-200"
                 title="Search"
               >
-                <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
+                <Icon
+                  icon="iconamoon:search-fill"
+                  className="text-white w-5 h-5"
+                />
               </Button>
             </div>
           </div>
@@ -597,7 +680,9 @@ function BuyContent() {
                 <Input
                   placeholder="City, building or community"
                   value={filters.location}
-                  onChange={(e) => handleFilterChange("location", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("location", e.target.value)
+                  }
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
                 <Icon
@@ -612,7 +697,9 @@ function BuyContent() {
               <label className="text-sm font-medium text-gray-700">Type</label>
               <Select
                 value={filters.listing_type}
-                onValueChange={(value) => handleFilterChange("listing_type", value)}
+                onValueChange={(value) =>
+                  handleFilterChange("listing_type", value)
+                }
               >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
@@ -899,57 +986,36 @@ function BuyContent() {
               />
             ))}
           </div>
-          
-          {/* Pagination - Always show when there are properties */}
-          {!loading && property.length > 0 && (
-            <div className="flex flex-col items-center gap-6 py-12 bg-white border-t border-gray-200 mx-4 mt-8 shadow-lg">
-              {/* Property count */}
-              <div className="text-sm text-gray-600 font-medium">
-                Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalCount)} of {totalCount} properties
-              </div>
-              
-              {/* Simple Previous/Next buttons - Always show for testing */}
-              <div className="flex items-center gap-6">
-                <Button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  variant="outline"
-                  size="lg"
-                  className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
-                >
-                  <Icon icon="lucide:chevron-left" className="w-5 h-5" />
-                  Previous
-                </Button>
-                
-                {/* Current page indicator */}
-                <div className="flex items-center gap-2 px-6 py-3 bg-primary/15 rounded-xl border border-primary/20">
-                  <span className="text-base font-semibold text-primary">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                </div>
-                
-                <Button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  variant="outline"
-                  size="lg"
-                  className="flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-50 border-2 border-gray-300 text-gray-700 font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:border-primary hover:text-primary shadow-md hover:shadow-lg"
-                >
-                  Next
-                  <Icon icon="lucide:chevron-right" className="w-5 h-5" />
-                </Button>
-              </div>
+
+          {/* Loading more indicator */}
+          {loadingMore && (
+            <div className="flex justify-center items-center py-8">
+              <Loader className="animate-spin h-8 w-8 text-primary" />
+              <span className="ml-2 text-gray-600">
+                Loading more properties...
+              </span>
             </div>
           )}
-          
+
+          {/* Intersection Observer target */}
+          {!loading && <div ref={observerRef} className="h-8 " />}
+
+          {/* No more properties message */}
+          {!hasMore && property.length > 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No more properties to load
+            </div>
+          )}
+
           {/* No properties message */}
           {!loading && property.length === 0 && (
             <div className="text-center py-12 text-gray-500">
-              <div className="text-lg font-medium mb-2">No properties found</div>
+              <div className="text-lg font-medium mb-2">
+                No properties found
+              </div>
               <div className="text-sm">Try adjusting your search filters</div>
             </div>
           )}
-          
         </>
       )}
     </div>
@@ -958,13 +1024,15 @@ function BuyContent() {
 
 function Buy() {
   return (
-    <Suspense fallback={
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <PropertyCardSkeleton key={i} />
-        ))}
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PropertyCardSkeleton key={i} />
+          ))}
+        </div>
+      }
+    >
       <BuyContent />
     </Suspense>
   );
