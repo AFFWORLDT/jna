@@ -20,7 +20,7 @@ import { RentCard } from "@/src/view/rent/rentCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
-import React, { useCallback, useMemo, Suspense } from "react";
+import React, { useCallback, useMemo, Suspense, useRef } from "react";
 import { api } from "@/src/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -58,10 +58,14 @@ function RentContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
   const [showFilters, setShowFilters] = React.useState(false);
   const [developers, setDevelopers] = React.useState([]);
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
+  const observerRef = useRef<HTMLDivElement>(null);
   
   // Filter states
   const [filters, setFilters] = React.useState({
@@ -78,13 +82,19 @@ function RentContent() {
     ref_number: ""
   });
 
-  const fetchproperty = useCallback(async () => {
-    setLoading(true);
+  const fetchproperty = useCallback(async (page = 1, append = false) => {
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setCurrentPage(1);
+      setHasMore(true);
+    }
     
     const queryParams = new URLSearchParams({
       sort_order: "desc",
-      page: "1",
-      size: "24",
+      page: page.toString(),
+      size: "6",
       status:"ACTIVE"
     });
     
@@ -97,11 +107,24 @@ function RentContent() {
     
     try {
       const res = await getAllBuyProperties(queryParams.toString());
-      setProperty(res?.properties || []);
+      const newProperties = res?.properties || [];
+      
+      if (append) {
+        setProperty(prev => [...prev, ...newProperties]);
+      } else {
+        setProperty(newProperties);
+      }
+      
+      setCurrentPage(page);
+      
+      // Check if there are more pages
+      const hasMoreData = newProperties.length === 6;
+      setHasMore(hasMoreData);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -142,9 +165,15 @@ function RentContent() {
   }, [router]);
 
   const handleSearch = useCallback(() => {
-    fetchproperty();
+    fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
+
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchproperty(currentPage + 1, true);
+    }
+  }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
   const clearAllFilters = useCallback(() => {
     setFilters({
@@ -174,17 +203,33 @@ function RentContent() {
     setShowFilters(prev => !prev);
   }, []);
 
-  // Initial API call and when filters change
+  // Initial load and when filters change
   React.useEffect(() => {
-    console.log("Rent page - Initial load or filters changed, calling API with:", filters);
-    fetchproperty();
-  }, [filters, fetchproperty]);
+    fetchproperty(1, false);
+  }, [filters]);
 
-  // Initial API call on page load
+  // Intersection Observer for infinite scroll
   React.useEffect(() => {
-    console.log("Rent page - Page loaded, making initial API call");
-    fetchproperty();
-  }, []);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = observerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loadingMore, loadMore]);
 
   // Handle query parameters from hero section
   React.useEffect(() => {
@@ -726,22 +771,50 @@ function RentContent() {
       </Link>
       </p>
 
-      {loading || property.length === 0 ? (
-        <div className="text-center py-12">
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
           {Array.from({ length: 6 }).map((_, i) => (
               <PropertyCardSkeleton key={i} />
             ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
-          {property?.map((item: any, index: number) => (
-            <RentCard
-              key={item.id ?? index}
-              data={item}
-              onFavorite={handleFavorite}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
+            {property?.map((item: any, index: number) => (
+              <RentCard
+                key={item.id ?? index}
+                data={item}
+                onFavorite={handleFavorite}
+              />
+            ))}
+          </div>
+          
+          {/* Loading more indicator */}
+          {loadingMore && (
+            <div className="flex justify-center items-center py-8">
+              <Loader className="animate-spin h-8 w-8 text-primary" />
+              <span className="ml-2 text-gray-600">Loading more properties...</span>
+            </div>
+          )}
+          
+          {/* Intersection Observer target */}
+          {!loading && <div ref={observerRef} className="h-8 " />}
+          
+          {/* No more properties message */}
+          {!hasMore && property.length > 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No more properties to load
+            </div>
+          )}
+          
+          {/* No properties message */}
+          {!loading && property.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <div className="text-lg font-medium mb-2">No properties found</div>
+              <div className="text-sm">Try adjusting your search filters</div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
