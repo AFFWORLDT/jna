@@ -34,29 +34,56 @@ const COMPLETION_STATUS_OPTIONS = [
   { label: "Off Plan Primary", value: "off_plan_primary" },
 ];
 
-const PROPERTY_TYPES = [
-  "APARTMENT",
-  "PENTHOUSE",
-  "TOWNHOUSE",
-  "VILLA",
-];
+const PROPERTY_TYPES = ["APARTMENT", "PENTHOUSE", "TOWNHOUSE", "VILLA"];
 
 const RENT_PRICE_OPTIONS = [
-  "5000", "10000", "15000", "20000", "25000", "30000", "35000", "40000",
-  "45000", "50000", "60000", "70000", "80000", "90000", "100000", "120000",
-  "150000", "200000", "250000", "300000", "400000", "500000"
+  "5000",
+  "10000",
+  "15000",
+  "20000",
+  "25000",
+  "30000",
+  "35000",
+  "40000",
+  "45000",
+  "50000",
+  "60000",
+  "70000",
+  "80000",
+  "90000",
+  "100000",
+  "120000",
+  "150000",
+  "200000",
+  "250000",
+  "300000",
+  "400000",
+  "500000",
 ];
 
 const BEDROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
 const BATHROOM_OPTIONS = ["any", "1", "2", "3", "4", "5+"];
 const HANDOVER_YEAR_OPTIONS = [
-  "any", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035"
+  "any",
+  "2024",
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "2030",
+  "2031",
+  "2032",
+  "2033",
+  "2034",
+  "2035",
 ];
 
 function RentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState([]);
+  const [totalProperties, setTotalProperties] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [loadingMore, setLoadingMore] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -66,7 +93,7 @@ function RentContent() {
   const [developerSearch, setDeveloperSearch] = React.useState("");
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
   const observerRef = useRef<HTMLDivElement>(null);
-  
+
   // Filter states
   const [filters, setFilters] = React.useState({
     listing_type: "RENT",
@@ -79,71 +106,80 @@ function RentContent() {
     bedrooms: "any",
     bathrooms: "any",
     handover_year: "any",
-    ref_number: ""
+    ref_number: "",
   });
 
-  const fetchproperty = useCallback(async (page = 1, append = false) => {
-    console.log("fetchproperty called:", { page, append, loadingMore, hasMore });
-    
-    if (append) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-      setCurrentPage(1);
-      setHasMore(true);
-    }
-    
-    const queryParams = new URLSearchParams({
-      sort_order: "desc",
-      page: page.toString(),
-      size: "6",
-      status:"ACTIVE"
-    });
-    
-    // Add filter parameters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value && value !== "any" && value !== "all") {
-        queryParams.append(key, value);
-      }
-    });
-
-    const finalQueryString = queryParams.toString();
-    console.log("Making API call with params:", finalQueryString);
-    
-    try {
-      const res = await getAllBuyProperties(finalQueryString);
-      const newProperties = res?.properties || [];
-      
-      console.log("API response:", { 
-        totalProperties: newProperties.length, 
-        currentPropertyCount: property.length,
-        append 
+  const fetchproperty = useCallback(
+    async (page = 1, append = false) => {
+      console.log("fetchproperty called:", {
+        page,
+        append,
+        loadingMore,
+        hasMore,
       });
-      
+
       if (append) {
-        setProperty(prev => {
-          const updated = [...prev, ...newProperties];
-          console.log("Appended properties. New total:", updated.length);
-          return updated;
-        });
+        setLoadingMore(true);
       } else {
-        setProperty(newProperties);
-        console.log("Set new properties:", newProperties.length);
+        setLoading(true);
+        setCurrentPage(1);
+        setHasMore(true);
       }
-      
-      setCurrentPage(page);
-      
-      // Check if there are more pages
-      const hasMoreData = newProperties.length === 6;
-      console.log("Has more data:", hasMoreData);
-      setHasMore(hasMoreData);
-    } catch (error) {
-      console.error("Error fetching properties:", error);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
-    }
-  }, [filters]);
+
+      const queryParams = new URLSearchParams({
+        sort_order: "desc",
+        page: page.toString(),
+        size: "6",
+        status: "ACTIVE",
+      });
+
+      // Add filter parameters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value && value !== "any" && value !== "all") {
+          queryParams.append(key, value);
+        }
+      });
+
+      const finalQueryString = queryParams.toString();
+      console.log("Making API call with params:", finalQueryString);
+
+      try {
+        const res = await getAllBuyProperties(finalQueryString);
+        const newProperties = res?.properties || [];
+
+        setTotalProperties(res?.totalProperties || 0);
+        console.log("API response:", {
+          totalProperties: newProperties.length,
+          currentPropertyCount: property.length,
+          append,
+        });
+
+        if (append) {
+          setProperty((prev) => {
+            const updated = [...prev, ...newProperties];
+            console.log("Appended properties. New total:", updated.length);
+            return updated;
+          });
+        } else {
+          setProperty(newProperties);
+          console.log("Set new properties:", newProperties.length);
+        }
+
+        setCurrentPage(page);
+
+        // Check if there are more pages
+        const hasMoreData = newProperties.length === 6;
+        console.log("Has more data:", hasMoreData);
+        setHasMore(hasMoreData);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    },
+    [filters]
+  );
 
   // Debounced developer search
   const searchDevelopers = useCallback((searchTerm: string) => {
@@ -155,7 +191,9 @@ function RentContent() {
     setSearchingDevelopers(true);
     const timeoutId = setTimeout(async () => {
       try {
-        const response = await api.get(`/properties/get_developers?name=${searchTerm}`);
+        const response = await api.get(
+          `/properties/get_developers?name=${searchTerm}`
+        );
         setDevelopers(response.data?.developers || response.data || []);
       } catch (error) {
         console.error("Error searching developers:", error);
@@ -168,18 +206,21 @@ function RentContent() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const handleFilterChange = useCallback((key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-    
-    // Navigate when listing_type changes
-    if (key === "listing_type") {
-      if (value === "SELL") {
-        router.push("/buy");
-      } else if (value === "RENT") {
-        router.push("/rent");
+  const handleFilterChange = useCallback(
+    (key: string, value: string) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+
+      // Navigate when listing_type changes
+      if (key === "listing_type") {
+        if (value === "SELL") {
+          router.push("/buy");
+        } else if (value === "RENT") {
+          router.push("/rent");
+        }
       }
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
   const handleSearch = useCallback(() => {
     fetchproperty(1, false);
@@ -214,14 +255,17 @@ function RentContent() {
     setDevelopers([]);
   }, []);
 
-  const handleDeveloperSelect = useCallback((developer: any) => {
-    handleFilterChange("developer_id", developer.id);
-    setDeveloperSearch(developer.name);
-    setDevelopers([]);
-  }, [handleFilterChange]);
+  const handleDeveloperSelect = useCallback(
+    (developer: any) => {
+      handleFilterChange("developer_id", developer.id);
+      setDeveloperSearch(developer.name);
+      setDevelopers([]);
+    },
+    [handleFilterChange]
+  );
 
   const toggleFilters = useCallback(() => {
-    setShowFilters(prev => !prev);
+    setShowFilters((prev) => !prev);
   }, []);
 
   // Initial load and when filters change
@@ -238,9 +282,9 @@ function RentContent() {
           hasMore,
           loadingMore,
           currentPage,
-          propertyLength: property.length
+          propertyLength: property.length,
         });
-        
+
         if (entries[0].isIntersecting && hasMore && !loadingMore) {
           console.log("Loading more properties - Page:", currentPage + 1);
           loadMore();
@@ -272,17 +316,24 @@ function RentContent() {
     const refNumber = searchParams.get("ref_number");
     const minPrice = searchParams.get("min_price");
     const maxPrice = searchParams.get("max_price");
-    
+
     console.log("Rent page - Query parameters received:", {
       propertyType,
       location,
       bedrooms,
       refNumber,
       minPrice,
-      maxPrice
+      maxPrice,
     });
-    
-    if (propertyType || location || bedrooms || refNumber || minPrice || maxPrice) {
+
+    if (
+      propertyType ||
+      location ||
+      bedrooms ||
+      refNumber ||
+      minPrice ||
+      maxPrice
+    ) {
       const newFilters = {
         property_type: propertyType || "any",
         location: location || "",
@@ -291,14 +342,14 @@ function RentContent() {
         min_price: minPrice || "any",
         max_price: maxPrice || "any",
       };
-      
+
       console.log("Rent page - Setting new filters:", newFilters);
       console.log("Rent page - Current filters before update:", filters);
-      
-      setFilters(prev => {
+
+      setFilters((prev) => {
         const updatedFilters = {
           ...prev,
-          ...newFilters
+          ...newFilters,
         };
         console.log("Rent page - Updated filters:", updatedFilters);
         return updatedFilters;
@@ -314,14 +365,14 @@ function RentContent() {
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('.developer-search')) {
+      if (!target.closest(".developer-search")) {
         setDevelopers([]);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -331,62 +382,82 @@ function RentContent() {
   }, []);
 
   // Memoized components
-  const FilterButton = useMemo(() => (
-    <div className="block md:hidden py-20">
-      <div className="flex items-center gap-3 p-4 backdrop-blur-md">
-        <div className="flex-1">
-          <Input
-            placeholder="Location or Project"
-            value={filters.location}
-            onChange={(e) => handleFilterChange("location", e.target.value)}
-            className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
-          />
+  const FilterButton = useMemo(
+    () => (
+      <div className="block md:hidden py-20">
+        <div className="flex items-center gap-3 p-4 backdrop-blur-md">
+          <div className="flex-1">
+            <Input
+              placeholder="Location or Project"
+              value={filters.location}
+              onChange={(e) => handleFilterChange("location", e.target.value)}
+              className="w-full text-black bg-white border border-gray-300 placeholder:text-gray-500 h-12"
+            />
+          </div>
+          <Button
+            onClick={toggleFilters}
+            size="lg"
+            variant="outline"
+            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
+          >
+            <Icon
+              icon="lucide:sliders-horizontal"
+              className="text-gray-600 w-5 h-5"
+            />
+          </Button>
+          <Button
+            onClick={clearAllFilters}
+            size="lg"
+            variant="outline"
+            className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
+          >
+            <Icon icon="lucide:x-circle" className="text-gray-600 w-5 h-5" />
+          </Button>
+          <Button
+            onClick={handleSearch}
+            size="lg"
+            className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg rounded-lg transition-all duration-200"
+          >
+            <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
+          </Button>
         </div>
-        <Button
-          onClick={toggleFilters}
-          size="lg"
-          variant="outline"
-          className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
-        >
-          <Icon icon="lucide:sliders-horizontal" className="text-gray-600 w-5 h-5" />
-        </Button>
-        <Button
-          onClick={clearAllFilters}
-          size="lg"
-          variant="outline"
-          className="h-12 w-12 bg-white hover:bg-gray-50 border border-gray-300 flex items-center justify-center rounded-lg transition-all duration-200"
-        >
-          <Icon icon="lucide:x-circle" className="text-gray-600 w-5 h-5" />
-        </Button>
-        <Button
-          onClick={handleSearch}
-          size="lg"
-          className="h-12 w-12 bg-primary hover:bg-primary/90 flex items-center justify-center shadow-lg rounded-lg transition-all duration-200"
-        >
-          <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
-        </Button>
       </div>
-    </div>
-  ), [filters.location, handleFilterChange, toggleFilters, handleSearch, clearAllFilters]);
+    ),
+    [
+      filters.location,
+      handleFilterChange,
+      toggleFilters,
+      handleSearch,
+      clearAllFilters,
+    ]
+  );
 
-  const PropertyTypeSelect = useMemo(() => (
-    <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
-      <SelectTrigger className="w-full sm:w-40 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent className="bg-white">
-        <SelectItem value="any">Property Type</SelectItem>
-        {PROPERTY_TYPES.map(type => (
-          <SelectItem key={type} value={type}>{type}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  ), [filters.property_type, handleFilterChange]);
+  const PropertyTypeSelect = useMemo(
+    () => (
+      <Select
+        value={filters.property_type}
+        onValueChange={(value) => handleFilterChange("property_type", value)}
+      >
+        <SelectTrigger className="w-full sm:w-40 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectItem value="any">Property Type</SelectItem>
+          {PROPERTY_TYPES.map((type) => (
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    ),
+    [filters.property_type, handleFilterChange]
+  );
 
   const PriceSelect = useMemo(() => {
     const MinPriceSelect = () => (
-      <Select 
-        value={filters.min_price} 
+      <Select
+        value={filters.min_price}
         onValueChange={(value) => handleFilterChange("min_price", value)}
       >
         <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
@@ -394,7 +465,7 @@ function RentContent() {
         </SelectTrigger>
         <SelectContent className="bg-white">
           <SelectItem value="any">Min Price</SelectItem>
-          {RENT_PRICE_OPTIONS.map(price => (
+          {RENT_PRICE_OPTIONS.map((price) => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
             </SelectItem>
@@ -404,8 +475,8 @@ function RentContent() {
     );
 
     const MaxPriceSelect = () => (
-      <Select 
-        value={filters.max_price} 
+      <Select
+        value={filters.max_price}
         onValueChange={(value) => handleFilterChange("max_price", value)}
       >
         <SelectTrigger className="w-full sm:w-28 bg-white border-0 rounded-md h-12 text-gray-900 focus:ring-0 focus:ring-offset-0 px-4">
@@ -413,7 +484,7 @@ function RentContent() {
         </SelectTrigger>
         <SelectContent className="bg-white">
           <SelectItem value="any">Max Price</SelectItem>
-          {RENT_PRICE_OPTIONS.map(price => (
+          {RENT_PRICE_OPTIONS.map((price) => (
             <SelectItem key={price} value={price}>
               {parseInt(price).toLocaleString()}
             </SelectItem>
@@ -428,14 +499,19 @@ function RentContent() {
   return (
     <div>
       <section className="bg-[#141442] px-4 lg:h-72 h-auto flex justify-center items-end lg:py-16 py-6">
-        <div className="container mx-auto " >
+        <div className="container mx-auto ">
           {FilterButton}
 
           {/* Desktop Search Form */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-8 gap-4 p-6 backdrop-blur-md">
             {/* Listing Type Filter */}
             <div>
-              <Select value={filters.listing_type} onValueChange={(value) => handleFilterChange("listing_type", value)}>
+              <Select
+                value={filters.listing_type}
+                onValueChange={(value) =>
+                  handleFilterChange("listing_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
@@ -458,14 +534,21 @@ function RentContent() {
 
             {/* Property Type */}
             <div>
-              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+              <Select
+                value={filters.property_type}
+                onValueChange={(value) =>
+                  handleFilterChange("property_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Property Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Property Type</SelectItem>
-                  {PROPERTY_TYPES.map(type => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  {PROPERTY_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -473,13 +556,18 @@ function RentContent() {
 
             {/* Min Price */}
             <div>
-              <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+              <Select
+                value={filters.min_price}
+                onValueChange={(value) =>
+                  handleFilterChange("min_price", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Min Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Min Price</SelectItem>
-                  {RENT_PRICE_OPTIONS.map(price => (
+                  {RENT_PRICE_OPTIONS.map((price) => (
                     <SelectItem key={price} value={price}>
                       AED {parseInt(price).toLocaleString()}
                     </SelectItem>
@@ -490,13 +578,18 @@ function RentContent() {
 
             {/* Max Price */}
             <div>
-              <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+              <Select
+                value={filters.max_price}
+                onValueChange={(value) =>
+                  handleFilterChange("max_price", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Max Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Max Price</SelectItem>
-                  {RENT_PRICE_OPTIONS.map(price => (
+                  {RENT_PRICE_OPTIONS.map((price) => (
                     <SelectItem key={price} value={price}>
                       AED {parseInt(price).toLocaleString()}
                     </SelectItem>
@@ -507,20 +600,23 @@ function RentContent() {
 
             {/* Beds */}
             <div>
-              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+              <Select
+                value={filters.bedrooms}
+                onValueChange={(value) => handleFilterChange("bedrooms", value)}
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 text-black h-14">
                   <SelectValue placeholder="Beds" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="any">Beds</SelectItem>
-                  {BEDROOM_OPTIONS.slice(1).map(bed => (
-                    <SelectItem key={bed} value={bed}>{bed === "5+" ? "5+ Beds" : `${bed} Bed`}</SelectItem>
+                  {BEDROOM_OPTIONS.slice(1).map((bed) => (
+                    <SelectItem key={bed} value={bed}>
+                      {bed === "5+" ? "5+ Beds" : `${bed} Bed`}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-
-
 
             {/* Action Buttons */}
             <div className="flex gap-3">
@@ -541,13 +637,16 @@ function RentContent() {
               >
                 <Icon icon="lucide:x-circle" className="w-5 h-5" />
               </Button>
-              
+
               <Button
                 onClick={handleSearch}
                 className="h-14 w-14 bg-primary hover:bg-primary/90 text-white flex items-center justify-center shadow-lg font-medium transition-all duration-200"
                 title="Search"
               >
-                <Icon icon="iconamoon:search-fill" className="text-white w-5 h-5" />
+                <Icon
+                  icon="iconamoon:search-fill"
+                  className="text-white w-5 h-5"
+                />
               </Button>
             </div>
           </div>
@@ -570,20 +669,24 @@ function RentContent() {
               </Button>
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-6 py-4">
             {/* Search Input - Hidden on large screens since it's shown in desktop form */}
             <div className="space-y-2 md:hidden">
-              <label className="text-sm font-medium text-gray-700">Location</label>
+              <label className="text-sm font-medium text-gray-700">
+                Location
+              </label>
               <div className="relative">
                 <Input
                   placeholder="City, building or community"
                   value={filters.location}
-                  onChange={(e) => handleFilterChange("location", e.target.value)}
+                  onChange={(e) =>
+                    handleFilterChange("location", e.target.value)
+                  }
                   className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 placeholder:text-gray-600 focus-visible:ring-2 focus-visible:ring-primary"
                 />
-                <Icon 
-                  icon="heroicons:magnifying-glass" 
+                <Icon
+                  icon="heroicons:magnifying-glass"
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
                 />
               </div>
@@ -592,7 +695,12 @@ function RentContent() {
             {/* Listing Type Filter - Hidden on large screens since it's shown in desktop form */}
             <div className="space-y-2 md:hidden">
               <label className="text-sm font-medium text-gray-700">Type</label>
-              <Select value={filters.listing_type} onValueChange={(value) => handleFilterChange("listing_type", value)}>
+              <Select
+                value={filters.listing_type}
+                onValueChange={(value) =>
+                  handleFilterChange("listing_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -605,15 +713,24 @@ function RentContent() {
 
             {/* Property Type - Hidden on large screens since it's shown in desktop form */}
             <div className="space-y-2 md:hidden">
-              <label className="text-sm font-medium text-gray-700">Property Type</label>
-              <Select value={filters.property_type} onValueChange={(value) => handleFilterChange("property_type", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Property Type
+              </label>
+              <Select
+                value={filters.property_type}
+                onValueChange={(value) =>
+                  handleFilterChange("property_type", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white max-h-60">
                   <SelectItem value="any">Any Property Type</SelectItem>
-                  {PROPERTY_TYPES.map(type => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                  {PROPERTY_TYPES.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -621,8 +738,15 @@ function RentContent() {
 
             {/* Completion Status */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Completion Status</label>
-              <Select value={filters.completion_status} onValueChange={(value) => handleFilterChange("completion_status", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Completion Status
+              </label>
+              <Select
+                value={filters.completion_status}
+                onValueChange={(value) =>
+                  handleFilterChange("completion_status", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -638,7 +762,9 @@ function RentContent() {
 
             {/* Developer Search */}
             <div className="space-y-2 developer-search">
-              <label className="text-sm font-medium text-gray-700">Developer</label>
+              <label className="text-sm font-medium text-gray-700">
+                Developer
+              </label>
               <div className="relative">
                 <Input
                   placeholder="Search developers..."
@@ -660,9 +786,13 @@ function RentContent() {
                       className="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                       onClick={() => handleDeveloperSelect(developer)}
                     >
-                      <div className="text-sm font-medium text-gray-900">{developer.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {developer.name}
+                      </div>
                       {developer.location && (
-                        <div className="text-xs text-gray-500">{developer.location}</div>
+                        <div className="text-xs text-gray-500">
+                          {developer.location}
+                        </div>
                       )}
                     </div>
                   ))}
@@ -673,14 +803,21 @@ function RentContent() {
             {/* Price Range - Hidden on large screens since it's shown in desktop form */}
             <div className="grid grid-cols-2 gap-4 md:hidden">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Min Price</label>
-                <Select value={filters.min_price} onValueChange={(value) => handleFilterChange("min_price", value)}>
+                <label className="text-sm font-medium text-gray-700">
+                  Min Price
+                </label>
+                <Select
+                  value={filters.min_price}
+                  onValueChange={(value) =>
+                    handleFilterChange("min_price", value)
+                  }
+                >
                   <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
                     <SelectItem value="any">Any</SelectItem>
-                    {RENT_PRICE_OPTIONS.map(price => (
+                    {RENT_PRICE_OPTIONS.map((price) => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
                       </SelectItem>
@@ -690,14 +827,21 @@ function RentContent() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">Max Price</label>
-                <Select value={filters.max_price} onValueChange={(value) => handleFilterChange("max_price", value)}>
+                <label className="text-sm font-medium text-gray-700">
+                  Max Price
+                </label>
+                <Select
+                  value={filters.max_price}
+                  onValueChange={(value) =>
+                    handleFilterChange("max_price", value)
+                  }
+                >
                   <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-white max-h-60">
                     <SelectItem value="any">Any</SelectItem>
-                    {RENT_PRICE_OPTIONS.map(price => (
+                    {RENT_PRICE_OPTIONS.map((price) => (
                       <SelectItem key={price} value={price}>
                         {parseInt(price).toLocaleString()}
                       </SelectItem>
@@ -709,8 +853,13 @@ function RentContent() {
 
             {/* Bedrooms - Hidden on large screens since it's shown in desktop form */}
             <div className="space-y-2 md:hidden">
-              <label className="text-sm font-medium text-gray-700">Bedrooms</label>
-              <Select value={filters.bedrooms} onValueChange={(value) => handleFilterChange("bedrooms", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Bedrooms
+              </label>
+              <Select
+                value={filters.bedrooms}
+                onValueChange={(value) => handleFilterChange("bedrooms", value)}
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -727,8 +876,15 @@ function RentContent() {
 
             {/* Bathrooms */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Bathrooms</label>
-              <Select value={filters.bathrooms} onValueChange={(value) => handleFilterChange("bathrooms", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Bathrooms
+              </label>
+              <Select
+                value={filters.bathrooms}
+                onValueChange={(value) =>
+                  handleFilterChange("bathrooms", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
@@ -745,15 +901,24 @@ function RentContent() {
 
             {/* Handover Year */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Handover Year</label>
-              <Select value={filters.handover_year} onValueChange={(value) => handleFilterChange("handover_year", value)}>
+              <label className="text-sm font-medium text-gray-700">
+                Handover Year
+              </label>
+              <Select
+                value={filters.handover_year}
+                onValueChange={(value) =>
+                  handleFilterChange("handover_year", value)
+                }
+              >
                 <SelectTrigger className="w-full bg-white border border-gray-300 rounded-md h-14 text-gray-900 focus:ring-2 focus:ring-primary">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
                   <SelectItem value="any">Any Year</SelectItem>
                   {HANDOVER_YEAR_OPTIONS.slice(1).map((year) => (
-                    <SelectItem key={year} value={year}>{year}</SelectItem>
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -769,7 +934,7 @@ function RentContent() {
                 <Icon icon="lucide:x-circle" className="w-5 h-5 mr-2" />
                 Clear Filters
               </Button>
-              <Button 
+              <Button
                 onClick={handleSearch}
                 className="flex-1 bg-primary hover:bg-primary/90 text-white font-medium h-14 rounded-lg transition-all duration-200 shadow-lg"
               >
@@ -786,29 +951,38 @@ function RentContent() {
           Dubai&apos;s most exquisite rental properties
         </h1>
         <p className="text-center text-gray-600 mt-4">
-          Find your perfect rental home in Dubai&apos;s most prestigious locations
-          with world-class amenities and unmatched lifestyle.
+          Find your perfect rental home in Dubai&apos;s most prestigious
+          locations with world-class amenities and unmatched lifestyle.
         </p>
       </div>
       <p className="text-center mb-11">
-      <Link href={"/whyDubai#rent-investment"}>
-      <span
-          className={cn(
-            "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
-            "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
-            "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+        <Link href={"/whyDubai#rent-investment"}>
+          <span
+            className={cn(
+              "relative pb-1 transition-all duration-300 text-primary uppercase font-thin",
+              "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0",
+              "after:-translate-x-1/2 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            )}
+          >
+            Learn More
+          </span>
+        </Link>
+        <div className="h-8">
+          {totalProperties !== 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <div className="text-lg font-medium mb-2">
+                Total properties: {totalProperties}
+              </div>
+            </div>
           )}
-        >
-          Learn More
-        </span>
-      </Link>
+        </div>
       </p>
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
           {Array.from({ length: 6 }).map((_, i) => (
-              <PropertyCardSkeleton key={i} />
-            ))}
+            <PropertyCardSkeleton key={i} />
+          ))}
         </div>
       ) : (
         <>
@@ -821,33 +995,33 @@ function RentContent() {
               />
             ))}
           </div>
-          
+
           {/* Loading more indicator */}
           {loadingMore && (
             <div className="flex justify-center items-center py-8">
               <Loader className="animate-spin h-8 w-8 text-primary" />
-              <span className="ml-2 text-gray-600">Loading more properties...</span>
+              <span className="ml-2 text-gray-600">
+                Loading more properties...
+              </span>
             </div>
           )}
-          
-            {/* Intersection Observer target */}
-            {!loading && (
-              <div ref={observerRef} className="h-8 bg-red-200 flex items-center justify-center text-xs text-red-600">
-                Scroll Target (Debug) - Page: {currentPage}, HasMore: {hasMore ? 'Yes' : 'No'}, Loading: {loadingMore ? 'Yes' : 'No'}
-              </div>
-            )}
-          
+
+          {/* Intersection Observer target */}
+          {!loading && <div ref={observerRef} className="h-8 " />}
+
           {/* No more properties message */}
           {!hasMore && property.length > 0 && (
             <div className="text-center py-8 text-gray-500">
               No more properties to load
             </div>
           )}
-          
+
           {/* No properties message */}
           {!loading && property.length === 0 && (
             <div className="text-center py-12 text-gray-500">
-              <div className="text-lg font-medium mb-2">No properties found</div>
+              <div className="text-lg font-medium mb-2">
+                No properties found
+              </div>
               <div className="text-sm">Try adjusting your search filters</div>
             </div>
           )}
@@ -859,13 +1033,15 @@ function RentContent() {
 
 function Rent() {
   return (
-    <Suspense fallback={
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <PropertyCardSkeleton key={i} />
-        ))}
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 container my-4 mx-auto">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PropertyCardSkeleton key={i} />
+          ))}
+        </div>
+      }
+    >
       <RentContent />
     </Suspense>
   );

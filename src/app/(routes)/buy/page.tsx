@@ -100,6 +100,7 @@ function BuyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [property, setProperty] = React.useState<any[]>([]);
+  const [totalProperties, setTotalProperties] = React.useState(0);
   const [loading, setLoading] = React.useState(true);
   const [loadingMore, setLoadingMore] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -159,15 +160,16 @@ function BuyContent() {
       const finalQueryString = queryParams.toString();
       console.log("Making API call with params:", finalQueryString);
 
-      try {
-        const res = await getAllBuyProperties(finalQueryString);
-        const newProperties = res?.properties || [];
-
-        console.log("API response:", {
-          totalProperties: newProperties.length,
-          currentPropertyCount: property.length,
-          append,
-        });
+       try {
+         const res = await getAllBuyProperties(finalQueryString);
+         const newProperties = res?.properties || [];
+ 
+         setTotalProperties(res?.totalProperties || 0);
+         console.log("API response:", {
+           totalProperties: newProperties.length,
+           currentPropertyCount: property.length,
+           append,
+         });
 
         if (append) {
           setProperty((prev) => {
@@ -954,6 +956,7 @@ function BuyContent() {
           Become part of a world class lifestyle, benefit of unrivaled returns
           and own a piece of Dubai&apos;s future.
         </p>
+       
       </div>
       <p className="text-center mb-11">
         <Link href={"/whyDubai"}>
@@ -967,6 +970,16 @@ function BuyContent() {
             Learn More
           </span>
         </Link>
+
+        <div className="h-8">
+          {
+            totalProperties !== 0 && (
+              <div className="text-center py-12 text-gray-500">
+                <div className="text-lg font-medium mb-2">Total properties: {totalProperties}</div>
+              </div>
+            )
+          }
+        </div>
       </p>
 
       {loading ? (
