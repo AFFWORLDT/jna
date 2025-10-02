@@ -83,6 +83,8 @@ function RentContent() {
   });
 
   const fetchproperty = useCallback(async (page = 1, append = false) => {
+    console.log("fetchproperty called:", { page, append, loadingMore, hasMore });
+    
     if (append) {
       setLoadingMore(true);
     } else {
@@ -104,21 +106,36 @@ function RentContent() {
         queryParams.append(key, value);
       }
     });
+
+    const finalQueryString = queryParams.toString();
+    console.log("Making API call with params:", finalQueryString);
     
     try {
-      const res = await getAllBuyProperties(queryParams.toString());
+      const res = await getAllBuyProperties(finalQueryString);
       const newProperties = res?.properties || [];
       
+      console.log("API response:", { 
+        totalProperties: newProperties.length, 
+        currentPropertyCount: property.length,
+        append 
+      });
+      
       if (append) {
-        setProperty(prev => [...prev, ...newProperties]);
+        setProperty(prev => {
+          const updated = [...prev, ...newProperties];
+          console.log("Appended properties. New total:", updated.length);
+          return updated;
+        });
       } else {
         setProperty(newProperties);
+        console.log("Set new properties:", newProperties.length);
       }
       
       setCurrentPage(page);
       
       // Check if there are more pages
       const hasMoreData = newProperties.length === 6;
+      console.log("Has more data:", hasMoreData);
       setHasMore(hasMoreData);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -170,8 +187,12 @@ function RentContent() {
   }, [fetchproperty, showFilters]);
 
   const loadMore = useCallback(() => {
+    console.log("loadMore called:", { loadingMore, hasMore, currentPage });
     if (!loadingMore && hasMore) {
+      console.log("Fetching next page:", currentPage + 1);
       fetchproperty(currentPage + 1, true);
+    } else {
+      console.log("Load more blocked:", { loadingMore, hasMore });
     }
   }, [fetchproperty, currentPage, loadingMore, hasMore]);
 
@@ -212,7 +233,16 @@ function RentContent() {
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        console.log("Intersection observer triggered:", {
+          isIntersecting: entries[0].isIntersecting,
+          hasMore,
+          loadingMore,
+          currentPage,
+          propertyLength: property.length
+        });
+        
         if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          console.log("Loading more properties - Page:", currentPage + 1);
           loadMore();
         }
       },
@@ -221,7 +251,10 @@ function RentContent() {
 
     const currentRef = observerRef.current;
     if (currentRef) {
+      console.log("Setting up intersection observer");
       observer.observe(currentRef);
+    } else {
+      console.log("Observer ref not found");
     }
 
     return () => {
@@ -229,7 +262,7 @@ function RentContent() {
         observer.unobserve(currentRef);
       }
     };
-  }, [hasMore, loadingMore, loadMore]);
+  }, [hasMore, loadingMore, loadMore, currentPage, property.length]);
 
   // Handle query parameters from hero section
   React.useEffect(() => {
@@ -797,8 +830,12 @@ function RentContent() {
             </div>
           )}
           
-          {/* Intersection Observer target */}
-          {!loading && <div ref={observerRef} className="h-8 " />}
+            {/* Intersection Observer target */}
+            {!loading && (
+              <div ref={observerRef} className="h-8 bg-red-200 flex items-center justify-center text-xs text-red-600">
+                Scroll Target (Debug) - Page: {currentPage}, HasMore: {hasMore ? 'Yes' : 'No'}, Loading: {loadingMore ? 'Yes' : 'No'}
+              </div>
+            )}
           
           {/* No more properties message */}
           {!hasMore && property.length > 0 && (
