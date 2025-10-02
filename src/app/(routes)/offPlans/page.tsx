@@ -836,7 +836,7 @@ function OffPlansPageContent() {
         
         {/* Intersection Observer target */}
         {!loading && (
-          <div ref={observerRef} className="h-9" />
+          <div ref={observerRef} className="h-10" />
         )}
         
         {/* No more properties message */}
