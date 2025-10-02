@@ -238,7 +238,7 @@ function BuyContent() {
     [router]
   );
 
-  const handleSearch = useCallback(() => {
+  const handleSearch = useCallback(() => { 
     fetchproperty(1, false);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
