@@ -97,7 +97,7 @@ export default function DetailPage({ id }: any) {
           <h1 className="text-3xl md:text-4xl font-light mb-4 leading-tight tracking-wide">
             {property?.name}
           </h1>
-          <p className="text-lg font-light mb-12 tracking-wider uppercase text-primary">
+          <p className="text-lg font-light mb-12 tracking-wider uppercase text-white">
             {property?.location?.community}, {property?.location?.sub_community}
             , {property?.location?.city}
           </p>
@@ -113,10 +113,10 @@ export default function DetailPage({ id }: any) {
             >
               Enquire Now
             </a>
-            <span className="text-gray-300">|</span>
+            {/* <span className="text-gray-300">|</span>
             <a href="#" className="hover:underline">
               Properties List
-            </a>
+            </a> */}
           </div>
 
           <hr className="border-t border-gray-200 mb-12" />
