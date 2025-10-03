@@ -971,7 +971,7 @@ function BuyContent() {
           </span>
         </Link>
 
-        <div className="h-8">
+        {/* <div className="h-8">
           {
             totalProperties !== 0 && (
               <div className="text-center py-12 text-gray-500">
@@ -979,7 +979,7 @@ function BuyContent() {
               </div>
             )
           }
-        </div>
+        </div> */}
       </p>
 
       {loading ? (
