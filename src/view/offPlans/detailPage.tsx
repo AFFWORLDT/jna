@@ -16,6 +16,8 @@ export default function DetailPage({ id }: any) {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  // Track slide direction: 1 for next (right arrow), -1 for prev (left arrow)
+  const [slideDirection, setSlideDirection] = useState(1);
 
   useEffect(() => {
     async function fetchProperty() {
@@ -38,18 +40,21 @@ export default function DetailPage({ id }: any) {
   }, [property?.photos]);
 
   const nextImage = () => {
+    setSlideDirection(1);
     setSelectedImageIndex((prev) =>
       prev === property.photos.length - 1 ? 0 : prev + 1
     );
   };
 
   const prevImage = () => {
+    setSlideDirection(-1);
     setSelectedImageIndex((prev) =>
       prev === 0 ? property.photos.length - 1 : prev - 1
     );
   };
 
   const goToImage = (index: number) => {
+    setSlideDirection(index > selectedImageIndex ? 1 : -1);
     setSelectedImageIndex(index);
   };
 
@@ -195,9 +200,9 @@ export default function DetailPage({ id }: any) {
                   <AnimatePresence initial={false}>
                     <motion.div
                       key={selectedImageIndex}
-                      initial={{ x: "100%" }}
+                      initial={{ x: slideDirection === 1 ? "100%" : "-100%" }}
                       animate={{ x: 0 }}
-                      exit={{ x: "-100%" }}
+                      exit={{ x: slideDirection === 1 ? "-100%" : "100%" }}
                       transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                       className="absolute inset-0"
                     >
