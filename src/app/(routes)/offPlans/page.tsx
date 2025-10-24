@@ -128,6 +128,7 @@ function OffPlansPageContent() {
       sort_order: "desc",
       page: page.toString(),
       size: "6",
+      portal:"ownerPortal"
     });
 
     // Add filter parameters
