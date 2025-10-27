@@ -2,6 +2,7 @@
 import { getAllProperties } from "@/src/api/offPlans";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
+import PaginationComponent from "@/src/components/common/PaginationComponent";
 import {
   Select,
   SelectContent,
@@ -88,10 +89,9 @@ function OffPlansPageContent() {
   const searchParams = useSearchParams();
   const [property, setProperty] = useState([]);
   const [totalProperties, setTotalProperties] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [developers, setDevelopers] = useState([]);
   const [developerSearch, setDeveloperSearch] = useState("");
@@ -113,22 +113,14 @@ function OffPlansPageContent() {
     ref_number: "",
   });
 
-  const fetchproperty = useCallback(async (page = 1, append = false) => {
-    console.log("fetchproperty called:", { page, append, loadingMore, hasMore });
-    
-    if (append) {
-      setLoadingMore(true);
-    } else {
-      setLoading(true);
-      setCurrentPage(1);
-      setHasMore(true);
-    }
+  const fetchproperty = useCallback(async (page = 1) => {
+    setLoading(true);
 
     const queryParams = new URLSearchParams({
       sort_order: "desc",
       page: page.toString(),
-      size: "6",
-      portal:"OwnPortal"
+      size: "12",
+      portal: "OwnPortal"
     });
 
     // Add filter parameters
@@ -138,42 +130,22 @@ function OffPlansPageContent() {
       }
     });
 
-    const finalQueryString = queryParams.toString();
-    console.log("Making API call with params:", finalQueryString);
-
     try {
-      const res = await getAllProperties(finalQueryString);
+      const res = await getAllProperties(queryParams.toString());
       const newProperties = res?.projects || [];
 
       setTotalProperties(res?.totalProjects || 0);
-      console.log("API response:", { 
-        totalProperties: newProperties.length, 
-        currentPropertyCount: property.length,
-        append 
-      });
-      
-      if (append) {
-        setProperty(prev => {
-          const updated = [...prev, ...newProperties];
-          console.log("Appended properties. New total:", updated.length);
-          return updated;
-        });
-      } else {
-        setProperty(newProperties);
-        console.log("Set new properties:", newProperties.length);
-      }
-      
+      setProperty(newProperties);
       setCurrentPage(page);
       
-      // Check if there are more pages
-      const hasMoreData = newProperties.length === 6;
-      console.log("Has more data:", hasMoreData);
-      setHasMore(hasMoreData);
+      // Calculate total pages
+      const total = res?.totalProjects || 0;
+      const calculatedPages = Math.ceil(total / 12);
+      setTotalPages(calculatedPages || 1);
     } catch (error) {
       console.error("Error fetching properties:", error);
     } finally {
       setLoading(false);
-      setLoadingMore(false);
     }
   }, [filters]);
 
@@ -218,9 +190,14 @@ function OffPlansPageContent() {
   }, [router]);
 
   const handleSearch = useCallback(() => {
-    fetchproperty(1, false);
+    fetchproperty(1);
     if (showFilters) setShowFilters(false);
   }, [fetchproperty, showFilters]);
+
+  const handlePageChange = useCallback((page: number) => {
+    fetchproperty(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [fetchproperty]);
 
   const clearAllFilters = useCallback(() => {
     setFilters({
@@ -240,16 +217,6 @@ function OffPlansPageContent() {
     setDevelopers([]);
   }, []);
 
-  const loadMore = useCallback(() => {
-    console.log("loadMore called:", { loadingMore, hasMore, currentPage });
-    if (!loadingMore && hasMore) {
-      console.log("Fetching next page:", currentPage + 1);
-      fetchproperty(currentPage + 1, true);
-    } else {
-      console.log("Load more blocked:", { loadingMore, hasMore });
-    }
-  }, [fetchproperty, currentPage, loadingMore, hasMore]);
-
   const handleDeveloperSelect = useCallback(
     (developer: any) => {
       handleFilterChange("developer_id", developer.id);
@@ -265,43 +232,8 @@ function OffPlansPageContent() {
 
   // Initial load and when filters change
   useEffect(() => {
-    fetchproperty(1, false);
+    fetchproperty(1);
   }, [filters]);
-
-  // Intersection Observer for infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        console.log("Intersection observer triggered:", {
-          isIntersecting: entries[0].isIntersecting,
-          hasMore,
-          loadingMore,
-          currentPage,
-          propertyLength: property.length
-        });
-        
-        if (entries[0].isIntersecting && hasMore && !loadingMore) {
-          console.log("Loading more properties - Page:", currentPage + 1);
-          loadMore();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = observerRef.current;
-    if (currentRef) {
-      console.log("Setting up intersection observer");
-      observer.observe(currentRef);
-    } else {
-      console.log("Observer ref not found");
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [hasMore, loadingMore, loadMore, currentPage, property.length]);
 
   // Handle query parameters from hero section
   useEffect(() => {
@@ -870,27 +802,16 @@ function OffPlansPageContent() {
             <OffPlanCard data={property} key={i} />
           ))}
         </div>
-        
-        {/* Loading more indicator */}
-        {loadingMore && (
-          <div className="flex justify-center items-center py-8">
-            <Loader className="animate-spin h-8 w-8 text-primary" />
-            <span className="ml-2 text-gray-600">Loading more properties...</span>
-          </div>
+
+        {/* Pagination */}
+        {!loading && property.length > 0 && totalPages > 1 && (
+          <PaginationComponent
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
         )}
-         
-        {/* Intersection Observer target */}
-        {!loading && (
-          <div ref={observerRef} className="h-8"/>
-        )}
-        
-        {/* No more properties message */}
-        {!hasMore && property?.length > 0 && (
-          <div className="text-center py-8 text-gray-500">
-            No more properties to load
-          </div>
-        )}
-        
+
         {/* No properties message */}
         {!loading && property?.length === 0 && (
           <div className="text-center py-12 text-gray-500">

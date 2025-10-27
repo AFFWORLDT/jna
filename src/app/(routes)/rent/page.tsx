@@ -19,6 +19,7 @@ import { cn } from "@/src/lib/utils";
 import { RentCard } from "@/src/view/rent/rentCard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Loader, Filter, X, Search } from "lucide-react";
+import PaginationComponent from "@/src/components/common/PaginationComponent";
 import PropertyCardSkeleton from "@/src/components/common/property-card-skeleton";
 import React, { useCallback, useMemo, Suspense, useRef } from "react";
 import { api } from "@/src/lib/axios";
