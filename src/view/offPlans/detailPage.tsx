@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import LocationSection from "./Location";
 import AmenitiesSection from "@/src/components/common/amenities";
-import ProjectDetails from "@/src/components/common/project-details";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -187,7 +186,7 @@ export default function DetailPage({ id }: any) {
               )}
             </div>
           </div>
-          <ProjectDetails property={property} />
+          {/* ProjectDetails removed as requested */}
         </div>
       </section>
 

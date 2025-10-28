@@ -1,7 +1,6 @@
 import { getAllBuyPropertiesById } from "@/src/api/buy";
 import EnquireForm from "@/src/components/common/enquireForm";
 import AmenitiesSection from "@/src/components/common/amenities";
-import ProjectDetails from "@/src/components/common/project-details";
 import { Badge } from "@/src/components/ui/badge";
 import { Card } from "@/src/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
@@ -124,7 +123,7 @@ export default function DetailPage({ id }: any) {
               <SquareGanttChart className="w-6 h-6" />
               <span>{property?.size ? `${property?.size} sqft` : "N/A"}</span>
           </div>
-          <ProjectDetails property={property} />
+          {/* ProjectDetails removed as requested */}
           </div>
         </section>
       </div>

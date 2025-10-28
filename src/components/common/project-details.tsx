@@ -111,47 +111,27 @@ export default function ProjectDetails({ property }: ProjectDetailsProps) {
         <h2 className="text-3xl font-serif text-gray-800 mb-6 text-center">Project Details</h2>
         <hr className="border-t border-gray-200 mb-12 max-w-4xl mx-auto" />
 
-        {/* Center Section: Price and Bedrooms */}
+        {/* Center Section: Bedrooms only */}
         <div className="flex justify-center mb-12">
           <div className="w-full max-w-4xl">
-            {(startingPrice || availableBedrooms.length > 0) && (
-              <div className="flex flex-col md:flex-row items-center justify-center gap-10">
-                {startingPrice && (
-                  <div className="text-center">
-                    <h3 className="text-sm font-light uppercase text-primary mb-2">Starting From</h3>
-                    <p className="text-xl font-mono text-gray-900">{startingPrice}</p>
+            {availableBedrooms.length > 0 && (
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <h3 className="text-sm font-light uppercase text-primary mb-2">Available Bedrooms</h3>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {availableBedrooms.map((b, i) => (
+                      <Badge key={`${b}-${i}`} className="rounded-none bg-[#F2EEE8] text-gray-800 border border-gray-200 px-3 py-2">
+                        {b}
+                      </Badge>
+                    ))}
                   </div>
-                )}
-                {availableBedrooms.length > 0 && (
-                  <div className="text-center">
-                    <h3 className="text-sm font-light uppercase text-primary mb-2">Available Bedrooms</h3>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {availableBedrooms.map((b, i) => (
-                        <Badge key={`${b}-${i}`} className="rounded-none bg-[#F2EEE8] text-gray-800 border border-gray-200 px-3 py-2">
-                          {b}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Amenities Section */}
-        {amenities.length > 0 && (
-          <div className="mb-12 text-center">
-            <h3 className="text-sm font-light uppercase text-primary mb-4">Amenities</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-w-5xl mx-auto">
-              {amenities.map((a, i) => (
-                <div key={`${a}-${i}`} className="bg-[#F8F5EF] border border-gray-200 px-3 py-2 text-sm text-gray-900 text-center">
-                  {a}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Amenities hidden as requested */}
 
         {/* Floorplans Section */}
         {floorPlans.length > 0 && (
