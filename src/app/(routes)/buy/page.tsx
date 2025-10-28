@@ -111,19 +111,27 @@ function BuyContent() {
   const [searchingDevelopers, setSearchingDevelopers] = React.useState(false);
   const observerRef = useRef<HTMLDivElement>(null);
 
+  // Initialize filters from URL
+  const initialFiltersFromUrl = React.useMemo(() => {
+    const params = new URLSearchParams(searchParams as any);
+    return {
+      listing_type: params.get("listing_type") || "SELL",
+      location: params.get("location") || "",
+      property_type: params.get("property_type") || "any",
+      min_price: params.get("min_price") || "any",
+      max_price: params.get("max_price") || "any",
+      completion_status: params.get("completion_status") || "all",
+      developer_id: params.get("developer_id") || "any",
+      bedrooms: params.get("bedrooms") || "any",
+      bathrooms: params.get("bathrooms") || "any",
+      handover_year: params.get("handover_year") || "any",
+      ref_number: params.get("ref_number") || "",
+    };
+  }, [searchParams]);
+
   // Filter states
   const [filters, setFilters] = React.useState({
-    listing_type: "SELL",
-    location: "",
-    property_type: "any",
-    min_price: "any",
-    max_price: "any",
-    completion_status: "all",
-    developer_id: "any",
-    bedrooms: "any",
-    bathrooms: "any",
-    handover_year: "any",
-    ref_number: "",
+    ...initialFiltersFromUrl,
   });
 
   const fetchproperty = useCallback(
@@ -229,22 +237,40 @@ function BuyContent() {
     (key: string, value: string) => {
       setFilters((prev) => ({ ...prev, [key]: value }));
 
+      // Persist filters in URL for back/forward
+      const next = new URLSearchParams(searchParams as any);
+      if (value && value !== "any" && value !== "all") {
+        next.set(key, value);
+      } else {
+        next.delete(key);
+      }
+      router.replace(`/buy?${next.toString()}`);
+
       // Navigate when listing_type changes
       if (key === "listing_type") {
         if (value === "RENT") {
           router.push("/rent");
         } else if (value === "SELL") {
           router.push("/buy");
+        } else if (value === "OFF_PLAN") {
+          router.push("/offPlans");
         }
       }
     },
-    [router]
+    [router, searchParams]
   );
 
   const handleSearch = useCallback(() => {
+    const next = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value !== "any" && value !== "all") {
+        next.set(key, value as string);
+      }
+    });
+    router.replace(`/buy?${next.toString()}`);
     fetchproperty(1);
     if (showFilters) setShowFilters(false);
-  }, [fetchproperty, showFilters]);
+  }, [fetchproperty, showFilters, filters, router]);
 
   const clearAllFilters = useCallback(() => {
     setFilters({
@@ -449,6 +475,7 @@ function BuyContent() {
                 <SelectContent className="bg-white">
                   <SelectItem value="SELL">Buy</SelectItem>
                   <SelectItem value="RENT">Rent</SelectItem>
+                  <SelectItem value="OFF_PLAN">Off Plan</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -638,6 +665,7 @@ function BuyContent() {
                 <SelectContent className="bg-white">
                   <SelectItem value="SELL">Buy</SelectItem>
                   <SelectItem value="RENT">Rent</SelectItem>
+                  <SelectItem value="OFF_PLAN">Off Plan</SelectItem>
                 </SelectContent>
               </Select>
             </div>

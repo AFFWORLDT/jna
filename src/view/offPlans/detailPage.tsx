@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import LocationSection from "./Location";
+import AmenitiesSection from "@/src/components/common/amenities";
+import ProjectDetails from "@/src/components/common/project-details";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -185,6 +187,7 @@ export default function DetailPage({ id }: any) {
               )}
             </div>
           </div>
+          <ProjectDetails property={property} />
         </div>
       </section>
 
@@ -309,6 +312,17 @@ export default function DetailPage({ id }: any) {
             </div>
           </div>
         )}
+        {/* Amenities */}
+        <AmenitiesSection
+          title="Amenities"
+          amenities={
+            Array.isArray(property?.amenities)
+              ? property?.amenities
+              : Array.isArray(property?.newParam?.amenities)
+              ? property?.newParam?.amenities
+              : []
+          }
+        />
 
         <div className="my-5">
           <LocationSection property={property} />

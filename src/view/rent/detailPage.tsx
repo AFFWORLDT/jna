@@ -1,5 +1,7 @@
 import { getAllBuyPropertiesById } from "@/src/api/buy";
 import EnquireForm from "@/src/components/common/enquireForm";
+import AmenitiesSection from "@/src/components/common/amenities";
+import ProjectDetails from "@/src/components/common/project-details";
 import { Badge } from "@/src/components/ui/badge";
 import { Card } from "@/src/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
@@ -121,7 +123,8 @@ export default function DetailPage({ id }: any) {
             <div className="flex items-center gap-1">
               <SquareGanttChart className="w-6 h-6" />
               <span>{property?.size ? `${property?.size} sqft` : "N/A"}</span>
-            </div>
+          </div>
+          <ProjectDetails property={property} />
           </div>
         </section>
       </div>
@@ -216,6 +219,18 @@ export default function DetailPage({ id }: any) {
             </div>
           </div>
         </div>
+
+        {/* Amenities */}
+        <AmenitiesSection
+          title="Amenities"
+          amenities={
+            Array.isArray(property?.amenities)
+              ? property?.amenities
+              : Array.isArray(property?.newParam?.amenities)
+              ? property?.newParam?.amenities
+              : []
+          }
+        />
       </section>
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">

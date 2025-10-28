@@ -7,7 +7,7 @@ import Image from "next/image";
 export function CallToAction() {
   return (
     <section className="relative py-16 md:py-24 overflow-hidden bg-[#F8F5EF]">
-]      <div className="absolute bottom-0 inset-x-0 w-full h-96 opacity-40">
+      <div className="absolute bottom-0 inset-x-0 w-full h-96 opacity-40">
         <Image
           src="/images/dubai-skyline-30.svg" 
           alt="Dubai Skyline"

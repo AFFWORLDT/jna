@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import {
   Select,
@@ -13,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
   const router = useRouter();
-  const [propertyType, setPropertyType] = useState("any");
+  const [propertyType, setPropertyType] = useState("buy");
   const [propertyTypeFilter, setPropertyTypeFilter] = useState("any");
   const [location, setLocation] = useState("any");
   const [bedrooms, setBedrooms] = useState("any");
@@ -150,10 +151,9 @@ export default function HeroSection() {
               </div>
               <Select value={propertyType} onValueChange={handlePropertyTypeChange}>
                 <SelectTrigger className="w-full h-14 sm:h-14 text-white max-sm:text-black  focus:ring-offset-0 focus:ring-transparent bg-white/10 max-sm:bg-white border border-white/30 max-sm:border-gray-300 rounded-none pt-5 pb-2">
-                  <SelectValue placeholder="Any" className="max-sm:hidden pt-2" />
+                  <SelectValue placeholder="Buy" className="max-sm:hidden pt-2" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-900">
-                  <SelectItem value="any">Any</SelectItem>
                   <SelectItem value="buy">Buy</SelectItem>
                   <SelectItem value="rent">Rent</SelectItem>
                   <SelectItem value="off_plan">Off Plan</SelectItem>

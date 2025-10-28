@@ -99,18 +99,26 @@ function OffPlansPageContent() {
   const observerRef = useRef<HTMLDivElement>(null);
 
   // Filter states
+  // Initialize filters from URL
+  const initialFiltersFromUrl = useMemo(() => {
+    const params = new URLSearchParams(searchParams as any);
+    return {
+      type: params.get("type") || "off_plan",
+      location: params.get("location") || "",
+      property_type: params.get("property_type") || "any",
+      min_price: params.get("min_price") || "any",
+      max_price: params.get("max_price") || "any",
+      completion_status: params.get("completion_status") || "all",
+      developer_id: params.get("developer_id") || "any",
+      bedrooms: params.get("bedrooms") || "any",
+      bathrooms: params.get("bathrooms") || "any",
+      handover_year: params.get("handover_year") || "any",
+      ref_number: params.get("ref_number") || "",
+    };
+  }, [searchParams]);
+
   const [filters, setFilters] = useState({
-    type: "off_plan",
-    location: "",
-    property_type: "any",
-    min_price: "any",
-    max_price: "any",
-    completion_status: "all",
-    developer_id: "any",
-    bedrooms: "any",
-    bathrooms: "any",
-    handover_year: "any",
-    ref_number: "",
+    ...initialFiltersFromUrl,
   });
 
   const fetchproperty = useCallback(async (page = 1) => {
@@ -176,6 +184,14 @@ function OffPlansPageContent() {
 
   const handleFilterChange = useCallback((key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    // Reflect filter change in URL for back/forward persistence
+    const next = new URLSearchParams(searchParams as any);
+    if (value && value !== "any" && value !== "all") {
+      next.set(key, value);
+    } else {
+      next.delete(key);
+    }
+    router.replace(`/offPlans?${next.toString()}`);
     
     // Navigate when type changes
     if (key === "type") {
@@ -187,12 +203,20 @@ function OffPlansPageContent() {
         router.push("/offPlans");
       }
     }
-  }, [router]);
+  }, [router, searchParams]);
 
   const handleSearch = useCallback(() => {
+    // Ensure URL encodes all active filters when performing search
+    const next = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value && value !== "any" && value !== "all") {
+        next.set(key, value as string);
+      }
+    });
+    router.replace(`/offPlans?${next.toString()}`);
     fetchproperty(1);
     if (showFilters) setShowFilters(false);
-  }, [fetchproperty, showFilters]);
+  }, [fetchproperty, showFilters, filters, router]);
 
   const handlePageChange = useCallback((page: number) => {
     fetchproperty(page);

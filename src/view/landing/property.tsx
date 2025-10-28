@@ -1,3 +1,4 @@
+"use client";
 import { getAllBuyProperties } from "@/src/api/buy";
 import { PropertyCard } from "@/src/components/common/card";
 import { Button } from "@/src/components/ui/button";
