@@ -1,6 +1,7 @@
 import { getAllBuyPropertiesById } from "@/src/api/buy";
 import EnquireForm from "@/src/components/common/enquireForm";
 import AmenitiesSection from "@/src/components/common/amenities";
+import ProjectDetails from "@/src/components/common/project-details";
 import { Badge } from "@/src/components/ui/badge";
 import { Card } from "@/src/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/src/components/ui/dialog";
@@ -209,7 +210,7 @@ export default function DetailPage({ id }: any) {
               )}
             </div>
           </div>
-          {/* ProjectDetails removed as requested */}
+          <ProjectDetails property={property} />
         </div>
       </section>
       <section className="bg-white py-16 px-4 md:px-6 lg:px-8">

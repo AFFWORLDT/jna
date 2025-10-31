@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import LocationSection from "./Location";
 import AmenitiesSection from "@/src/components/common/amenities";
+import ProjectDetails from "@/src/components/common/project-details";
 
 export default function DetailPage({ id }: any) {
   const [property, setProperty] = useState<any>(null);
@@ -186,7 +187,7 @@ export default function DetailPage({ id }: any) {
               )}
             </div>
           </div>
-          {/* ProjectDetails removed as requested */}
+          <ProjectDetails property={property} />
         </div>
       </section>
 
@@ -219,25 +220,28 @@ export default function DetailPage({ id }: any) {
                       />
                     </motion.div>
                   </AnimatePresence>
-
-                  {/* Navigation Arrows */}
-                  {property.photos.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
-                      >
-                        <Icon icon="teenyicons:left-outline" fontSize={30} />
-                      </button>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2  text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 z-10"
-                      >
-                        <Icon icon="teenyicons:right-outline" fontSize={30} />
-                      </button>
-                    </>
-                  )}
                 </div>
+
+                {/* Navigation Arrows (outside image area) */}
+                {property.photos.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute -left-6 md:-left-8 lg:-left-10 top-[calc(50%-1.5rem)] text-white bg-black/40 hover:bg-black/60 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-100 z-20"
+                      aria-label="Previous image"
+                    >
+                      <Icon icon="teenyicons:left-outline" fontSize={28} />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute -right-6 md:-right-8 lg:-right-10 top-[calc(50%-1.5rem)] text-white bg-black/40 hover:bg-black/60 rounded-full w-12 h-12 flex items-center justify-center transition-all duration-200 opacity-100 z-20"
+                      aria-label="Next image"
+                    >
+                      <Icon icon="teenyicons:right-outline" fontSize={28} />
+                    </button>
+                  </>
+                )}
+              </div>
 
                 {/* Thumbnail Carousel */}
                 <div className="relative">
@@ -279,8 +283,7 @@ export default function DetailPage({ id }: any) {
                         }`}
                       />
                     ))}
-                  </div>
-                </div>
+              </div>
               </div>
             </div>
           )}

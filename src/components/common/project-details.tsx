@@ -74,19 +74,44 @@ export default function ProjectDetails({ property }: ProjectDetailsProps) {
     const candidates: unknown[] = [
       np.floorPlans,
       (property as AnyRecord)?.floorPlans,
+      // snake_case variants
+      np.floor_plans,
+      (property as AnyRecord)?.floor_plans,
+      // alternative collections
       np.unitTypes,
       (property as AnyRecord)?.unitTypes,
     ];
     const firstArray = candidates.find(Array.isArray) as AnyRecord[] | undefined;
     if (!firstArray) return [];
-    return firstArray.map((it: AnyRecord) => ({
-      bedroom: it.bedroom ?? it.bedrooms ?? it.type ?? it.title,
-      price: it.price ?? it.startingPrice,
-      size: it.size ?? it.area,
-      url: it.url ?? it.fileUrl ?? it.planUrl,
-      image: it.image ?? it.thumbnail,
-      title: it.title,
-    }));
+    return firstArray.map((it: AnyRecord) => {
+      const layoutUrl: string | undefined = it.layout || it.layout_url || it.layoutUrl;
+      const inferredImageFromLayout =
+        typeof layoutUrl === "string" && /\.(png|jpe?g|webp|avif|svg)$/i.test(layoutUrl)
+          ? layoutUrl
+          : undefined;
+
+      return {
+        bedroom: it.bedroom ?? it.Bedroom ?? it.bedrooms ?? it.type ?? it.title,
+        price: it.price ?? it.startingPrice,
+        size: it.size ?? it.area,
+        url:
+          it.url ??
+          it.fileUrl ??
+          it.planUrl ??
+          it.file_url ??
+          it.plan_url ??
+          layoutUrl,
+        image:
+          it.image ??
+          it.thumbnail ??
+          it.image_url ??
+          it.imageUrl ??
+          it.layout_image ??
+          it.layoutImage ??
+          inferredImageFromLayout,
+        title: it.title,
+      } as FloorPlan;
+    });
   }, [property]);
 
   const amenities: string[] = useMemo(() => {
@@ -111,21 +136,29 @@ export default function ProjectDetails({ property }: ProjectDetailsProps) {
         <h2 className="text-3xl font-serif text-gray-800 mb-6 text-center">Project Details</h2>
         <hr className="border-t border-gray-200 mb-12 max-w-4xl mx-auto" />
 
-        {/* Center Section: Bedrooms only */}
+        {/* Center Section: Starting Price and Bedrooms */}
         <div className="flex justify-center mb-12">
           <div className="w-full max-w-4xl">
-            {availableBedrooms.length > 0 && (
-              <div className="flex items-center justify-center">
-                <div className="text-center">
-                  <h3 className="text-sm font-light uppercase text-primary mb-2">Available Bedrooms</h3>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {availableBedrooms.map((b, i) => (
-                      <Badge key={`${b}-${i}`} className="rounded-none bg-[#F2EEE8] text-gray-800 border border-gray-200 px-3 py-2">
-                        {b}
-                      </Badge>
-                    ))}
+            {(startingPrice || availableBedrooms.length > 0) && (
+              <div className="flex flex-col md:flex-row items-center justify-center gap-10">
+                {startingPrice && (
+                  <div className="text-center">
+                    <h3 className="text-sm font-light uppercase text-primary mb-2">Starting From</h3>
+                    <p className="text-xl font-mono text-gray-900">{startingPrice}</p>
                   </div>
-                </div>
+                )}
+                {availableBedrooms.length > 0 && (
+                  <div className="text-center">
+                    <h3 className="text-sm font-light uppercase text-primary mb-2">Available Bedrooms</h3>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {availableBedrooms.map((b, i) => (
+                        <Badge key={`${b}-${i}`} className="rounded-none bg-[#F2EEE8] text-gray-800 border border-gray-200 px-3 py-2">
+                          {b}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
